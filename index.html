@@ -3,288 +3,212 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <title>Mac Chicken | Order Fresh Chicken</title>
 
 <style>
-*{
-    box-sizing:border-box;
-    margin:0;
-    padding:0;
-    font-family:Arial,Helvetica,sans-serif;
-}
-
+*{box-sizing:border-box;margin:0;padding:0}
 body{
-    background:#f8f5ef;
-    color:#222;
+font-family:Arial,sans-serif;
+background:#fffaf2;
+color:#171717;
+line-height:1.5
 }
-
 header{
-    background:#111;
-    color:white;
-    padding:18px 20px;
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
+background:#111;
+padding:14px 18px;
+display:flex;
+align-items:center;
+justify-content:space-between;
+position:sticky;
+top:0;
+z-index:10
 }
-
 .logo{
-    font-size:25px;
-    font-weight:800;
+height:58px;
+max-width:180px;
+object-fit:contain
 }
-
-.logo span{
-    color:#e7b52b;
+.whatsapp{
+background:#25D366;
+color:white;
+padding:10px 15px;
+border-radius:25px;
+text-decoration:none;
+font-weight:bold;
+font-size:14px
 }
-
-.tagline{
-    font-size:11px;
-    color:#e7b52b;
-    letter-spacing:2px;
-    margin-top:3px;
-}
-
-.whatsapp-top{
-    background:#25D366;
-    color:white;
-    text-decoration:none;
-    padding:10px 14px;
-    border-radius:20px;
-    font-size:13px;
-    font-weight:bold;
-}
-
 .hero{
-    background:linear-gradient(135deg,#8d0808,#c91818);
-    color:white;
-    text-align:center;
-    padding:40px 20px;
+background:linear-gradient(135deg,#111,#4b0808);
+color:white;
+padding:45px 20px;
+text-align:center
 }
-
-.chicken-icon{
-    width:110px;
-    height:110px;
-    margin:auto;
-    background:#fff;
-    border-radius:50%;
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    font-size:58px;
-    box-shadow:0 10px 30px rgba(0,0,0,.25);
+.hero-img{
+width:190px;
+height:190px;
+object-fit:cover;
+border-radius:25px;
+border:4px solid #d9a928;
+margin-bottom:20px
 }
-
 .hero h1{
-    margin-top:20px;
-    font-size:32px;
+font-size:36px;
+color:#f4c542;
+margin-bottom:8px
 }
-
 .hero p{
-    margin-top:10px;
-    font-size:16px;
+font-size:17px;
+max-width:600px;
+margin:auto
 }
-
 .price{
-    display:inline-block;
-    margin-top:18px;
-    background:#e7b52b;
-    color:#111;
-    padding:10px 20px;
-    border-radius:25px;
-    font-weight:bold;
-    font-size:20px;
+margin:20px auto;
+font-size:25px;
+font-weight:bold;
+color:white
 }
-
-.container{
-    max-width:650px;
-    margin:25px auto;
-    padding:0 15px;
+.btn{
+display:inline-block;
+border:0;
+padding:14px 24px;
+border-radius:30px;
+background:#c91414;
+color:white;
+font-weight:bold;
+text-decoration:none;
+cursor:pointer
 }
-
+.btn.gold{background:#d9a928;color:#111}
+section{
+padding:45px 18px;
+max-width:1050px;
+margin:auto
+}
+.title{
+text-align:center;
+margin-bottom:28px
+}
+.title h2{
+font-size:28px;
+color:#8e0909
+}
+.title p{color:#666}
+.cards{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+gap:18px
+}
 .card{
-    background:white;
-    border-radius:18px;
-    padding:22px;
-    margin-bottom:20px;
-    box-shadow:0 5px 20px rgba(0,0,0,.08);
+background:white;
+border-radius:18px;
+overflow:hidden;
+box-shadow:0 5px 18px #00000018
 }
-
-.card h2{
-    color:#9d0b0b;
-    margin-bottom:18px;
-    font-size:22px;
+.card img{
+width:100%;
+height:190px;
+object-fit:cover
 }
-
+.card-body{padding:18px}
+.card h3{
+color:#8e0909;
+margin-bottom:7px
+}
+.card p{
+color:#666;
+font-size:14px;
+margin-bottom:14px
+}
+.order-box{
+background:white;
+border-radius:22px;
+padding:25px;
+box-shadow:0 5px 22px #00000018;
+max-width:650px;
+margin:auto
+}
 label{
-    display:block;
-    font-weight:bold;
-    margin:15px 0 7px;
+display:block;
+font-weight:bold;
+margin:15px 0 7px
 }
-
 input,select,textarea{
-    width:100%;
-    padding:13px;
-    border:1px solid #ddd;
-    border-radius:10px;
-    font-size:15px;
-    outline:none;
+width:100%;
+padding:13px;
+border:1px solid #ddd;
+border-radius:10px;
+font-size:16px;
+background:white
 }
-
-textarea{
-    min-height:90px;
-    resize:vertical;
+textarea{min-height:90px}
+.qty{
+display:flex;
+align-items:center;
+justify-content:center;
+gap:20px;
+margin:10px 0 20px
 }
-
-.quantity{
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    gap:20px;
-    margin:15px 0;
+.qty button{
+width:45px;
+height:45px;
+border:0;
+border-radius:50%;
+font-size:25px;
+background:#8e0909;
+color:white
 }
-
-.quantity button{
-    width:45px;
-    height:45px;
-    border:none;
-    border-radius:50%;
-    background:#9d0b0b;
-    color:white;
-    font-size:25px;
+.qty span{
+font-size:28px;
+font-weight:bold
 }
-
-.quantity span{
-    font-size:26px;
-    font-weight:bold;
-}
-
 .total{
-    text-align:center;
-    background:#fff7df;
-    padding:16px;
-    border-radius:12px;
-    margin-top:15px;
-    font-size:20px;
-    font-weight:bold;
+background:#fff3d0;
+padding:15px;
+border-radius:12px;
+text-align:center;
+font-size:21px;
+font-weight:bold;
+margin:20px 0
 }
-
-.option-group{
-    display:flex;
-    gap:10px;
-    flex-wrap:wrap;
+.options{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:10px
 }
-
 .option{
-    flex:1;
-    min-width:140px;
+border:1px solid #ddd;
+border-radius:10px;
+padding:12px
 }
-
-.option input{
-    display:none;
+.option input{width:auto;margin-right:7px}
+.note{
+background:#f7f0df;
+padding:12px;
+border-radius:10px;
+font-size:13px;
+margin-top:10px
 }
-
-.option label{
-    border:2px solid #ddd;
-    border-radius:10px;
-    padding:13px;
-    text-align:center;
-    cursor:pointer;
-    margin:0;
-    font-weight:normal;
-}
-
-.option input:checked + label{
-    border-color:#9d0b0b;
-    background:#fff0f0;
-    color:#9d0b0b;
-    font-weight:bold;
-}
-
-.delivery-note{
-    margin-top:10px;
-    padding:12px;
-    background:#f5f5f5;
-    border-radius:10px;
-    font-size:13px;
-    color:#555;
-}
-
 .summary{
-    background:#111;
-    color:white;
+background:#111;
+color:white;
+padding:20px;
+border-radius:15px;
+margin-top:20px
 }
-
-.summary h2{
-    color:#e7b52b;
-}
-
-.summary-row{
-    display:flex;
-    justify-content:space-between;
-    padding:8px 0;
-    border-bottom:1px solid #333;
-}
-
-.order-btn{
-    width:100%;
-    border:none;
-    background:#25D366;
-    color:white;
-    padding:17px;
-    border-radius:12px;
-    font-size:17px;
-    font-weight:bold;
-    margin-top:20px;
-    cursor:pointer;
-}
-
-.order-btn:active{
-    transform:scale(.98);
-}
-
+.summary strong{color:#f4c542}
 footer{
-    text-align:center;
-    background:#111;
-    color:white;
-    padding:25px 15px;
-    margin-top:30px;
+background:#111;
+color:white;
+text-align:center;
+padding:30px 18px
 }
-
-footer strong{
-    color:#e7b52b;
-}
-
-.small{
-    font-size:12px;
-    color:#aaa;
-    margin-top:8px;
-}
-
-.hidden{
-    display:none;
-}
-
-@media(max-width:500px){
-    header{
-        padding:15px;
-    }
-
-    .logo{
-        font-size:21px;
-    }
-
-    .whatsapp-top{
-        font-size:11px;
-        padding:8px 10px;
-    }
-
-    .hero h1{
-        font-size:27px;
-    }
-
-    .card{
-        padding:18px;
-    }
+footer b{color:#f4c542}
+@media(max-width:600px){
+.hero h1{font-size:29px}
+.logo{height:48px;max-width:150px}
+.whatsapp{font-size:12px;padding:8px 11px}
+section{padding:35px 14px}
+.options{grid-template-columns:1fr}
 }
 </style>
 </head>
@@ -292,409 +216,353 @@ footer strong{
 <body>
 
 <header>
-    <div>
-        <div class="logo">Mac <span>Chicken</span></div>
-        <div class="tagline">QUALITY & HEALTH</div>
-    </div>
-
-    <a class="whatsapp-top"
-       href="https://wa.me/255744107741"
-       target="_blank">
-       WhatsApp
-    </a>
+<img class="logo"
+src="95622102-8212-413C-8849-91489284522F.png"
+alt="Mac Chicken">
+<a class="whatsapp"
+href="https://wa.me/255744107741"
+target="_blank">WhatsApp</a>
 </header>
 
-<section class="hero">
+<div class="hero">
+<img class="hero-img"
+src="0BE25A5A-E3C3-4CAF-B55E-95AF307F0284.jpeg"
+alt="Mac Chicken">
+<h1>ORDER FRESH CHICKEN 🐔</h1>
+<p>Fresh Broiler Chicken kutoka Mac Chicken — Quality & Health.</p>
+<div class="price">TSh 8,500 / KUKU</div>
+<a href="#order" class="btn">ORDER NOW</a>
+</div>
 
-    <div class="chicken-icon">🐔</div>
+<section>
+<div class="title">
+<h2>Mac Chicken Services</h2>
+<p>Chagua huduma inayokufaa</p>
+</div>
 
-    <h1>ORDER FRESH CHICKEN</h1>
-
-    <p>Fresh Broiler Chicken — Moshi & Arusha</p>
-
-    <div class="price">
-        TSh 8,500 / Kuku
-    </div>
-
-</section>
-
-<div class="container">
+<div class="cards">
 
 <div class="card">
+<img src="0BE25A5A-E3C3-4CAF-B55E-95AF307F0284.jpeg">
+<div class="card-body">
+<h3>🐔 Fresh Chicken</h3>
+<p>Order fresh broiler chicken kwa matumizi yako binafsi.</p>
+<a href="#order" class="btn">ORDER CHICKEN</a>
+</div>
+</div>
 
-<h2>🐔 Weka Order Yako</h2>
+<div class="card">
+<img src="87C07551-DB29-4DB1-AC25-C04776E594C9.png">
+<div class="card-body">
+<h3>🚚 Delivery</h3>
+<p>Tunapatikana Moshi na Arusha. Delivery fee itathibitishwa kulingana na location.</p>
+<a href="#order" class="btn gold">ORDER DELIVERY</a>
+</div>
+</div>
+
+<div class="card">
+<img src="6A5449E0-15A1-4713-9607-AE43AB121FD4.png">
+<div class="card-body">
+<h3>🎉 Events & Functions</h3>
+<p>Una event, sherehe au function? Wasiliana nasi kwa order ya quantity kubwa.</p>
+<a href="https://wa.me/255744107741?text=Habari%20Mac%20Chicken%2C%20nahitaji%20kuagiza%20kuku%20kwa%20EVENT%2FFUNCTION." class="btn">EVENT ORDER</a>
+</div>
+</div>
+
+<div class="card">
+<img src="657D522F-8FA9-4632-BDCC-1C71BC833232.png">
+<div class="card-body">
+<h3>🏢 Business Supply</h3>
+<p>Supply ya kuku kwa restaurants, hotels, shops na businesses.</p>
+<a href="https://wa.me/255744107741?text=Habari%20Mac%20Chicken%2C%20nahitaji%20Business%20Chicken%20Supply.%20Naomba%20quotation." class="btn">REQUEST QUOTATION</a>
+</div>
+</div>
+
+</div>
+</section>
+
+<section id="order">
+<div class="title">
+<h2>🐔 Place Your Order</h2>
+<p>Jaza taarifa zako hapa chini</p>
+</div>
+
+<div class="order-box">
 
 <label>Idadi ya Kuku</label>
 
-<div class="quantity">
-    <button type="button" onclick="changeQty(-1)">−</button>
-
-    <span id="quantity">1</span>
-
-    <button type="button" onclick="changeQty(1)">+</button>
+<div class="qty">
+<button type="button" onclick="changeQty(-1)">−</button>
+<span id="qty">1</span>
+<button type="button" onclick="changeQty(1)">+</button>
 </div>
 
 <div class="total">
-    Jumla: <span id="total">TSh 8,500</span>
+Total: <span id="total">TSh 8,500</span>
 </div>
-
-</div>
-
-
-<div class="card">
-
-<h2>📍 Taarifa za Delivery</h2>
 
 <label>Jina Kamili</label>
-<input type="text" id="name" placeholder="Mfano: John Michael">
+<input id="name" type="text" placeholder="Mfano: John Michael">
 
 <label>Namba ya Simu</label>
-<input type="tel" id="phone" placeholder="07XXXXXXXX">
+<input id="phone" type="tel" placeholder="07XXXXXXXX">
 
-<label>Unapatikana wapi?</label>
-
+<label>Location</label>
 <select id="location">
-    <option value="">-- Chagua eneo --</option>
-    <option value="Moshi">Moshi</option>
-    <option value="Arusha">Arusha</option>
+<option value="">Chagua location</option>
+<option>Moshi</option>
+<option>Arusha</option>
 </select>
 
-<label>Address / Location yako</label>
+<label>Address / Sehemu ya Delivery</label>
+<textarea id="address" placeholder="Mfano: Shanty Town, karibu na..."></textarea>
 
-<textarea id="address"
-placeholder="Mfano: Shanty Town, karibu na ..."></textarea>
-
-<label>Unataka kupata kuku kwa njia gani?</label>
-
-<div class="option-group">
-
+<label>Unataka kupata order vipi?</label>
+<div class="options">
 <div class="option">
-<input type="radio" id="delivery" name="method" value="Delivery">
-<label for="delivery">🚚 Delivery</label>
+<label>
+<input type="radio" name="delivery" value="Delivery" checked>
+Delivery
+</label>
 </div>
 
 <div class="option">
-<input type="radio" id="pickup" name="method" value="Pickup">
-<label for="pickup">🏪 Pickup</label>
+<label>
+<input type="radio" name="delivery" value="Pickup">
+Pickup
+</label>
+</div>
 </div>
 
-</div>
-
-<div class="delivery-note">
+<div class="note">
 🚚 Delivery fee itathibitishwa kulingana na location yako.
 </div>
 
-</div>
-
-
-<div class="card">
-
-<h2>💰 Malipo</h2>
-
-<div class="option-group">
-
+<label>Malipo</label>
+<div class="options">
 <div class="option">
-<input type="radio" id="before" name="payment" value="Lipa kabla ya delivery">
-<label for="before">💳 Lipa kabla</label>
+<label>
+<input type="radio" name="payment" value="Lipa kabla ya delivery" checked>
+Lipa kabla ya delivery
+</label>
 </div>
 
 <div class="option">
-<input type="radio" id="arrival" name="payment" value="Lipa wakati wa delivery">
-<label for="arrival">💵 Lipa wakati wa delivery</label>
+<label>
+<input type="radio" name="payment" value="Lipa wakati wa delivery">
+Lipa wakati wa delivery
+</label>
+</div>
 </div>
 
-</div>
-
-</div>
-
-
-<div class="card">
-
-<h2>🕐 Utapokea Lini?</h2>
-
-<div class="option-group">
-
+<label>Order inahitajika lini?</label>
+<div class="options">
 <div class="option">
-<input type="radio" id="now" name="schedule" value="Nahitaji sasa" checked>
-<label for="now">⚡ Nahitaji sasa</label>
+<label>
+<input type="radio" name="timeType" value="now" checked onchange="toggleDate()">
+Nahitaji sasa
+</label>
 </div>
 
 <div class="option">
-<input type="radio" id="later" name="schedule" value="Tarehe maalum">
-<label for="later">📅 Tarehe maalum</label>
+<label>
+<input type="radio" name="timeType" value="later" onchange="toggleDate()">
+Tarehe maalum
+</label>
+</div>
 </div>
 
-</div>
-
-<div id="dateTimeBox" class="hidden">
-
+<div id="schedule" style="display:none">
 <label>Tarehe</label>
-<input type="date" id="date">
+<input id="date" type="date">
 
 <label>Muda</label>
-<input type="time" id="time">
-
+<input id="time" type="time">
 </div>
 
+<div class="summary">
+<div>Order ID: <strong id="orderId"></strong></div>
+<br>
+<div>Kuku: <strong id="summaryQty">1</strong></div>
+<div>Subtotal: <strong id="summaryTotal">TSh 8,500</strong></div>
+<div>Delivery: <strong>Itathibitishwa</strong></div>
 </div>
 
+<br>
 
-<div class="card summary">
-
-<h2>📋 Order Summary</h2>
-
-<div class="summary-row">
-<span>Kuku</span>
-<span id="summaryQty">1</span>
-</div>
-
-<div class="summary-row">
-<span>Bei / kuku</span>
-<span>TSh 8,500</span>
-</div>
-
-<div class="summary-row">
-<span>Jumla</span>
-<span id="summaryTotal">TSh 8,500</span>
-</div>
-
-<div class="summary-row">
-<span>Delivery</span>
-<span id="summaryDelivery">Haijachaguliwa</span>
-</div>
-
-<button class="order-btn" onclick="sendOrder()">
-    📲 TUMA ORDER WHATSAPP
+<button class="btn" style="width:100%;font-size:17px"
+onclick="sendOrder()">
+📲 TUMA ORDER WHATSAPP
 </button>
 
 </div>
+</section>
 
+<section>
+<div class="title">
+<h2>🚚 Delivery</h2>
+<p>Freshness mpaka kwako</p>
 </div>
 
+<div class="card">
+<img src="87C07551-DB29-4DB1-AC25-C04776E594C9.png">
+<div class="card-body">
+<h3>Moshi & Arusha</h3>
+<p>
+Mac Chicken inahudumia customers wa Moshi na Arusha.
+Delivery fee hutegemea location na itathibitishwa kabla ya order kukamilishwa.
+</p>
+</div>
+</div>
+</section>
+
+<section>
+<div class="title">
+<h2>🏢 Business & Events</h2>
+<p>Quantity kubwa? Tuwasiliane moja kwa moja.</p>
+</div>
+
+<div class="cards">
+
+<div class="card">
+<img src="657D522F-8FA9-4632-BDCC-1C71BC833232.png">
+<div class="card-body">
+<h3>Business Supply</h3>
+<p>Kwa restaurants, hotels, shops na biashara nyingine.</p>
+<a class="btn"
+href="https://wa.me/255744107741?text=Habari%20Mac%20Chicken%2C%20nahitaji%20Business%20Supply.%20Naomba%20kuongea%20na%20team.">
+WhatsApp Us
+</a>
+</div>
+</div>
+
+<div class="card">
+<img src="6A5449E0-15A1-4713-9607-AE43AB121FD4.png">
+<div class="card-body">
+<h3>Events & Functions</h3>
+<p>Wedding, birthday, party, catering na events mbalimbali.</p>
+<a class="btn"
+href="https://wa.me/255744107741?text=Habari%20Mac%20Chicken%2C%20nahitaji%20kuku%20kwa%20Event%2FFunction.">
+WhatsApp Us
+</a>
+</div>
+</div>
+
+</div>
+</section>
 
 <footer>
-
-<strong>Mac Chicken</strong>
-
-<div>QUALITY & HEALTH</div>
-
-<div class="small">
-Fresh Broiler Chicken • Moshi • Arusha
-</div>
-
-<div class="small">
-WhatsApp: +255 744 107 741
-</div>
-
+<p><b>MAC CHICKEN</b></p>
+<p>QUALITY & HEALTH</p>
+<p>Fresh Broiler Chicken | Moshi | Arusha</p>
+<p>WhatsApp: +255 744 107 741</p>
+<br>
+<small>Freshness you can trust. Quality you can taste.</small>
 </footer>
 
-
 <script>
+const price=8500;
+let qty=1;
 
-let quantity = 1;
-
-const price = 8500;
-
-function formatMoney(number){
-    return "TSh " + number.toLocaleString("en-US");
+function formatMoney(n){
+return "TSh "+n.toLocaleString("en-US");
 }
 
-function updateTotal(){
+function changeQty(value){
+qty+=value;
+if(qty<1)qty=1;
 
-    const total = quantity * price;
-
-    document.getElementById("quantity").textContent = quantity;
-
-    document.getElementById("total").textContent =
-        formatMoney(total);
-
-    document.getElementById("summaryQty").textContent =
-        quantity + " kuku";
-
-    document.getElementById("summaryTotal").textContent =
-        formatMoney(total);
+document.getElementById("qty").textContent=qty;
+document.getElementById("total").textContent=formatMoney(qty*price);
+document.getElementById("summaryQty").textContent=qty;
+document.getElementById("summaryTotal").textContent=formatMoney(qty*price);
 }
 
-function changeQty(amount){
-
-    quantity += amount;
-
-    if(quantity < 1){
-        quantity = 1;
-    }
-
-    updateTotal();
+function toggleDate(){
+const selected=document.querySelector('input[name="timeType"]:checked').value;
+document.getElementById("schedule").style.display=
+selected==="later"?"block":"none";
 }
 
+const today=new Date().toISOString().split("T")[0];
+document.getElementById("date").min=today;
 
-document.querySelectorAll('input[name="schedule"]')
-.forEach(function(radio){
+function makeOrderId(){
+const d=new Date();
+const date=
+d.getFullYear().toString()+
+String(d.getMonth()+1).padStart(2,"0")+
+String(d.getDate()).padStart(2,"0");
 
-    radio.addEventListener("change", function(){
+const random=Math.floor(1000+Math.random()*9000);
 
-        const box = document.getElementById("dateTimeBox");
+return "MC-"+date+"-"+random;
+}
 
-        if(document.getElementById("later").checked){
-
-            box.classList.remove("hidden");
-
-        }else{
-
-            box.classList.add("hidden");
-
-        }
-
-    });
-
-});
-
-
-document.querySelectorAll('input[name="method"]')
-.forEach(function(radio){
-
-    radio.addEventListener("change", function(){
-
-        const selected = document.querySelector(
-            'input[name="method"]:checked'
-        );
-
-        if(selected){
-
-            document.getElementById("summaryDelivery")
-            .textContent = selected.value;
-
-        }
-
-    });
-
-});
-
+document.getElementById("orderId").textContent=makeOrderId();
 
 function sendOrder(){
 
-    const name =
-        document.getElementById("name").value.trim();
+const name=document.getElementById("name").value.trim();
+const phone=document.getElementById("phone").value.trim();
+const location=document.getElementById("location").value;
+const address=document.getElementById("address").value.trim();
 
-    const phone =
-        document.getElementById("phone").value.trim();
-
-    const location =
-        document.getElementById("location").value;
-
-    const address =
-        document.getElementById("address").value.trim();
-
-    const method =
-        document.querySelector('input[name="method"]:checked');
-
-    const payment =
-        document.querySelector('input[name="payment"]:checked');
-
-    const schedule =
-        document.querySelector('input[name="schedule"]:checked');
-
-    if(!name || !phone || !location || !address){
-
-        alert("Tafadhali jaza taarifa zote muhimu za order.");
-
-        return;
-    }
-
-    if(!method){
-
-        alert("Tafadhali chagua Delivery au Pickup.");
-
-        return;
-    }
-
-    if(!payment){
-
-        alert("Tafadhali chagua njia ya malipo.");
-
-        return;
-    }
-
-    let requiredDate = "Sasa hivi";
-    let requiredTime = "";
-
-    if(schedule.value === "Tarehe maalum"){
-
-        const date =
-            document.getElementById("date").value;
-
-        const time =
-            document.getElementById("time").value;
-
-        if(!date || !time){
-
-            alert("Tafadhali chagua tarehe na muda wa order.");
-
-            return;
-        }
-
-        requiredDate = date;
-        requiredTime = time;
-    }
-
-    const total = quantity * price;
-
-    let message =
-
-`🐔 *NEW MAC CHICKEN ORDER*
-
-*Customer Details*
-Name: ${name}
-Phone: ${phone}
-
-*Order Details*
-Location: ${location}
-Address: ${address}
-Quantity: ${quantity} chicken
-Price: ${formatMoney(price)} / chicken
-Chicken Total: ${formatMoney(total)}
-
-*Delivery*
-Method: ${method.value}
-Delivery Fee: Itathibitishwa kulingana na location
-
-*Payment*
-${payment.value}
-
-*Required*
-Date: ${requiredDate}
-Time: ${requiredTime || "As soon as possible"}
-
-*TOTAL: ${formatMoney(total)} + delivery*
-
-Please confirm this order.
-
-Thank you for choosing *Mac Chicken* 🐔❤️`;
-
-    const whatsappNumber = "255744107741";
-
-    const url =
-        "https://wa.me/" +
-        whatsappNumber +
-        "?text=" +
-        encodeURIComponent(message);
-
-    window.open(url, "_blank");
+if(!name||!phone||!location||!address){
+alert("Tafadhali jaza taarifa zote muhimu.");
+return;
 }
 
+const delivery=
+document.querySelector('input[name="delivery"]:checked').value;
 
-const today = new Date();
+const payment=
+document.querySelector('input[name="payment"]:checked').value;
 
-const yyyy = today.getFullYear();
+const timeType=
+document.querySelector('input[name="timeType"]:checked').value;
 
-const mm = String(today.getMonth()+1).padStart(2,"0");
+let requiredTime="Nahitaji sasa";
 
-const dd = String(today.getDate()).padStart(2,"0");
+if(timeType==="later"){
 
-document.getElementById("date").min =
-    `${yyyy}-${mm}-${dd}`;
+const date=document.getElementById("date").value;
+const time=document.getElementById("time").value;
 
-updateTotal();
+if(!date||!time){
+alert("Tafadhali chagua tarehe na muda wa order.");
+return;
+}
 
+requiredTime=date+" saa "+time;
+}
+
+const orderId=document.getElementById("orderId").textContent;
+const total=formatMoney(qty*price);
+
+const message=
+"🐔 NEW MAC CHICKEN ORDER%0A"+
+"━━━━━━━━━━━━━━%0A"+
+"Order ID: "+orderId+"%0A"+
+"Name: "+name+"%0A"+
+"Phone: "+phone+"%0A"+
+"Location: "+location+"%0A"+
+"Address: "+address+"%0A"+
+"Quantity: "+qty+" chickens%0A"+
+"Price: "+total+"%0A"+
+"Delivery/Pickup: "+delivery+"%0A"+
+"Required: "+requiredTime+"%0A"+
+"Payment: "+payment+"%0A"+
+"Delivery Fee: To be confirmed%0A"+
+"TOTAL: "+total+" + delivery%0A"+
+"━━━━━━━━━━━━━━%0A"+
+"Please confirm this order.";
+
+window.open(
+"https://wa.me/255744107741?text="+message,
+"_blank"
+);
+}
 </script>
 
 </body>
