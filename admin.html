@@ -57,6 +57,15 @@
       color: white;
     }
 
+    .sound-btn {
+      background: #2e7d32;
+      color: white;
+    }
+
+    .sound-btn.off {
+      background: #666;
+    }
+
     .container {
       width: 95%;
       max-width: 1400px;
@@ -127,6 +136,12 @@
       font-size: 24px;
     }
 
+    .topbar-actions {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
     .stats-grid {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
@@ -168,6 +183,81 @@
     .analytics-title {
       font-size: 20px;
       margin: 25px 0 15px;
+    }
+
+    /* NEW ORDER ALERT */
+
+    .new-order-alert {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      width: min(390px, calc(100% - 30px));
+      background: white;
+      border-radius: 14px;
+      box-shadow: 0 10px 35px rgba(0,0,0,0.25);
+      padding: 18px;
+      z-index: 20000;
+      border-left: 6px solid #b71c1c;
+      display: none;
+      animation: alertSlide 0.35s ease;
+    }
+
+    .new-order-alert.show {
+      display: block;
+    }
+
+    @keyframes alertSlide {
+      from {
+        opacity: 0;
+        transform: translateY(-20px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .alert-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+
+    .alert-title {
+      font-size: 18px;
+      font-weight: bold;
+      color: #b71c1c;
+    }
+
+    .alert-close {
+      background: #eee;
+      padding: 5px 9px;
+      font-size: 16px;
+    }
+
+    .alert-details {
+      line-height: 1.7;
+      font-size: 14px;
+    }
+
+    .alert-order-id {
+      font-weight: bold;
+      color: #111;
+    }
+
+    .alert-actions {
+      margin-top: 14px;
+      display: flex;
+      gap: 8px;
+    }
+
+    .alert-view-btn {
+      background: #111;
+      color: white;
+      flex: 1;
     }
 
     /* SEARCH/FILTERS */
@@ -498,6 +588,11 @@
       .bar {
         width: 75%;
       }
+
+      .new-order-alert {
+        top: 10px;
+        right: 15px;
+      }
     }
   </style>
 </head>
@@ -555,9 +650,24 @@
           <small id="lastUpdated">Not updated yet</small>
         </div>
 
-        <button class="refresh-btn" onclick="loadOrders()">
-          🔄 Refresh
-        </button>
+        <div class="topbar-actions">
+
+          <button
+            id="soundButton"
+            class="sound-btn"
+            onclick="toggleSound()"
+          >
+            🔊 Sound ON
+          </button>
+
+          <button
+            class="refresh-btn"
+            onclick="loadOrders()"
+          >
+            🔄 Refresh
+          </button>
+
+        </div>
       </div>
 
 
@@ -770,6 +880,48 @@
   </div>
 
 
+  <!-- NEW ORDER ALERT -->
+
+  <div
+    id="newOrderAlert"
+    class="new-order-alert"
+  >
+
+    <div class="alert-header">
+
+      <div class="alert-title">
+        🔔 NEW ORDER!
+      </div>
+
+      <button
+        class="alert-close"
+        onclick="closeNewOrderAlert()"
+      >
+        ×
+      </button>
+
+    </div>
+
+    <div
+      id="newOrderAlertDetails"
+      class="alert-details"
+    ></div>
+
+    <div class="alert-actions">
+
+      <button
+        id="alertViewButton"
+        class="alert-view-btn"
+        onclick="viewNewOrderFromAlert()"
+      >
+        View Order
+      </button>
+
+    </div>
+
+  </div>
+
+
   <!-- ORDER MODAL -->
 
   <div id="orderModal" class="modal">
@@ -818,6 +970,327 @@
   let allOrders = [];
   let currentModalOrder = null;
 
+  let realtimeChannel = null;
+
+  let soundEnabled = true;
+
+  let audioContext = null;
+
+  let latestAlertOrderId = null;
+
+
+  /* =========================
+     SOUND
+  ========================= */
+
+  function prepareAudio() {
+
+    try {
+
+      if (!audioContext) {
+
+        audioContext =
+          new (
+            window.AudioContext ||
+            window.webkitAudioContext
+          )();
+
+      }
+
+      if (
+        audioContext.state ===
+        "suspended"
+      ) {
+        audioContext.resume();
+      }
+
+    } catch (error) {
+
+      console.log(
+        "Audio unavailable:",
+        error
+      );
+
+    }
+  }
+
+
+  function playNotificationSound() {
+
+    if (!soundEnabled) {
+      return;
+    }
+
+    try {
+
+      prepareAudio();
+
+      if (!audioContext) {
+        return;
+      }
+
+      const now =
+        audioContext.currentTime;
+
+      const oscillator =
+        audioContext.createOscillator();
+
+      const gain =
+        audioContext.createGain();
+
+      oscillator.type = "sine";
+
+      oscillator.frequency.setValueAtTime(
+        880,
+        now
+      );
+
+      oscillator.frequency.setValueAtTime(
+        1174,
+        now + 0.10
+      );
+
+      gain.gain.setValueAtTime(
+        0.0001,
+        now
+      );
+
+      gain.gain.exponentialRampToValueAtTime(
+        0.18,
+        now + 0.02
+      );
+
+      gain.gain.exponentialRampToValueAtTime(
+        0.0001,
+        now + 0.45
+      );
+
+      oscillator.connect(gain);
+
+      gain.connect(
+        audioContext.destination
+      );
+
+      oscillator.start(now);
+
+      oscillator.stop(
+        now + 0.45
+      );
+
+    } catch (error) {
+
+      console.log(
+        "Notification sound error:",
+        error
+      );
+
+    }
+  }
+
+
+  function toggleSound() {
+
+    soundEnabled =
+      !soundEnabled;
+
+    const button =
+      document.getElementById(
+        "soundButton"
+      );
+
+    if (soundEnabled) {
+
+      prepareAudio();
+
+      button.textContent =
+        "🔊 Sound ON";
+
+      button.classList.remove(
+        "off"
+      );
+
+      playNotificationSound();
+
+    } else {
+
+      button.textContent =
+        "🔇 Sound OFF";
+
+      button.classList.add(
+        "off"
+      );
+    }
+  }
+
+
+  /* =========================
+     NEW ORDER ALERT
+  ========================= */
+
+  function showNewOrderAlert(order) {
+
+    if (!order) {
+      return;
+    }
+
+    latestAlertOrderId =
+      order.order_id;
+
+    const alert =
+      document.getElementById(
+        "newOrderAlert"
+      );
+
+    const details =
+      document.getElementById(
+        "newOrderAlertDetails"
+      );
+
+    details.innerHTML = `
+      <div>
+        <strong>Order ID:</strong>
+        <span class="alert-order-id">
+          ${escapeHtml(order.order_id)}
+        </span>
+      </div>
+
+      <div>
+        <strong>Customer:</strong>
+        ${escapeHtml(order.customer_name)}
+      </div>
+
+      <div>
+        <strong>Quantity:</strong>
+        ${getQuantity(order)} chickens
+      </div>
+
+      <div>
+        <strong>Location:</strong>
+        ${escapeHtml(order.location)}
+      </div>
+
+      <div>
+        <strong>Amount:</strong>
+        ${formatMoney(getPrice(order))}
+      </div>
+    `;
+
+    alert.classList.add(
+      "show"
+    );
+
+    playNotificationSound();
+
+    setTimeout(() => {
+
+      alert.classList.remove(
+        "show"
+      );
+
+    }, 12000);
+  }
+
+
+  function closeNewOrderAlert() {
+
+    document
+      .getElementById(
+        "newOrderAlert"
+      )
+      .classList.remove(
+        "show"
+      );
+  }
+
+
+  function viewNewOrderFromAlert() {
+
+    if (!latestAlertOrderId) {
+      return;
+    }
+
+    closeNewOrderAlert();
+
+    viewOrder(
+      latestAlertOrderId
+    );
+  }
+
+
+  /* =========================
+     REALTIME
+  ========================= */
+
+  function startRealtimeOrders() {
+
+    if (realtimeChannel) {
+
+      supabaseClient
+        .removeChannel(
+          realtimeChannel
+        );
+
+      realtimeChannel = null;
+    }
+
+
+    realtimeChannel =
+      supabaseClient
+        .channel(
+          "mac-chicken-orders-realtime"
+        )
+        .on(
+          "postgres_changes",
+          {
+            event: "INSERT",
+            schema: "public",
+            table: "orders"
+          },
+          async (payload) => {
+
+            console.log(
+              "NEW ORDER RECEIVED:",
+              payload
+            );
+
+            const newOrder =
+              payload.new;
+
+            showNewOrderAlert(
+              newOrder
+            );
+
+            await loadOrders();
+
+          }
+        )
+        .subscribe(
+          (status) => {
+
+            console.log(
+              "Realtime status:",
+              status
+            );
+
+          }
+        );
+  }
+
+
+  function stopRealtimeOrders() {
+
+    if (!realtimeChannel) {
+      return;
+    }
+
+    supabaseClient
+      .removeChannel(
+        realtimeChannel
+      );
+
+    realtimeChannel = null;
+  }
+
 
   /* =========================
      LOGIN CHECK
@@ -827,13 +1300,23 @@
 
     const {
       data: { session }
-    } = await supabaseClient.auth.getSession();
+    } =
+      await supabaseClient
+        .auth
+        .getSession();
 
     if (session) {
+
       showDashboard();
+
       loadOrders();
+
+      startRealtimeOrders();
+
     } else {
+
       showLogin();
+
     }
   }
 
@@ -841,24 +1324,42 @@
   function showLogin() {
 
     document
-      .getElementById("loginSection")
-      .classList.remove("hidden");
+      .getElementById(
+        "loginSection"
+      )
+      .classList.remove(
+        "hidden"
+      );
 
     document
-      .getElementById("dashboardSection")
-      .classList.add("hidden");
+      .getElementById(
+        "dashboardSection"
+      )
+      .classList.add(
+        "hidden"
+      );
   }
 
 
   function showDashboard() {
 
     document
-      .getElementById("loginSection")
-      .classList.add("hidden");
+      .getElementById(
+        "loginSection"
+      )
+      .classList.add(
+        "hidden"
+      );
 
     document
-      .getElementById("dashboardSection")
-      .classList.remove("hidden");
+      .getElementById(
+        "dashboardSection"
+      )
+      .classList.remove(
+        "hidden"
+      );
+
+    prepareAudio();
   }
 
 
@@ -869,17 +1370,33 @@
   async function login() {
 
     const email =
-      document.getElementById("email").value.trim();
+      document
+        .getElementById(
+          "email"
+        )
+        .value
+        .trim();
 
     const password =
-      document.getElementById("password").value;
+      document
+        .getElementById(
+          "password"
+        )
+        .value;
 
     const errorBox =
-      document.getElementById("loginError");
+      document
+        .getElementById(
+          "loginError"
+        );
 
-    errorBox.textContent = "";
+    errorBox.textContent =
+      "";
 
-    if (!email || !password) {
+    if (
+      !email ||
+      !password
+    ) {
 
       errorBox.textContent =
         "Please enter email and password.";
@@ -889,10 +1406,13 @@
 
     const {
       error
-    } = await supabaseClient.auth.signInWithPassword({
-      email,
-      password
-    });
+    } =
+      await supabaseClient
+        .auth
+        .signInWithPassword({
+          email,
+          password
+        });
 
     if (error) {
 
@@ -903,7 +1423,10 @@
     }
 
     showDashboard();
+
     loadOrders();
+
+    startRealtimeOrders();
   }
 
 
@@ -913,7 +1436,11 @@
 
   async function logout() {
 
-    await supabaseClient.auth.signOut();
+    stopRealtimeOrders();
+
+    await supabaseClient
+      .auth
+      .signOut();
 
     allOrders = [];
 
@@ -928,7 +1455,10 @@
   async function loadOrders() {
 
     const tbody =
-      document.getElementById("ordersTableBody");
+      document
+        .getElementById(
+          "ordersTableBody"
+        );
 
     tbody.innerHTML = `
       <tr>
@@ -941,12 +1471,16 @@
     const {
       data,
       error
-    } = await supabaseClient
-      .from("orders")
-      .select("*")
-      .order("created_at", {
-        ascending: false
-      });
+    } =
+      await supabaseClient
+        .from("orders")
+        .select("*")
+        .order(
+          "created_at",
+          {
+            ascending: false
+          }
+        );
 
     if (error) {
 
@@ -962,16 +1496,27 @@
       return;
     }
 
-    allOrders = data || [];
+    allOrders =
+      data || [];
 
     updateStats();
+
     updateAnalytics();
+
     renderSalesChart();
+
     renderOrders();
 
-    document.getElementById("lastUpdated").textContent =
-      "Last updated: " +
-      new Date().toLocaleString("en-TZ");
+    document
+      .getElementById(
+        "lastUpdated"
+      )
+      .textContent =
+        "Last updated: " +
+        new Date()
+          .toLocaleString(
+            "en-TZ"
+          );
   }
 
 
@@ -981,59 +1526,92 @@
 
   function isCancelled(order) {
 
-    return String(order.order_status || "")
-      .toLowerCase() === "cancelled";
+    return String(
+      order.order_status || ""
+    )
+      .toLowerCase() ===
+      "cancelled";
   }
 
 
   function validOrders() {
 
     return allOrders.filter(
-      order => !isCancelled(order)
+      order =>
+        !isCancelled(order)
     );
   }
 
 
   function getPrice(order) {
 
-    return Number(order.price || 0);
+    return Number(
+      order.price || 0
+    );
   }
 
 
   function getQuantity(order) {
 
-    return Number(order.quantity || 0);
+    return Number(
+      order.quantity || 0
+    );
   }
 
 
   function getPaymentStatus(order) {
 
-    return order.payment_status ||
-      "Pending";
+    return (
+      order.payment_status ||
+      "Pending"
+    );
   }
 
 
   function formatMoney(amount) {
 
-    return "TSh " +
-      Number(amount || 0)
-        .toLocaleString("en-TZ");
+    return (
+      "TSh " +
+      Number(
+        amount || 0
+      )
+        .toLocaleString(
+          "en-TZ"
+        )
+    );
   }
 
 
   function escapeHtml(value) {
 
-    if (value === null ||
-        value === undefined) {
+    if (
+      value === null ||
+      value === undefined
+    ) {
       return "";
     }
 
     return String(value)
-      .replace(/&/g, "&amp;")
-      .replace(/</g, "&lt;")
-      .replace(/>/g, "&gt;")
-      .replace(/"/g, "&quot;")
-      .replace(/'/g, "&#039;");
+      .replace(
+        /&/g,
+        "&amp;"
+      )
+      .replace(
+        /</g,
+        "&lt;"
+      )
+      .replace(
+        />/g,
+        "&gt;"
+      )
+      .replace(
+        /"/g,
+        "&quot;"
+      )
+      .replace(
+        /'/g,
+        "&#039;"
+      );
   }
 
 
@@ -1047,7 +1625,9 @@
 
   function dateKeyTZ(dateValue) {
 
-    if (!dateValue) return "";
+    if (!dateValue) {
+      return "";
+    }
 
     return new Intl.DateTimeFormat(
       "en-CA",
@@ -1057,24 +1637,34 @@
         month: "2-digit",
         day: "2-digit"
       }
-    ).format(new Date(dateValue));
+    ).format(
+      new Date(
+        dateValue
+      )
+    );
   }
 
 
   function todayKey() {
 
-    return dateKeyTZ(new Date());
+    return dateKeyTZ(
+      new Date()
+    );
   }
 
 
   function getStartOfWeek() {
 
-    const now = new Date();
+    const now =
+      new Date();
 
-    const day = now.getDay();
+    const day =
+      now.getDay();
 
     const diff =
-      day === 0 ? 6 : day - 1;
+      day === 0
+        ? 6
+        : day - 1;
 
     const start =
       new Date(now);
@@ -1087,7 +1677,8 @@
     );
 
     start.setDate(
-      start.getDate() - diff
+      start.getDate() -
+      diff
     );
 
     return start;
@@ -1096,7 +1687,8 @@
 
   function getStartOfMonth() {
 
-    const now = new Date();
+    const now =
+      new Date();
 
     return new Date(
       now.getFullYear(),
@@ -1125,21 +1717,36 @@
     const pendingOrders =
       orders.filter(
         order =>
-          String(order.order_status || "")
-            .toLowerCase() === "pending"
+          String(
+            order.order_status || ""
+          )
+            .toLowerCase() ===
+          "pending"
       ).length;
 
     const totalChickens =
       orders.reduce(
-        (sum, order) =>
-          sum + getQuantity(order),
+        (
+          sum,
+          order
+        ) =>
+          sum +
+          getQuantity(
+            order
+          ),
         0
       );
 
     const totalSales =
       orders.reduce(
-        (sum, order) =>
-          sum + getPrice(order),
+        (
+          sum,
+          order
+        ) =>
+          sum +
+          getPrice(
+            order
+          ),
         0
       );
 
@@ -1161,7 +1768,9 @@
     document.getElementById(
       "totalSales"
     ).textContent =
-      formatMoney(totalSales);
+      formatMoney(
+        totalSales
+      );
   }
 
 
@@ -1180,150 +1789,217 @@
     const todayOrdersList =
       orders.filter(
         order =>
-          dateKeyTZ(order.created_at) === today
+          dateKeyTZ(
+            order.created_at
+          ) === today
       );
 
     const todaySales =
       todayOrdersList.reduce(
-        (sum, order) =>
-          sum + getPrice(order),
+        (
+          sum,
+          order
+        ) =>
+          sum +
+          getPrice(
+            order
+          ),
         0
       );
 
     const todayChickens =
       todayOrdersList.reduce(
-        (sum, order) =>
-          sum + getQuantity(order),
+        (
+          sum,
+          order
+        ) =>
+          sum +
+          getQuantity(
+            order
+          ),
         0
       );
 
 
-    /* TODAY */
-
     document.getElementById(
       "todaySales"
     ).textContent =
-      formatMoney(todaySales);
+      formatMoney(
+        todaySales
+      );
 
     document.getElementById(
       "todayOrders"
     ).textContent =
-      todayOrdersList.length.toLocaleString();
+      todayOrdersList
+        .length
+        .toLocaleString();
 
     document.getElementById(
       "todayChickens"
     ).textContent =
-      todayChickens.toLocaleString();
+      todayChickens
+        .toLocaleString();
 
-
-    /* WEEK */
 
     const weekStart =
       getStartOfWeek();
 
     const weeklyOrders =
-      orders.filter(order => {
+      orders.filter(
+        order => {
 
-        if (!order.created_at) {
-          return false;
+          if (
+            !order.created_at
+          ) {
+            return false;
+          }
+
+          return (
+            new Date(
+              order.created_at
+            ) >=
+            weekStart
+          );
+
         }
-
-        return new Date(order.created_at)
-          >= weekStart;
-      });
+      );
 
     const weeklySales =
       weeklyOrders.reduce(
-        (sum, order) =>
-          sum + getPrice(order),
+        (
+          sum,
+          order
+        ) =>
+          sum +
+          getPrice(
+            order
+          ),
         0
       );
 
     document.getElementById(
       "weeklySales"
     ).textContent =
-      formatMoney(weeklySales);
+      formatMoney(
+        weeklySales
+      );
 
-
-    /* MONTH */
 
     const monthStart =
       getStartOfMonth();
 
     const monthlyOrders =
-      orders.filter(order => {
+      orders.filter(
+        order => {
 
-        if (!order.created_at) {
-          return false;
+          if (
+            !order.created_at
+          ) {
+            return false;
+          }
+
+          return (
+            new Date(
+              order.created_at
+            ) >=
+            monthStart
+          );
+
         }
-
-        return new Date(order.created_at)
-          >= monthStart;
-      });
+      );
 
     const monthlySales =
       monthlyOrders.reduce(
-        (sum, order) =>
-          sum + getPrice(order),
+        (
+          sum,
+          order
+        ) =>
+          sum +
+          getPrice(
+            order
+          ),
         0
       );
 
     document.getElementById(
       "monthlySales"
     ).textContent =
-      formatMoney(monthlySales);
+      formatMoney(
+        monthlySales
+      );
 
-
-    /* PAYMENT */
 
     const paid =
       orders.filter(
         order =>
-          getPaymentStatus(order)
-            .toLowerCase() === "paid"
+          getPaymentStatus(
+            order
+          ).toLowerCase() ===
+          "paid"
       );
 
     const unpaid =
       orders.filter(
         order =>
-          getPaymentStatus(order)
-            .toLowerCase() !== "paid"
+          getPaymentStatus(
+            order
+          ).toLowerCase() !==
+          "paid"
       );
 
     const paidSales =
       paid.reduce(
-        (sum, order) =>
-          sum + getPrice(order),
+        (
+          sum,
+          order
+        ) =>
+          sum +
+          getPrice(
+            order
+          ),
         0
       );
 
     const pendingSales =
       unpaid.reduce(
-        (sum, order) =>
-          sum + getPrice(order),
+        (
+          sum,
+          order
+        ) =>
+          sum +
+          getPrice(
+            order
+          ),
         0
       );
 
     document.getElementById(
       "paidOrders"
     ).textContent =
-      paid.length.toLocaleString();
+      paid.length
+        .toLocaleString();
 
     document.getElementById(
       "paidOrdersSub"
     ).textContent =
       "Pending payment: " +
-      unpaid.length.toLocaleString();
+      unpaid.length
+        .toLocaleString();
 
     document.getElementById(
       "paidSales"
     ).textContent =
-      formatMoney(paidSales);
+      formatMoney(
+        paidSales
+      );
 
     document.getElementById(
       "pendingSales"
     ).textContent =
-      formatMoney(pendingSales);
+      formatMoney(
+        pendingSales
+      );
   }
 
 
@@ -1335,9 +2011,14 @@
 
     const days = [];
 
-    const now = new Date();
+    const now =
+      new Date();
 
-    for (let i = 6; i >= 0; i--) {
+    for (
+      let i = 6;
+      i >= 0;
+      i--
+    ) {
 
       const date =
         new Date(now);
@@ -1350,10 +2031,13 @@
       );
 
       date.setDate(
-        date.getDate() - i
+        date.getDate() -
+        i
       );
 
-      days.push(date);
+      days.push(
+        date
+      );
     }
 
     return days;
@@ -1375,38 +2059,57 @@
       getLastSevenDays();
 
     const values =
-      days.map(day => {
+      days.map(
+        day => {
 
-        const key =
-          dateKeyTZ(day);
+          const key =
+            dateKeyTZ(
+              day
+            );
 
-        return allOrders
-          .filter(order =>
-            !isCancelled(order) &&
-            dateKeyTZ(order.created_at) === key
-          )
-          .reduce(
-            (sum, order) =>
-              sum + getPrice(order),
-            0
-          );
-      });
+          return allOrders
+            .filter(
+              order =>
+                !isCancelled(
+                  order
+                ) &&
+                dateKeyTZ(
+                  order.created_at
+                ) === key
+            )
+            .reduce(
+              (
+                sum,
+                order
+              ) =>
+                sum +
+                getPrice(
+                  order
+                ),
+              0
+            );
+        }
+      );
 
-
-    /* =========================
-       NO SALES YET
-    ========================= */
 
     const totalSevenDaySales =
       values.reduce(
-        (sum, value) =>
-          sum + value,
+        (
+          sum,
+          value
+        ) =>
+          sum +
+          value,
         0
       );
 
-    chart.innerHTML = "";
+    chart.innerHTML =
+      "";
 
-    if (totalSevenDaySales === 0) {
+    if (
+      totalSevenDaySales ===
+      0
+    ) {
 
       chart.innerHTML = `
         <div class="chart-empty">
@@ -1422,16 +2125,18 @@
     }
 
 
-    /* =========================
-       SALES EXIST
-    ========================= */
-
     const max =
-      Math.max(...values, 1);
+      Math.max(
+        ...values,
+        1
+      );
 
 
     days.forEach(
-      (day, index) => {
+      (
+        day,
+        index
+      ) => {
 
         const value =
           values[index];
@@ -1440,7 +2145,10 @@
           value > 0
             ? Math.max(
                 3,
-                (value / max) * 85
+                (
+                  value /
+                  max
+                ) * 85
               )
             : 3;
 
@@ -1462,7 +2170,9 @@
 
         valueLabel.textContent =
           value > 0
-            ? formatCompactMoney(value)
+            ? formatCompactMoney(
+                value
+              )
             : "0";
 
         const bar =
@@ -1474,7 +2184,8 @@
           "bar";
 
         bar.style.height =
-          height + "%";
+          height +
+          "%";
 
         const label =
           document.createElement(
@@ -1488,7 +2199,8 @@
           day.toLocaleDateString(
             "en-US",
             {
-              weekday: "short"
+              weekday:
+                "short"
             }
           );
 
@@ -1512,27 +2224,41 @@
   }
 
 
-  function formatCompactMoney(value) {
+  function formatCompactMoney(
+    value
+  ) {
 
     const amount =
-      Number(value || 0);
+      Number(
+        value || 0
+      );
 
-    if (amount >= 1000000) {
+    if (
+      amount >=
+      1000000
+    ) {
 
       return (
         "TSh " +
-        (amount / 1000000)
-          .toFixed(1) +
+        (
+          amount /
+          1000000
+        ).toFixed(1) +
         "M"
       );
     }
 
-    if (amount >= 1000) {
+    if (
+      amount >=
+      1000
+    ) {
 
       return (
         "TSh " +
-        (amount / 1000)
-          .toFixed(0) +
+        (
+          amount /
+          1000
+        ).toFixed(0) +
         "K"
       );
     }
@@ -1551,82 +2277,111 @@
   function renderOrders() {
 
     const search =
-      document.getElementById(
-        "searchInput"
-      ).value
-      .toLowerCase()
-      .trim();
+      document
+        .getElementById(
+          "searchInput"
+        )
+        .value
+        .toLowerCase()
+        .trim();
 
     const location =
-      document.getElementById(
-        "locationFilter"
-      ).value;
+      document
+        .getElementById(
+          "locationFilter"
+        )
+        .value;
 
     const delivery =
-      document.getElementById(
-        "deliveryFilter"
-      ).value;
+      document
+        .getElementById(
+          "deliveryFilter"
+        )
+        .value;
 
     const status =
-      document.getElementById(
-        "statusFilter"
-      ).value;
+      document
+        .getElementById(
+          "statusFilter"
+        )
+        .value;
 
     const payment =
-      document.getElementById(
-        "paymentFilter"
-      ).value;
+      document
+        .getElementById(
+          "paymentFilter"
+        )
+        .value;
 
 
     const filtered =
-      allOrders.filter(order => {
+      allOrders.filter(
+        order => {
 
-        const searchable =
-          (
-            String(order.order_id || "") +
-            " " +
-            String(order.customer_name || "") +
-            " " +
-            String(order.phone || "")
-          ).toLowerCase();
+          const searchable =
+            (
+              String(
+                order.order_id ||
+                ""
+              ) +
+              " " +
+              String(
+                order.customer_name ||
+                ""
+              ) +
+              " " +
+              String(
+                order.phone ||
+                ""
+              )
+            )
+              .toLowerCase();
 
-        if (
-          search &&
-          !searchable.includes(search)
-        ) {
-          return false;
+          if (
+            search &&
+            !searchable.includes(
+              search
+            )
+          ) {
+            return false;
+          }
+
+          if (
+            location &&
+            order.location !==
+              location
+          ) {
+            return false;
+          }
+
+          if (
+            delivery &&
+            order.delivery_method !==
+              delivery
+          ) {
+            return false;
+          }
+
+          if (
+            status &&
+            order.order_status !==
+              status
+          ) {
+            return false;
+          }
+
+          if (
+            payment &&
+            getPaymentStatus(
+              order
+            ) !== payment
+          ) {
+            return false;
+          }
+
+          return true;
         }
-
-        if (
-          location &&
-          order.location !== location
-        ) {
-          return false;
-        }
-
-        if (
-          delivery &&
-          order.delivery_method !== delivery
-        ) {
-          return false;
-        }
-
-        if (
-          status &&
-          order.order_status !== status
-        ) {
-          return false;
-        }
-
-        if (
-          payment &&
-          getPaymentStatus(order) !== payment
-        ) {
-          return false;
-        }
-
-        return true;
-      });
+      );
 
 
     document.getElementById(
@@ -1642,7 +2397,9 @@
         "ordersTableBody"
       );
 
-    if (!filtered.length) {
+    if (
+      !filtered.length
+    ) {
 
       tbody.innerHTML = `
         <tr>
@@ -1657,167 +2414,233 @@
 
 
     tbody.innerHTML =
-      filtered.map(order => {
+      filtered
+        .map(
+          order => {
 
-        const orderId =
-          escapeHtml(order.order_id);
+            const orderId =
+              escapeHtml(
+                order.order_id
+              );
 
-        const customer =
-          escapeHtml(order.customer_name);
+            const customer =
+              escapeHtml(
+                order.customer_name
+              );
 
-        const phone =
-          escapeHtml(order.phone);
+            const phone =
+              escapeHtml(
+                order.phone
+              );
 
-        const loc =
-          escapeHtml(order.location);
+            const loc =
+              escapeHtml(
+                order.location
+              );
 
-        const deliveryMethod =
-          escapeHtml(order.delivery_method);
+            const deliveryMethod =
+              escapeHtml(
+                order.delivery_method
+              );
 
-        const paymentMethod =
-          escapeHtml(order.payment_method);
+            const paymentMethod =
+              escapeHtml(
+                order.payment_method
+              );
 
-        const qty =
-          getQuantity(order);
+            const qty =
+              getQuantity(
+                order
+              );
 
-        const price =
-          getPrice(order);
+            const price =
+              getPrice(
+                order
+              );
 
-        const paymentStatus =
-          getPaymentStatus(order);
+            const paymentStatus =
+              getPaymentStatus(
+                order
+              );
 
-        const orderStatus =
-          order.order_status ||
-          "Pending";
+            const orderStatus =
+              order.order_status ||
+              "Pending";
 
 
-        return `
-          <tr>
+            return `
+              <tr>
 
-            <td>
-              <strong>${orderId}</strong>
-            </td>
+                <td>
+                  <strong>
+                    ${orderId}
+                  </strong>
+                </td>
 
-            <td>
-              ${customer}
-            </td>
+                <td>
+                  ${customer}
+                </td>
 
-            <td>
-              ${phone}
-            </td>
+                <td>
+                  ${phone}
+                </td>
 
-            <td>
-              ${loc}
-            </td>
+                <td>
+                  ${loc}
+                </td>
 
-            <td>
-              ${qty}
-            </td>
+                <td>
+                  ${qty}
+                </td>
 
-            <td>
-              ${formatMoney(price)}
-            </td>
+                <td>
+                  ${formatMoney(
+                    price
+                  )}
+                </td>
 
-            <td>
-              ${deliveryMethod}
-            </td>
+                <td>
+                  ${deliveryMethod}
+                </td>
 
-            <td>
-              ${paymentMethod}
-            </td>
+                <td>
+                  ${paymentMethod}
+                </td>
 
-            <td>
+                <td>
 
-              <select
-                class="payment-select"
-                onchange="updatePaymentStatus('${orderId}', this.value)"
-              >
+                  <select
+                    class="payment-select"
+                    onchange="updatePaymentStatus('${orderId}', this.value)"
+                  >
 
-                <option
-                  value="Pending"
-                  ${paymentStatus === "Pending" ? "selected" : ""}
-                >
-                  Pending
-                </option>
+                    <option
+                      value="Pending"
+                      ${
+                        paymentStatus ===
+                        "Pending"
+                          ? "selected"
+                          : ""
+                      }
+                    >
+                      Pending
+                    </option>
 
-                <option
-                  value="Paid"
-                  ${paymentStatus === "Paid" ? "selected" : ""}
-                >
-                  Paid
-                </option>
+                    <option
+                      value="Paid"
+                      ${
+                        paymentStatus ===
+                        "Paid"
+                          ? "selected"
+                          : ""
+                      }
+                    >
+                      Paid
+                    </option>
 
-                <option
-                  value="Pay at Delivery"
-                  ${paymentStatus === "Pay at Delivery" ? "selected" : ""}
-                >
-                  Pay at Delivery
-                </option>
+                    <option
+                      value="Pay at Delivery"
+                      ${
+                        paymentStatus ===
+                        "Pay at Delivery"
+                          ? "selected"
+                          : ""
+                      }
+                    >
+                      Pay at Delivery
+                    </option>
 
-              </select>
+                  </select>
 
-            </td>
+                </td>
 
-            <td>
+                <td>
 
-              <select
-                class="status-select"
-                onchange="updateOrderStatus('${orderId}', this.value)"
-              >
+                  <select
+                    class="status-select"
+                    onchange="updateOrderStatus('${orderId}', this.value)"
+                  >
 
-                <option
-                  value="Pending"
-                  ${orderStatus === "Pending" ? "selected" : ""}
-                >
-                  Pending
-                </option>
+                    <option
+                      value="Pending"
+                      ${
+                        orderStatus ===
+                        "Pending"
+                          ? "selected"
+                          : ""
+                      }
+                    >
+                      Pending
+                    </option>
 
-                <option
-                  value="Confirmed"
-                  ${orderStatus === "Confirmed" ? "selected" : ""}
-                >
-                  Confirmed
-                </option>
+                    <option
+                      value="Confirmed"
+                      ${
+                        orderStatus ===
+                        "Confirmed"
+                          ? "selected"
+                          : ""
+                      }
+                    >
+                      Confirmed
+                    </option>
 
-                <option
-                  value="Ready"
-                  ${orderStatus === "Ready" ? "selected" : ""}
-                >
-                  Ready
-                </option>
+                    <option
+                      value="Ready"
+                      ${
+                        orderStatus ===
+                        "Ready"
+                          ? "selected"
+                          : ""
+                      }
+                    >
+                      Ready
+                    </option>
 
-                <option
-                  value="Delivered"
-                  ${orderStatus === "Delivered" ? "selected" : ""}
-                >
-                  Delivered
-                </option>
+                    <option
+                      value="Delivered"
+                      ${
+                        orderStatus ===
+                        "Delivered"
+                          ? "selected"
+                          : ""
+                      }
+                    >
+                      Delivered
+                    </option>
 
-                <option
-                  value="Cancelled"
-                  ${orderStatus === "Cancelled" ? "selected" : ""}
-                >
-                  Cancelled
-                </option>
+                    <option
+                      value="Cancelled"
+                      ${
+                        orderStatus ===
+                        "Cancelled"
+                          ? "selected"
+                          : ""
+                      }
+                    >
+                      Cancelled
+                    </option>
 
-              </select>
+                  </select>
 
-            </td>
+                </td>
 
-            <td>
+                <td>
 
-              <button
-                class="view-btn"
-                onclick="viewOrder('${orderId}')"
-              >
-                View
-              </button>
+                  <button
+                    class="view-btn"
+                    onclick="viewOrder('${orderId}')"
+                  >
+                    View
+                  </button>
 
-            </td>
+                </td>
 
-          </tr>
-        `;
-      }).join("");
+              </tr>
+            `;
+          }
+        )
+        .join("");
   }
 
 
@@ -1832,16 +2655,17 @@
 
     const {
       error
-    } = await supabaseClient
-      .from("orders")
-      .update({
-        payment_status:
-          newPaymentStatus
-      })
-      .eq(
-        "order_id",
-        orderId
-      );
+    } =
+      await supabaseClient
+        .from("orders")
+        .update({
+          payment_status:
+            newPaymentStatus
+        })
+        .eq(
+          "order_id",
+          orderId
+        );
 
     if (error) {
 
@@ -1856,7 +2680,9 @@
 
     const order =
       allOrders.find(
-        o => o.order_id === orderId
+        o =>
+          o.order_id ===
+          orderId
       );
 
     if (order) {
@@ -1866,8 +2692,11 @@
     }
 
     updateStats();
+
     updateAnalytics();
+
     renderSalesChart();
+
     renderOrders();
 
     showMessage(
@@ -1887,16 +2716,17 @@
 
     const {
       error
-    } = await supabaseClient
-      .from("orders")
-      .update({
-        order_status:
-          newStatus
-      })
-      .eq(
-        "order_id",
-        orderId
-      );
+    } =
+      await supabaseClient
+        .from("orders")
+        .update({
+          order_status:
+            newStatus
+        })
+        .eq(
+          "order_id",
+          orderId
+        );
 
     if (error) {
 
@@ -1911,7 +2741,9 @@
 
     const order =
       allOrders.find(
-        o => o.order_id === orderId
+        o =>
+          o.order_id ===
+          orderId
       );
 
     if (order) {
@@ -1921,8 +2753,11 @@
     }
 
     updateStats();
+
     updateAnalytics();
+
     renderSalesChart();
+
     renderOrders();
 
     showMessage(
@@ -1935,7 +2770,9 @@
      MESSAGE
   ========================= */
 
-  function showMessage(message) {
+  function showMessage(
+    message
+  ) {
 
     const box =
       document.getElementById(
@@ -1944,14 +2781,20 @@
 
     box.innerHTML =
       `<span class="success-message">
-        ${escapeHtml(message)}
+        ${escapeHtml(
+          message
+        )}
       </span>`;
 
-    setTimeout(() => {
+    setTimeout(
+      () => {
 
-      box.innerHTML = "";
+        box.innerHTML =
+          "";
 
-    }, 2500);
+      },
+      2500
+    );
   }
 
 
@@ -1959,16 +2802,22 @@
      VIEW ORDER
   ========================= */
 
-  function viewOrder(orderId) {
+  function viewOrder(
+    orderId
+  ) {
 
     const order =
       allOrders.find(
-        o => o.order_id === orderId
+        o =>
+          o.order_id ===
+          orderId
       );
 
     if (!order) {
 
-      alert("Order not found.");
+      alert(
+        "Order not found."
+      );
 
       return;
     }
@@ -1981,7 +2830,9 @@
       order.required_datetime
         ? new Date(
             order.required_datetime
-          ).toLocaleString("en-TZ")
+          ).toLocaleString(
+            "en-TZ"
+          )
         : "Not specified";
 
 
@@ -1989,23 +2840,29 @@
       order.created_at
         ? new Date(
             order.created_at
-          ).toLocaleString("en-TZ")
+          ).toLocaleString(
+            "en-TZ"
+          )
         : "Not available";
 
 
     const paymentStatus =
-      getPaymentStatus(order);
+      getPaymentStatus(
+        order
+      );
 
 
     const deliveryFee =
       Number(
-        order.delivery_fee || 0
+        order.delivery_fee ||
+        0
       );
 
 
     const whatsappNumber =
       String(
-        order.phone || ""
+        order.phone ||
+        ""
       ).replace(
         /[^0-9]/g,
         ""
@@ -2015,9 +2872,15 @@
     const whatsappMessage =
       encodeURIComponent(
         "Hello " +
-        (order.customer_name || "") +
+        (
+          order.customer_name ||
+          ""
+        ) +
         ", this is Mac Chicken regarding your order " +
-        (order.order_id || "") +
+        (
+          order.order_id ||
+          ""
+        ) +
         "."
       );
 
@@ -2033,7 +2896,9 @@
             Order ID
           </div>
           <div class="detail-value">
-            ${escapeHtml(order.order_id)}
+            ${escapeHtml(
+              order.order_id
+            )}
           </div>
         </div>
 
@@ -2042,7 +2907,10 @@
             Order Status
           </div>
           <div class="detail-value">
-            ${escapeHtml(order.order_status || "Pending")}
+            ${escapeHtml(
+              order.order_status ||
+              "Pending"
+            )}
           </div>
         </div>
 
@@ -2051,7 +2919,9 @@
             Customer
           </div>
           <div class="detail-value">
-            ${escapeHtml(order.customer_name)}
+            ${escapeHtml(
+              order.customer_name
+            )}
           </div>
         </div>
 
@@ -2060,7 +2930,9 @@
             Phone
           </div>
           <div class="detail-value">
-            ${escapeHtml(order.phone)}
+            ${escapeHtml(
+              order.phone
+            )}
           </div>
         </div>
 
@@ -2069,7 +2941,9 @@
             Location
           </div>
           <div class="detail-value">
-            ${escapeHtml(order.location)}
+            ${escapeHtml(
+              order.location
+            )}
           </div>
         </div>
 
@@ -2078,7 +2952,9 @@
             Quantity
           </div>
           <div class="detail-value">
-            ${getQuantity(order)} chickens
+            ${getQuantity(
+              order
+            )} chickens
           </div>
         </div>
 
@@ -2087,7 +2963,11 @@
             Sales Amount
           </div>
           <div class="detail-value">
-            ${formatMoney(getPrice(order))}
+            ${formatMoney(
+              getPrice(
+                order
+              )
+            )}
           </div>
         </div>
 
@@ -2096,7 +2976,9 @@
             Payment Method
           </div>
           <div class="detail-value">
-            ${escapeHtml(order.payment_method)}
+            ${escapeHtml(
+              order.payment_method
+            )}
           </div>
         </div>
 
@@ -2105,7 +2987,9 @@
             Payment Status
           </div>
           <div class="detail-value">
-            ${escapeHtml(paymentStatus)}
+            ${escapeHtml(
+              paymentStatus
+            )}
           </div>
         </div>
 
@@ -2114,7 +2998,9 @@
             Delivery Method
           </div>
           <div class="detail-value">
-            ${escapeHtml(order.delivery_method)}
+            ${escapeHtml(
+              order.delivery_method
+            )}
           </div>
         </div>
 
@@ -2123,7 +3009,9 @@
             Delivery Fee
           </div>
           <div class="detail-value">
-            ${formatMoney(deliveryFee)}
+            ${formatMoney(
+              deliveryFee
+            )}
           </div>
         </div>
 
@@ -2132,7 +3020,10 @@
             Order Type
           </div>
           <div class="detail-value">
-            ${escapeHtml(order.order_type || "Standard")}
+            ${escapeHtml(
+              order.order_type ||
+              "Standard"
+            )}
           </div>
         </div>
 
@@ -2141,7 +3032,9 @@
             Order Placed
           </div>
           <div class="detail-value">
-            ${escapeHtml(createdDate)}
+            ${escapeHtml(
+              createdDate
+            )}
           </div>
         </div>
 
@@ -2150,7 +3043,9 @@
             Required Date / Time
           </div>
           <div class="detail-value">
-            ${escapeHtml(requiredDate)}
+            ${escapeHtml(
+              requiredDate
+            )}
           </div>
         </div>
 
@@ -2159,7 +3054,10 @@
             Address
           </div>
           <div class="detail-value">
-            ${escapeHtml(order.address || "Not specified")}
+            ${escapeHtml(
+              order.address ||
+              "Not specified"
+            )}
           </div>
         </div>
 
@@ -2168,7 +3066,10 @@
             Delivery Location
           </div>
           <div class="detail-value">
-            ${escapeHtml(order.delivery_location || "Not specified")}
+            ${escapeHtml(
+              order.delivery_location ||
+              "Not specified"
+            )}
           </div>
         </div>
 
@@ -2177,7 +3078,10 @@
             Notes
           </div>
           <div class="detail-value">
-            ${escapeHtml(order.notes || "No notes")}
+            ${escapeHtml(
+              order.notes ||
+              "No notes"
+            )}
           </div>
         </div>
 
@@ -2214,8 +3118,12 @@
 
 
     document
-      .getElementById("orderModal")
-      .classList.add("show");
+      .getElementById(
+        "orderModal"
+      )
+      .classList.add(
+        "show"
+      );
   }
 
 
@@ -2226,8 +3134,12 @@
   function closeModal() {
 
     document
-      .getElementById("orderModal")
-      .classList.remove("show");
+      .getElementById(
+        "orderModal"
+      )
+      .classList.remove(
+        "show"
+      );
 
     currentModalOrder =
       null;
@@ -2235,7 +3147,9 @@
 
 
   document
-    .getElementById("orderModal")
+    .getElementById(
+      "orderModal"
+    )
     .addEventListener(
       "click",
       function(event) {
@@ -2244,7 +3158,9 @@
           event.target ===
           this
         ) {
+
           closeModal();
+
         }
 
       }
@@ -2255,15 +3171,23 @@
      AUTH STATE
   ========================= */
 
-  supabaseClient.auth
+  supabaseClient
+    .auth
     .onAuthStateChange(
-      (event, session) => {
+      (
+        event,
+        session
+      ) => {
 
         if (session) {
 
           showDashboard();
 
+          startRealtimeOrders();
+
         } else {
+
+          stopRealtimeOrders();
 
           showLogin();
 
