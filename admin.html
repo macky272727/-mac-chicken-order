@@ -136,7 +136,7 @@
     table {
       width: 100%;
       border-collapse: collapse;
-      min-width: 1050px;
+      min-width: 1150px;
     }
     th,
     td {
@@ -158,6 +158,13 @@
     .payment-status {
       min-width: 145px;
     }
+    .view-btn {
+      background: #111;
+      color: white;
+      padding: 8px 12px;
+      font-size: 12px;
+      white-space: nowrap;
+    }
     .empty {
       text-align: center;
       padding: 30px;
@@ -178,6 +185,117 @@
       border-radius: 8px;
       margin-bottom: 15px;
       display: none;
+    }
+    /* ORDER DETAILS MODAL */
+    .modal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,.72);
+      z-index: 2000;
+      padding: 20px;
+      overflow-y: auto;
+    }
+    .modal-box {
+      max-width: 650px;
+      margin: 30px auto;
+      background: white;
+      border-radius: 18px;
+      overflow: hidden;
+      box-shadow: 0 10px 40px rgba(0,0,0,.3);
+    }
+    .modal-header {
+      background: #111;
+      color: white;
+      padding: 18px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+    }
+    .modal-header h2 {
+      margin: 0;
+      font-size: 20px;
+    }
+    .close-btn {
+      background: #c62828;
+      color: white;
+      border-radius: 50%;
+      width: 38px;
+      height: 38px;
+      padding: 0;
+      font-size: 20px;
+    }
+    .details-body {
+      padding: 20px;
+    }
+    .details-id {
+      background: #fff8df;
+      border: 1px solid #ead68b;
+      border-radius: 12px;
+      padding: 14px;
+      text-align: center;
+      margin-bottom: 18px;
+    }
+    .details-id small {
+      display: block;
+      color: #777;
+      margin-bottom: 5px;
+    }
+    .details-id strong {
+      font-size: 20px;
+      color: #a00000;
+    }
+    .detail-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+    .detail-card {
+      background: #f7f7f7;
+      border-radius: 11px;
+      padding: 13px;
+    }
+    .detail-card.full {
+      grid-column: 1 / -1;
+    }
+    .detail-card small {
+      display: block;
+      color: #777;
+      font-size: 11px;
+      margin-bottom: 5px;
+      text-transform: uppercase;
+      font-weight: bold;
+    }
+    .detail-card strong {
+      display: block;
+      font-size: 15px;
+      word-break: break-word;
+    }
+    .detail-price {
+      color: #a00000;
+      font-size: 20px !important;
+    }
+    .modal-actions {
+      display: flex;
+      gap: 10px;
+      margin-top: 20px;
+    }
+    .whatsapp-btn {
+      flex: 1;
+      background: #25d366;
+      color: white;
+      text-align: center;
+      padding: 13px;
+      border-radius: 10px;
+      font-weight: bold;
+      text-decoration: none;
+    }
+    .close-large {
+      flex: 1;
+      background: #222;
+      color: white;
+      padding: 13px;
     }
     @media (max-width: 1000px) {
       .stats {
@@ -212,6 +330,21 @@
       .container {
         padding: 10px;
       }
+      .detail-grid {
+        grid-template-columns: 1fr;
+      }
+      .detail-card.full {
+        grid-column: auto;
+      }
+      .modal {
+        padding: 10px;
+      }
+      .modal-box {
+        margin: 10px auto;
+      }
+      .modal-actions {
+        flex-direction: column;
+      }
     }
   </style>
 </head>
@@ -221,58 +354,79 @@
     <h1>🐔 Mac Chicken</h1>
     <small>ADMIN DASHBOARD</small>
   </div>
-
-Logout
-
+  <button class="logout" onclick="logout()">
+    Logout
+  </button>
 </header>
+<!-- LOGIN -->
 <div id="loginSection" class="login-box">
   <h2>Admin Login</h2>
   <div id="loginError" class="error"></div>
 
 Email
+
 <input
 type=“email”
 id=“email”
 placeholder=“Admin email”
 
 Password
+
 <input
 type=“password”
 id=“password”
 placeholder=“Password”
 
-  <button class="login-btn" onclick="login()">
-    Login
+<button
+class=“login-btn”
+onclick=“login()”
+
+Login
   </button>
 </div>
+<!-- DASHBOARD -->
 <div id="dashboard" class="dashboard">
   <div class="container">
 <div id="errorBox" class="error"></div>
 <div id="successBox" class="success"></div>
+<!-- STATS -->
 <div class="stats">
   <div class="stat">
     <span>Total Orders</span>
-    <strong id="totalOrders">0</strong>
+    <strong id="totalOrders">
+      0
+    </strong>
   </div>
   <div class="stat">
     <span>Pending Orders</span>
-    <strong id="pendingOrders">0</strong>
+    <strong id="pendingOrders">
+      0
+    </strong>
   </div>
   <div class="stat">
     <span>Chickens Sold</span>
-    <strong id="totalChickens">0</strong>
+    <strong id="totalChickens">
+      0
+    </strong>
   </div>
   <div class="stat">
     <span>Total Sales</span>
-    <strong id="totalSales">TSh 0</strong>
+    <strong id="totalSales">
+      TSh 0
+    </strong>
   </div>
   <div class="stat paid">
     <span>Paid Orders</span>
-    <strong id="paidOrders">0</strong>
+    <strong id="paidOrders">
+      0
+    </strong>
   </div>
 </div>
+<!-- FILTERS -->
 <div class="filters">
-  <h3>Search & Filter</h3>
+  <h3>
+    Search & Filter
+  </h3>
   <div class="filter-grid">
     <input
       type="text"
@@ -280,35 +434,82 @@ placeholder=“Password”
       placeholder="Search Order ID, name or phone..."
       oninput="renderOrders()"
     >
-    <select id="locationFilter" onchange="renderOrders()">
-      <option value="">All Locations</option>
-      <option value="Moshi">Moshi</option>
-      <option value="Arusha">Arusha</option>
+    <select
+      id="locationFilter"
+      onchange="renderOrders()"
+    >
+      <option value="">
+        All Locations
+      </option>
+      <option value="Moshi">
+        Moshi
+      </option>
+      <option value="Arusha">
+        Arusha
+      </option>
     </select>
-    <select id="deliveryFilter" onchange="renderOrders()">
-      <option value="">All Delivery Methods</option>
-      <option value="Delivery">Delivery</option>
-      <option value="Pickup">Pickup</option>
+    <select
+      id="deliveryFilter"
+      onchange="renderOrders()"
+    >
+      <option value="">
+        All Delivery Methods
+      </option>
+      <option value="Delivery">
+        Delivery
+      </option>
+      <option value="Pickup">
+        Pickup
+      </option>
     </select>
-    <select id="statusFilter" onchange="renderOrders()">
-      <option value="">All Order Status</option>
-      <option value="Pending">Pending</option>
-      <option value="Confirmed">Confirmed</option>
-      <option value="Ready">Ready</option>
-      <option value="Delivered">Delivered</option>
-      <option value="Cancelled">Cancelled</option>
+    <select
+      id="statusFilter"
+      onchange="renderOrders()"
+    >
+      <option value="">
+        All Order Status
+      </option>
+      <option value="Pending">
+        Pending
+      </option>
+      <option value="Confirmed">
+        Confirmed
+      </option>
+      <option value="Ready">
+        Ready
+      </option>
+      <option value="Delivered">
+        Delivered
+      </option>
+      <option value="Cancelled">
+        Cancelled
+      </option>
     </select>
-    <select id="paymentFilter" onchange="renderOrders()">
-      <option value="">All Payment Status</option>
-      <option value="Pending">Pending</option>
-      <option value="Paid">Paid</option>
-      <option value="Pay at Delivery">Pay at Delivery</option>
+    <select
+      id="paymentFilter"
+      onchange="renderOrders()"
+    >
+      <option value="">
+        All Payment Status
+      </option>
+      <option value="Pending">
+        Pending
+      </option>
+      <option value="Paid">
+        Paid
+      </option>
+      <option value="Pay at Delivery">
+        Pay at Delivery
+      </option>
     </select>
   </div>
 </div>
+<!-- ORDERS -->
 <div class="orders-box">
   <div class="orders-title">
-    <h2>Customer Orders</h2>
+    <h2>
+      Customer Orders
+    </h2>
     <button onclick="loadOrders()">
       🔄 Refresh
     </button>
@@ -320,16 +521,39 @@ placeholder=“Password”
   <table>
     <thead>
       <tr>
-        <th>Order ID</th>
-        <th>Customer</th>
-        <th>Phone</th>
-        <th>Location</th>
-        <th>Qty</th>
-        <th>Price</th>
-        <th>Delivery</th>
-        <th>Payment Method</th>
-        <th>Payment Status</th>
-        <th>Order Status</th>
+        <th>
+          Order ID
+        </th>
+        <th>
+          Customer
+        </th>
+        <th>
+          Phone
+        </th>
+        <th>
+          Location
+        </th>
+        <th>
+          Qty
+        </th>
+        <th>
+          Price
+        </th>
+        <th>
+          Delivery
+        </th>
+        <th>
+          Payment Method
+        </th>
+        <th>
+          Payment Status
+        </th>
+        <th>
+          Order Status
+        </th>
+        <th>
+          Details
+        </th>
       </tr>
     </thead>
     <tbody id="ordersTable">
@@ -338,7 +562,36 @@ placeholder=“Password”
 </div>
   </div>
 </div>
+<!-- ORDER DETAILS MODAL -->
+<div
+  id="orderModal"
+  class="modal"
+  onclick="closeModalOutside(event)"
+>
+  <div
+    class="modal-box"
+    onclick="event.stopPropagation()"
+  >
+<div class="modal-header">
+  <h2>
+    🐔 Order Details
+  </h2>
+  <button
+    class="close-btn"
+    onclick="closeOrderDetails()"
+  >
+    ×
+  </button>
+</div>
+<div
+  id="detailsBody"
+  class="details-body"
+>
+</div>
+  </div>
+</div>
 <script>
+  /* SUPABASE */
   const SUPABASE_URL =
     "https://tuqrnlaofriqggeaoqxb.supabase.co";
   const SUPABASE_KEY =
@@ -349,32 +602,46 @@ placeholder=“Password”
       SUPABASE_KEY
     );
   let allOrders = [];
-  function showError(message, target = "errorBox") {
+  /* ALERTS */
+  function showError(
+    message,
+    target = "errorBox"
+  ) {
     const box =
       document.getElementById(target);
-    box.textContent = message;
-    box.style.display = "block";
+    box.textContent =
+      message;
+    box.style.display =
+      "block";
     setTimeout(() => {
-      box.style.display = "none";
+      box.style.display =
+        "none";
     }, 5000);
   }
   function showSuccess(message) {
     const box =
-      document.getElementById("successBox");
-    box.textContent = message;
-    box.style.display = "block";
+      document.getElementById(
+        "successBox"
+      );
+    box.textContent =
+      message;
+    box.style.display =
+      "block";
     setTimeout(() => {
-      box.style.display = "none";
+      box.style.display =
+        "none";
     }, 4000);
   }
+  /* LOGIN */
   async function login() {
     const email =
-      document.getElementById("email")
-        .value
-        .trim();
+      document.getElementById(
+        "email"
+      ).value.trim();
     const password =
-      document.getElementById("password")
-        .value;
+      document.getElementById(
+        "password"
+      ).value;
     if (!email || !password) {
       showError(
         "Please enter email and password.",
@@ -385,8 +652,10 @@ placeholder=“Password”
     const { error } =
       await supabaseClient.auth
         .signInWithPassword({
-          email: email,
-          password: password
+          email:
+            email,
+          password:
+            password
         });
     if (error) {
       showError(
@@ -397,6 +666,7 @@ placeholder=“Password”
     }
     await checkSession();
   }
+  /* SESSION */
   async function checkSession() {
     const { data } =
       await supabaseClient.auth
@@ -404,29 +674,38 @@ placeholder=“Password”
     if (data.session) {
       document.getElementById(
         "loginSection"
-      ).style.display = "none";
+      ).style.display =
+        "none";
       document.getElementById(
         "dashboard"
-      ).style.display = "block";
+      ).style.display =
+        "block";
       await loadOrders();
     } else {
       document.getElementById(
         "loginSection"
-      ).style.display = "block";
+      ).style.display =
+        "block";
       document.getElementById(
         "dashboard"
-      ).style.display = "none";
+      ).style.display =
+        "none";
     }
   }
+  /* LOGOUT */
   async function logout() {
-    await supabaseClient.auth.signOut();
+    await supabaseClient.auth
+      .signOut();
     document.getElementById(
       "dashboard"
-    ).style.display = "none";
+    ).style.display =
+      "none";
     document.getElementById(
       "loginSection"
-    ).style.display = "block";
+    ).style.display =
+      "block";
   }
+  /* LOAD ORDERS */
   async function loadOrders() {
     const { data, error } =
       await supabaseClient
@@ -439,44 +718,56 @@ placeholder=“Password”
       );
       return;
     }
-    allOrders = data || [];
+    allOrders =
+      data || [];
     updateStats();
     renderOrders();
   }
+  /* STATS */
   function updateStats() {
     const totalOrders =
       allOrders.length;
     const pendingOrders =
       allOrders.filter(
         order =>
-          order.order_status === "Pending"
+          order.order_status ===
+          "Pending"
       ).length;
     const totalChickens =
       allOrders
         .filter(
           order =>
-            order.order_status !== "Cancelled"
+            order.order_status !==
+            "Cancelled"
         )
         .reduce(
           (sum, order) =>
-            sum + Number(order.quantity || 0),
+            sum +
+            Number(
+              order.quantity || 0
+            ),
           0
         );
     const totalSales =
       allOrders
         .filter(
           order =>
-            order.order_status !== "Cancelled"
+            order.order_status !==
+            "Cancelled"
         )
         .reduce(
           (sum, order) =>
-            sum + Number(order.price || 0),
+            sum +
+            Number(
+              order.price || 0
+            ),
           0
         );
     const paidOrders =
       allOrders.filter(
         order =>
-          order.payment_status === "Paid"
+          order.payment_status ===
+          "Paid"
       ).length;
     document.getElementById(
       "totalOrders"
@@ -500,6 +791,7 @@ placeholder=“Password”
     ).textContent =
       paidOrders;
   }
+  /* RENDER ORDERS */
   function renderOrders() {
     const search =
       document.getElementById(
@@ -527,27 +819,40 @@ placeholder=“Password”
       allOrders.filter(order => {
         const matchesSearch =
           !search ||
-          String(order.order_id || "")
+          String(
+            order.order_id || ""
+          )
             .toLowerCase()
             .includes(search) ||
-          String(order.customer_name || "")
+          String(
+            order.customer_name || ""
+          )
             .toLowerCase()
             .includes(search) ||
-          String(order.phone || "")
+          String(
+            order.phone || ""
+          )
             .toLowerCase()
             .includes(search);
         const matchesLocation =
           !location ||
-          order.location === location;
+          order.location ===
+            location;
         const matchesDelivery =
           !delivery ||
-          order.delivery_method === delivery;
+          order.delivery_method ===
+            delivery;
         const matchesStatus =
           !status ||
-          order.order_status === status;
+          order.order_status ===
+            status;
         const matchesPaymentStatus =
           !paymentStatus ||
-          order.payment_status === paymentStatus;
+          (
+            order.payment_status ||
+            "Pending"
+          ) ===
+            paymentStatus;
         return (
           matchesSearch &&
           matchesLocation &&
@@ -559,7 +864,8 @@ placeholder=“Password”
     document.getElementById(
       "orderCount"
     ).textContent =
-      filtered.length + " orders";
+      filtered.length +
+      " orders";
     const table =
       document.getElementById(
         "ordersTable"
@@ -567,7 +873,10 @@ placeholder=“Password”
     if (!filtered.length) {
       table.innerHTML = `
         <tr>
-          <td colspan="10" class="empty">
+          <td
+            colspan="11"
+            class="empty"
+          >
             No orders found.
           </td>
         </tr>
@@ -580,139 +889,180 @@ placeholder=“Password”
           order.payment_status ||
           "Pending";
         return `
-        <tr>
-          <td>
-            <strong>
+          <tr>
+            <td>
+              <strong>
+                ${escapeHtml(
+                  order.order_id || ""
+                )}
+              </strong>
+            </td>
+            <td>
               ${escapeHtml(
-                order.order_id || ""
+                order.customer_name || ""
               )}
-            </strong>
-          </td>
-          <td>
-            ${escapeHtml(
-              order.customer_name || ""
-            )}
-          </td>
-          <td>
-            ${escapeHtml(
-              order.phone || ""
-            )}
-          </td>
-          <td>
-            ${escapeHtml(
-              order.location || ""
-            )}
-          </td>
-          <td>
-            ${Number(
-              order.quantity || 0
-            )}
-          </td>
-          <td>
-            TSh ${
-              Number(
-                order.price || 0
-              ).toLocaleString()
-            }
-          </td>
-          <td>
-            ${escapeHtml(
-              order.delivery_method || ""
-            )}
-          </td>
-          <td>
-            ${escapeHtml(
-              order.payment_method || ""
-            )}
-          </td>
-          <td>
-            <select
-              class="payment-status"
-              onchange="updatePaymentStatus(
-                '${escapeHtml(order.order_id)}',
-                this.value
-              )"
-            >
-              <option value="Pending"
-                ${
-                  paymentStatus === "Pending"
-                    ? "selected"
-                    : ""
-                }>
-                Pending
-              </option>
-              <option value="Paid"
-                ${
-                  paymentStatus === "Paid"
-                    ? "selected"
-                    : ""
-                }>
-                Paid
-              </option>
-              <option value="Pay at Delivery"
-                ${
-                  paymentStatus === "Pay at Delivery"
-                    ? "selected"
-                    : ""
-                }>
-                Pay at Delivery
-              </option>
-            </select>
-          </td>
-          <td>
-            <select
-              class="status"
-              onchange="updateStatus(
-                '${escapeHtml(order.order_id)}',
-                this.value
-              )"
-            >
-              <option value="Pending"
-                ${
-                  order.order_status === "Pending"
-                    ? "selected"
-                    : ""
-                }>
-                Pending
-              </option>
-              <option value="Confirmed"
-                ${
-                  order.order_status === "Confirmed"
-                    ? "selected"
-                    : ""
-                }>
-                Confirmed
-              </option>
-              <option value="Ready"
-                ${
-                  order.order_status === "Ready"
-                    ? "selected"
-                    : ""
-                }>
-                Ready
-              </option>
-              <option value="Delivered"
-                ${
-                  order.order_status === "Delivered"
-                    ? "selected"
-                    : ""
-                }>
-                Delivered
-              </option>
-              <option value="Cancelled"
-                ${
-                  order.order_status === "Cancelled"
-                    ? "selected"
-                    : ""
-                }>
-                Cancelled
-              </option>
-            </select>
-          </td>
-        </tr>
+            </td>
+            <td>
+              ${escapeHtml(
+                order.phone || ""
+              )}
+            </td>
+            <td>
+              ${escapeHtml(
+                order.location || ""
+              )}
+            </td>
+            <td>
+              ${Number(
+                order.quantity || 0
+              )}
+            </td>
+            <td>
+              TSh ${
+                Number(
+                  order.price || 0
+                ).toLocaleString()
+              }
+            </td>
+            <td>
+              ${escapeHtml(
+                order.delivery_method || ""
+              )}
+            </td>
+            <td>
+              ${escapeHtml(
+                order.payment_method || ""
+              )}
+            </td>
+            <td>
+              <select
+                class="payment-status"
+                onchange="updatePaymentStatus(
+                  '${escapeHtml(
+                    order.order_id
+                  )}',
+                  this.value
+                )"
+              >
+                <option
+                  value="Pending"
+                  ${
+                    paymentStatus ===
+                    "Pending"
+                      ? "selected"
+                      : ""
+                  }
+                >
+                  Pending
+                </option>
+                <option
+                  value="Paid"
+                  ${
+                    paymentStatus ===
+                    "Paid"
+                      ? "selected"
+                      : ""
+                  }
+                >
+                  Paid
+                </option>
+                <option
+                  value="Pay at Delivery"
+                  ${
+                    paymentStatus ===
+                    "Pay at Delivery"
+                      ? "selected"
+                      : ""
+                  }
+                >
+                  Pay at Delivery
+                </option>
+              </select>
+            </td>
+            <td>
+              <select
+                class="status"
+                onchange="updateStatus(
+                  '${escapeHtml(
+                    order.order_id
+                  )}',
+                  this.value
+                )"
+              >
+                <option
+                  value="Pending"
+                  ${
+                    order.order_status ===
+                    "Pending"
+                      ? "selected"
+                      : ""
+                  }
+                >
+                  Pending
+                </option>
+                <option
+                  value="Confirmed"
+                  ${
+                    order.order_status ===
+                    "Confirmed"
+                      ? "selected"
+                      : ""
+                  }
+                >
+                  Confirmed
+                </option>
+                <option
+                  value="Ready"
+                  ${
+                    order.order_status ===
+                    "Ready"
+                      ? "selected"
+                      : ""
+                  }
+                >
+                  Ready
+                </option>
+                <option
+                  value="Delivered"
+                  ${
+                    order.order_status ===
+                    "Delivered"
+                      ? "selected"
+                      : ""
+                  }
+                >
+                  Delivered
+                </option>
+                <option
+                  value="Cancelled"
+                  ${
+                    order.order_status ===
+                    "Cancelled"
+                      ? "selected"
+                      : ""
+                  }
+                >
+                  Cancelled
+                </option>
+              </select>
+            </td>
+            <td>
+              <button
+                class="view-btn"
+                onclick="viewOrder(
+                  '${escapeHtml(
+                    order.order_id
+                  )}'
+                )"
+              >
+                👁️ View
+              </button>
+            </td>
+          </tr>
         `;
       }).join("");
   }
+  /* PAYMENT STATUS */
   async function updatePaymentStatus(
     orderId,
     newPaymentStatus
@@ -739,7 +1089,8 @@ placeholder=“Password”
     const order =
       allOrders.find(
         item =>
-          item.order_id === orderId
+          item.order_id ===
+          orderId
       );
     if (order) {
       order.payment_status =
@@ -751,6 +1102,7 @@ placeholder=“Password”
       "Payment status updated successfully."
     );
   }
+  /* ORDER STATUS */
   async function updateStatus(
     orderId,
     newStatus
@@ -777,7 +1129,8 @@ placeholder=“Password”
     const order =
       allOrders.find(
         item =>
-          item.order_id === orderId
+          item.order_id ===
+          orderId
       );
     if (order) {
       order.order_status =
@@ -789,6 +1142,284 @@ placeholder=“Password”
       "Order status updated successfully."
     );
   }
+  /* VIEW ORDER DETAILS */
+  function viewOrder(orderId) {
+    const order =
+      allOrders.find(
+        item =>
+          item.order_id ===
+          orderId
+      );
+    if (!order) {
+      showError(
+        "Order not found."
+      );
+      return;
+    }
+    const paymentStatus =
+      order.payment_status ||
+      "Pending";
+    let requiredDate =
+      order.required_datetime ||
+      "";
+    if (requiredDate) {
+      try {
+        requiredDate =
+          new Date(
+            requiredDate
+          ).toLocaleString(
+            "en-GB"
+          );
+      } catch (error) {
+        requiredDate =
+          String(
+            requiredDate
+          );
+      }
+    }
+    const phone =
+      String(
+        order.phone || ""
+      ).replace(
+        /\D/g,
+        ""
+      );
+    let whatsappPhone =
+      phone;
+    if (
+      whatsappPhone.startsWith("0")
+    ) {
+      whatsappPhone =
+        "255" +
+        whatsappPhone.substring(1);
+    }
+    const message =
+      encodeURIComponent(
+        "Hello " +
+        (order.customer_name || "") +
+        ", this is Mac Chicken regarding your order " +
+        (order.order_id || "") +
+        "."
+      );
+    const whatsappLink =
+      whatsappPhone
+        ? "https://wa.me/" +
+          whatsappPhone +
+          "?text=" +
+          message
+        : "#";
+    document.getElementById(
+      "detailsBody"
+    ).innerHTML = `
+      <div class="details-id">
+        <small>
+          ORDER ID
+        </small>
+        <strong>
+          ${escapeHtml(
+            order.order_id || ""
+          )}
+        </strong>
+      </div>
+      <div class="detail-grid">
+        <div class="detail-card">
+          <small>
+            Customer
+          </small>
+          <strong>
+            ${escapeHtml(
+              order.customer_name || "-"
+            )}
+          </strong>
+        </div>
+        <div class="detail-card">
+          <small>
+            Phone
+          </small>
+          <strong>
+            ${escapeHtml(
+              order.phone || "-"
+            )}
+          </strong>
+        </div>
+        <div class="detail-card">
+          <small>
+            Location
+          </small>
+          <strong>
+            ${escapeHtml(
+              order.location || "-"
+            )}
+          </strong>
+        </div>
+        <div class="detail-card">
+          <small>
+            Delivery Method
+          </small>
+          <strong>
+            ${escapeHtml(
+              order.delivery_method || "-"
+            )}
+          </strong>
+        </div>
+        <div class="detail-card full">
+          <small>
+            Address / Delivery Location
+          </small>
+          <strong>
+            ${escapeHtml(
+              order.address ||
+              order.delivery_location ||
+              "-"
+            )}
+          </strong>
+        </div>
+        <div class="detail-card">
+          <small>
+            Quantity
+          </small>
+          <strong>
+            ${Number(
+              order.quantity || 0
+            )} Chicken(s)
+          </strong>
+        </div>
+        <div class="detail-card">
+          <small>
+            Chicken Cost
+          </small>
+          <strong class="detail-price">
+            TSh ${
+              Number(
+                order.price || 0
+              ).toLocaleString()
+            }
+          </strong>
+        </div>
+        <div class="detail-card">
+          <small>
+            Payment Method
+          </small>
+          <strong>
+            ${escapeHtml(
+              order.payment_method || "-"
+            )}
+          </strong>
+        </div>
+        <div class="detail-card">
+          <small>
+            Payment Status
+          </small>
+          <strong>
+            ${escapeHtml(
+              paymentStatus
+            )}
+          </strong>
+        </div>
+        <div class="detail-card">
+          <small>
+            Order Status
+          </small>
+          <strong>
+            ${escapeHtml(
+              order.order_status || "-"
+            )}
+          </strong>
+        </div>
+        <div class="detail-card">
+          <small>
+            Order Type
+          </small>
+          <strong>
+            ${escapeHtml(
+              order.order_type || "-"
+            )}
+          </strong>
+        </div>
+        <div class="detail-card">
+          <small>
+            Delivery Fee
+          </small>
+          <strong>
+            TSh ${
+              Number(
+                order.delivery_fee || 0
+              ).toLocaleString()
+            }
+          </strong>
+        </div>
+        <div class="detail-card full">
+          <small>
+            Required Date / Time
+          </small>
+          <strong>
+            ${escapeHtml(
+              requiredDate || "-"
+            )}
+          </strong>
+        </div>
+        <div class="detail-card full">
+          <small>
+            Notes
+          </small>
+          <strong>
+            ${escapeHtml(
+              order.notes || "-"
+            )}
+          </strong>
+        </div>
+      </div>
+      <div class="modal-actions">
+        ${
+          whatsappPhone
+          ? `
+            <a
+              class="whatsapp-btn"
+              href="${whatsappLink}"
+              target="_blank"
+              rel="noopener"
+            >
+              📲 WhatsApp Customer
+            </a>
+          `
+          : `
+            <button
+              class="whatsapp-btn"
+              disabled
+            >
+              📲 No Phone Number
+            </button>
+          `
+        }
+        <button
+          class="close-large"
+          onclick="closeOrderDetails()"
+        >
+          Close
+        </button>
+      </div>
+    `;
+    document.getElementById(
+      "orderModal"
+    ).style.display =
+      "block";
+  }
+  /* CLOSE MODAL */
+  function closeOrderDetails() {
+    document.getElementById(
+      "orderModal"
+    ).style.display =
+      "none";
+  }
+  function closeModalOutside(event) {
+    if (
+      event.target.id ===
+      "orderModal"
+    ) {
+      closeOrderDetails();
+    }
+  }
+  /* ESCAPE HTML */
   function escapeHtml(value) {
     return String(value)
       .replace(
@@ -812,6 +1443,7 @@ placeholder=“Password”
         "&#039;"
       );
   }
+  /* START */
   checkSession();
 </script>
 </body>
