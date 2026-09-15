@@ -4,624 +4,1018 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Mac Chicken Admin</title>
+
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
   <style>
     * {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
     }
+
     body {
       font-family: Arial, sans-serif;
-      background: #f5f5f5;
+      background: #f4f5f7;
       color: #222;
     }
-    header {
-      background: #111;
-      color: white;
-      padding: 18px;
+
+    .login-page {
+      min-height: 100vh;
       display: flex;
-      justify-content: space-between;
       align-items: center;
-      gap: 10px;
+      justify-content: center;
+      padding: 20px;
+      background: linear-gradient(135deg, #111, #2b2b2b);
     }
-    header h1 {
-      font-size: 22px;
-      color: #ffd700;
+
+    .login-box {
+      width: 100%;
+      max-width: 400px;
+      background: white;
+      padding: 30px 24px;
+      border-radius: 18px;
+      box-shadow: 0 15px 40px rgba(0,0,0,.25);
     }
-    header p {
+
+    .login-logo {
+      text-align: center;
+      margin-bottom: 25px;
+    }
+
+    .login-logo h1 {
+      font-size: 30px;
+      color: #b40000;
+    }
+
+    .login-logo p {
       font-size: 12px;
-      color: #ddd;
-      margin-top: 4px;
+      letter-spacing: 2px;
+      color: #b08a00;
+      font-weight: bold;
+      margin-top: 5px;
     }
+
+    input,
+    select,
+    button {
+      width: 100%;
+      padding: 13px;
+      border-radius: 10px;
+      border: 1px solid #ddd;
+      font-size: 15px;
+    }
+
+    input,
+    select {
+      background: #fff;
+      margin-bottom: 12px;
+    }
+
     button {
       border: none;
       cursor: pointer;
-      border-radius: 8px;
-      padding: 10px 14px;
       font-weight: bold;
     }
-    .logout {
-      background: #c62828;
-      color: white;
-    }
-    .container {
-      width: 95%;
-      max-width: 1200px;
-      margin: 20px auto;
-    }
-    .login-box,
-    .dashboard {
-      display: none;
-    }
-    .login-box {
-      max-width: 420px;
-      margin: 70px auto;
-      background: white;
-      padding: 25px;
-      border-radius: 15px;
-      box-shadow: 0 4px 15px rgba(0,0,0,.08);
-    }
-    .login-box h2 {
-      margin-bottom: 20px;
-      text-align: center;
-    }
-    input,
-    select {
-      width: 100%;
-      padding: 12px;
-      margin-top: 7px;
-      margin-bottom: 14px;
-      border: 1px solid #ccc;
-      border-radius: 8px;
-      font-size: 15px;
-      background: white;
-    }
-    label {
-      font-weight: bold;
-      font-size: 14px;
-    }
+
     .login-btn {
-      width: 100%;
-      background: #d32f2f;
+      background: #b40000;
       color: white;
-      padding: 13px;
-      font-size: 16px;
     }
+
+    .login-btn:hover {
+      background: #8d0000;
+    }
+
     .error {
-      color: #c62828;
+      color: #c40000;
+      font-size: 14px;
       margin-top: 12px;
       text-align: center;
-      font-size: 14px;
     }
-    .success {
-      color: #2e7d32;
-      margin-top: 12px;
-      text-align: center;
-      font-size: 14px;
+
+    .hidden {
+      display: none !important;
     }
-    .cards {
+
+    header {
+      background: #111;
+      color: white;
+      padding: 15px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 15px;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+
+    .brand h1 {
+      font-size: 23px;
+      color: #fff;
+    }
+
+    .brand span {
+      color: #d4a800;
+      font-size: 10px;
+      letter-spacing: 2px;
+      font-weight: bold;
+    }
+
+    .logout-btn {
+      width: auto;
+      padding: 9px 15px;
+      background: #b40000;
+      color: white;
+    }
+
+    main {
+      max-width: 1400px;
+      margin: auto;
+      padding: 20px;
+    }
+
+    .welcome {
+      margin-bottom: 20px;
+    }
+
+    .welcome h2 {
+      font-size: 25px;
+      margin-bottom: 5px;
+    }
+
+    .welcome p {
+      color: #666;
+    }
+
+    .stats {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
       gap: 15px;
       margin-bottom: 20px;
     }
-    .card {
+
+    .stat-card {
       background: white;
       padding: 20px;
-      border-radius: 12px;
-      box-shadow: 0 3px 12px rgba(0,0,0,.06);
+      border-radius: 15px;
+      box-shadow: 0 4px 15px rgba(0,0,0,.06);
     }
-    .card h3 {
+
+    .stat-card small {
+      color: #777;
       font-size: 13px;
-      color: #666;
-      margin-bottom: 8px;
     }
-    .card strong {
-      font-size: 25px;
+
+    .stat-card h3 {
+      font-size: 27px;
+      margin-top: 8px;
     }
+
     .filters {
       background: white;
-      padding: 15px;
-      border-radius: 12px;
+      padding: 18px;
+      border-radius: 15px;
       margin-bottom: 20px;
-      box-shadow: 0 3px 12px rgba(0,0,0,.06);
+      box-shadow: 0 4px 15px rgba(0,0,0,.06);
     }
+
+    .filters h3 {
+      margin-bottom: 12px;
+    }
+
     .filter-grid {
       display: grid;
       grid-template-columns: 2fr 1fr 1fr 1fr auto;
       gap: 10px;
-      align-items: end;
     }
-    .refresh {
+
+    .refresh-btn {
       background: #222;
       color: white;
-      height: 42px;
+      width: auto;
+      padding: 12px 18px;
     }
-    .table-box {
+
+    .orders-box {
       background: white;
-      border-radius: 12px;
-      padding: 15px;
-      overflow-x: auto;
-      box-shadow: 0 3px 12px rgba(0,0,0,.06);
+      border-radius: 15px;
+      box-shadow: 0 4px 15px rgba(0,0,0,.06);
+      overflow: hidden;
     }
+
+    .orders-header {
+      padding: 18px;
+      border-bottom: 1px solid #eee;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .orders-header h3 {
+      font-size: 20px;
+    }
+
+    .table-wrap {
+      overflow-x: auto;
+    }
+
     table {
       width: 100%;
       border-collapse: collapse;
-      min-width: 1050px;
+      min-width: 950px;
     }
+
     th,
     td {
-      padding: 11px 9px;
+      padding: 13px 12px;
       border-bottom: 1px solid #eee;
       text-align: left;
-      font-size: 13px;
+      font-size: 14px;
+      vertical-align: middle;
     }
+
     th {
-      background: #111;
-      color: white;
-      position: sticky;
-      top: 0;
+      background: #fafafa;
+      font-size: 12px;
+      text-transform: uppercase;
+      color: #666;
     }
+
+    tr:hover td {
+      background: #fafafa;
+    }
+
     .status-select {
       width: 135px;
+      padding: 8px;
       margin: 0;
-      padding: 7px;
-      font-size: 12px;
+      font-size: 13px;
+      font-weight: bold;
     }
+
+    .status-Pending {
+      color: #a66a00;
+    }
+
+    .status-Confirmed {
+      color: #006bb6;
+    }
+
+    .status-Ready {
+      color: #00853f;
+    }
+
+    .status-Delivered {
+      color: #087f23;
+    }
+
+    .status-Cancelled {
+      color: #c40000;
+    }
+
+    .order-id {
+      font-weight: bold;
+      color: #b40000;
+    }
+
     .empty {
+      text-align: center;
+      padding: 40px;
+      color: #777;
+    }
+
+    .loading {
       text-align: center;
       padding: 30px;
       color: #777;
     }
-    .loading {
-      text-align: center;
-      padding: 25px;
-      color: #777;
+
+    .toast {
+      position: fixed;
+      right: 20px;
+      bottom: 20px;
+      background: #111;
+      color: white;
+      padding: 14px 18px;
+      border-radius: 10px;
+      box-shadow: 0 8px 25px rgba(0,0,0,.25);
+      z-index: 100;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: .3s;
     }
-    @media (max-width: 800px) {
-      .cards {
+
+    .toast.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    @media (max-width: 900px) {
+      .stats {
         grid-template-columns: repeat(2, 1fr);
       }
+
       .filter-grid {
-        grid-template-columns: 1fr;
+        grid-template-columns: 1fr 1fr;
       }
-      header {
-        align-items: flex-start;
-      }
-      header h1 {
-        font-size: 18px;
+
+      .refresh-btn {
+        width: 100%;
       }
     }
-    @media (max-width: 480px) {
-      .cards {
+
+    @media (max-width: 600px) {
+      header {
+        padding: 13px;
+      }
+
+      .brand h1 {
+        font-size: 20px;
+      }
+
+      main {
+        padding: 12px;
+      }
+
+      .stats {
         grid-template-columns: 1fr 1fr;
         gap: 10px;
       }
-      .card {
+
+      .stat-card {
         padding: 15px;
       }
-      .card strong {
-        font-size: 20px;
+
+      .stat-card h3 {
+        font-size: 21px;
       }
-      .container {
-        width: 94%;
+
+      .filter-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .orders-header {
+        padding: 15px;
       }
     }
   </style>
 </head>
+
 <body>
-  <header>
-    <div>
-      <h1>🐔 Mac Chicken</h1>
-      <p>Admin Dashboard • QUALITY & HEALTH</p>
-    </div>
-    <button class="logout" onclick="logout()">Logout</button>
-  </header>
-  <div class="container">
-    <!-- LOGIN -->
-    <div class="login-box" id="loginBox">
-      <h2>Admin Login 🔐</h2>
-      <label>Email</label>
+
+  <!-- LOGIN -->
+  <section id="loginPage" class="login-page">
+
+    <div class="login-box">
+
+      <div class="login-logo">
+        <h1>Mac Chicken</h1>
+        <p>QUALITY & HEALTH</p>
+      </div>
+
       <input
         type="email"
         id="email"
-        placeholder="Admin email"
+        placeholder="Admin Email"
       >
-      <label>Password</label>
+
       <input
         type="password"
         id="password"
         placeholder="Password"
       >
+
       <button class="login-btn" onclick="login()">
-        Login
+        LOGIN
       </button>
-      <div id="loginMessage"></div>
+
+      <div id="loginError" class="error"></div>
+
     </div>
-    <!-- DASHBOARD -->
-    <div class="dashboard" id="dashboard">
-      <div class="cards">
-        <div class="card">
-          <h3>Total Orders</h3>
-          <strong id="totalOrders">0</strong>
-        </div>
-        <div class="card">
-          <h3>Pending</h3>
-          <strong id="pendingOrders">0</strong>
-        </div>
-        <div class="card">
-          <h3>Chickens Sold</h3>
-          <strong id="totalChickens">0</strong>
-        </div>
-        <div class="card">
-          <h3>Total Sales</h3>
-          <strong id="totalSales">TSh 0</strong>
-        </div>
+
+  </section>
+
+
+  <!-- ADMIN -->
+  <section id="adminPage" class="hidden">
+
+    <header>
+
+      <div class="brand">
+        <h1>Mac Chicken</h1>
+        <span>ADMIN DASHBOARD</span>
       </div>
+
+      <button class="logout-btn" onclick="logout()">
+        Logout
+      </button>
+
+    </header>
+
+
+    <main>
+
+      <div class="welcome">
+        <h2>Orders & Sales</h2>
+        <p>Manage Mac Chicken customer orders.</p>
+      </div>
+
+
+      <!-- STATS -->
+      <div class="stats">
+
+        <div class="stat-card">
+          <small>Total Orders</small>
+          <h3 id="totalOrders">0</h3>
+        </div>
+
+        <div class="stat-card">
+          <small>Pending</small>
+          <h3 id="pendingOrders">0</h3>
+        </div>
+
+        <div class="stat-card">
+          <small>Chickens Sold</small>
+          <h3 id="totalChickens">0</h3>
+        </div>
+
+        <div class="stat-card">
+          <small>Total Sales</small>
+          <h3 id="totalSales">TSh 0</h3>
+        </div>
+
+      </div>
+
+
+      <!-- FILTERS -->
       <div class="filters">
+
+        <h3>Search & Filter</h3>
+
         <div class="filter-grid">
-          <div>
-            <label>Search</label>
-            <input
-              type="text"
-              id="search"
-              placeholder="Order ID, name or phone"
-              oninput="renderOrders()"
-            >
-          </div>
-          <div>
-            <label>Location</label>
-            <select id="locationFilter" onchange="renderOrders()">
-              <option value="">All</option>
-              <option value="Moshi">Moshi</option>
-              <option value="Arusha">Arusha</option>
-            </select>
-          </div>
-          <div>
-            <label>Method</label>
-            <select id="methodFilter" onchange="renderOrders()">
-              <option value="">All</option>
-              <option value="Delivery">Delivery</option>
-              <option value="Pickup">Pickup</option>
-            </select>
-          </div>
-          <div>
-            <label>Status</label>
-            <select id="statusFilter" onchange="renderOrders()">
-              <option value="">All</option>
-              <option value="Pending">Pending</option>
-              <option value="Confirmed">Confirmed</option>
-              <option value="Ready">Ready</option>
-              <option value="Delivered">Delivered</option>
-              <option value="Cancelled">Cancelled</option>
-            </select>
-          </div>
-          <button class="refresh" onclick="loadOrders()">
-            🔄 Refresh
+
+          <input
+            type="text"
+            id="searchInput"
+            placeholder="Search Order ID, name or phone..."
+            oninput="applyFilters()"
+          >
+
+          <select id="locationFilter" onchange="applyFilters()">
+            <option value="">All Locations</option>
+            <option value="Moshi">Moshi</option>
+            <option value="Arusha">Arusha</option>
+          </select>
+
+          <select id="deliveryFilter" onchange="applyFilters()">
+            <option value="">All Methods</option>
+            <option value="Delivery">Delivery</option>
+            <option value="Pickup">Pickup</option>
+          </select>
+
+          <select id="statusFilter" onchange="applyFilters()">
+            <option value="">All Status</option>
+            <option value="Pending">Pending</option>
+            <option value="Confirmed">Confirmed</option>
+            <option value="Ready">Ready</option>
+            <option value="Delivered">Delivered</option>
+            <option value="Cancelled">Cancelled</option>
+          </select>
+
+          <button class="refresh-btn" onclick="loadOrders()">
+            Refresh
           </button>
+
         </div>
+
       </div>
-      <div class="table-box">
-        <div id="tableContent" class="loading">
+
+
+      <!-- ORDERS -->
+      <div class="orders-box">
+
+        <div class="orders-header">
+
+          <h3>Customer Orders</h3>
+
+          <strong id="ordersCount">
+            0 orders
+          </strong>
+
+        </div>
+
+        <div id="loading" class="loading">
           Loading orders...
         </div>
+
+        <div class="table-wrap">
+
+          <table id="ordersTable" class="hidden">
+
+            <thead>
+
+              <tr>
+                <th>Order ID</th>
+                <th>Date</th>
+                <th>Customer</th>
+                <th>Phone</th>
+                <th>Location</th>
+                <th>Qty</th>
+                <th>Total</th>
+                <th>Method</th>
+                <th>Payment</th>
+                <th>Status</th>
+              </tr>
+
+            </thead>
+
+            <tbody id="ordersBody"></tbody>
+
+          </table>
+
+        </div>
+
+        <div id="emptyOrders" class="empty hidden">
+          No orders found.
+        </div>
+
       </div>
-    </div>
-  </div>
+
+    </main>
+
+  </section>
+
+
+  <div id="toast" class="toast"></div>
+
+
   <script>
+
     const SUPABASE_URL =
       "https://tuqrnlaofriqggeaoqxb.supabase.co";
+
     const SUPABASE_KEY =
       "sb_publishable_NVTmWBHQVN8faM4tBcCpxg_IBW45wI_";
+
     const supabaseClient =
       window.supabase.createClient(
         SUPABASE_URL,
         SUPABASE_KEY
       );
+
+
     let allOrders = [];
+
+
+    // LOGIN
+    async function login() {
+
+      const email =
+        document.getElementById("email").value.trim();
+
+      const password =
+        document.getElementById("password").value;
+
+      const errorBox =
+        document.getElementById("loginError");
+
+      errorBox.textContent = "";
+
+      if (!email || !password) {
+        errorBox.textContent =
+          "Please enter email and password.";
+        return;
+      }
+
+      const { data, error } =
+        await supabaseClient.auth.signInWithPassword({
+          email,
+          password
+        });
+
+      if (error) {
+
+        errorBox.textContent =
+          error.message;
+
+        return;
+      }
+
+      showAdmin();
+
+    }
+
+
+    // LOGOUT
+    async function logout() {
+
+      await supabaseClient.auth.signOut();
+
+      document
+        .getElementById("adminPage")
+        .classList.add("hidden");
+
+      document
+        .getElementById("loginPage")
+        .classList.remove("hidden");
+
+    }
+
+
+    // SHOW ADMIN
+    function showAdmin() {
+
+      document
+        .getElementById("loginPage")
+        .classList.add("hidden");
+
+      document
+        .getElementById("adminPage")
+        .classList.remove("hidden");
+
+      loadOrders();
+
+    }
+
+
+    // CHECK SESSION
     async function checkSession() {
+
       const {
         data: { session }
       } = await supabaseClient.auth.getSession();
+
       if (session) {
-        showDashboard();
-        loadOrders();
-      } else {
-        showLogin();
+        showAdmin();
       }
+
     }
-    function showLogin() {
-      document.getElementById("loginBox").style.display = "block";
-      document.getElementById("dashboard").style.display = "none";
-    }
-    function showDashboard() {
-      document.getElementById("loginBox").style.display = "none";
-      document.getElementById("dashboard").style.display = "block";
-    }
-    async function login() {
-      const email =
-        document.getElementById("email").value.trim();
-      const password =
-        document.getElementById("password").value;
-      const message =
-        document.getElementById("loginMessage");
-      message.innerHTML = "";
-      if (!email || !password) {
-        message.className = "error";
-        message.textContent =
-          "Tafadhali jaza email na password.";
-        return;
-      }
-      const {
-        error
-      } = await supabaseClient.auth.signInWithPassword({
-        email,
-        password
-      });
-      if (error) {
-        message.className = "error";
-        message.textContent =
-          "Login failed: " + error.message;
-        return;
-      }
-      message.className = "success";
-      message.textContent =
-        "Login successful.";
-      showDashboard();
-      loadOrders();
-    }
-    async function logout() {
-      await supabaseClient.auth.signOut();
-      showLogin();
-    }
+
+
+    // LOAD ORDERS
     async function loadOrders() {
-      document.getElementById("tableContent").innerHTML =
-        '<div class="loading">Loading orders...</div>';
-      const {
-        data,
-        error
-      } = await supabaseClient
-        .from("orders")
-        .select("*")
-        .order("required_datetime", {
-          ascending: false
-        });
+
+      const loading =
+        document.getElementById("loading");
+
+      const table =
+        document.getElementById("ordersTable");
+
+      const empty =
+        document.getElementById("emptyOrders");
+
+      loading.classList.remove("hidden");
+      table.classList.add("hidden");
+      empty.classList.add("hidden");
+
+      const { data, error } =
+        await supabaseClient
+          .from("orders")
+          .select("*")
+          .order("created_at", {
+            ascending: false
+          });
+
       if (error) {
-        document.getElementById("tableContent").innerHTML =
-          '<div class="empty">Failed to load orders.<br>' +
-          escapeHtml(error.message) +
-          '</div>';
+
+        loading.textContent =
+          "Error loading orders: " + error.message;
+
         return;
       }
+
       allOrders = data || [];
-      updateSummary();
-      renderOrders();
+
+      updateStats(allOrders);
+
+      applyFilters();
+
+      loading.classList.add("hidden");
+
     }
-    function updateSummary() {
-      const totalOrders =
-        allOrders.length;
-      const pendingOrders =
-        allOrders.filter(
-          order => order.order_status === "Pending"
+
+
+    // UPDATE STATS
+    function updateStats(orders) {
+
+      document.getElementById("totalOrders")
+        .textContent = orders.length;
+
+      const pending =
+        orders.filter(
+          o => o.order_status === "Pending"
         ).length;
-      const totalChickens =
-        allOrders.reduce(
-          (sum, order) =>
-            sum + Number(order.quantity || 0),
-          0
-        );
-      const totalSales =
-        allOrders.reduce(
-          (sum, order) =>
-            sum + Number(order.price || 0),
-          0
-        );
-      document.getElementById("totalOrders").textContent =
-        totalOrders;
-      document.getElementById("pendingOrders").textContent =
-        pendingOrders;
-      document.getElementById("totalChickens").textContent =
-        totalChickens;
-      document.getElementById("totalSales").textContent =
-        "TSh " + totalSales.toLocaleString();
+
+      document.getElementById("pendingOrders")
+        .textContent = pending;
+
+      const chickens =
+        orders
+          .filter(o => o.order_status !== "Cancelled")
+          .reduce(
+            (sum, o) => sum + Number(o.quantity || 0),
+            0
+          );
+
+      document.getElementById("totalChickens")
+        .textContent = chickens;
+
+      const sales =
+        orders
+          .filter(o => o.order_status !== "Cancelled")
+          .reduce(
+            (sum, o) => sum + Number(o.price || 0),
+            0
+          );
+
+      document.getElementById("totalSales")
+        .textContent =
+        "TSh " +
+        sales.toLocaleString();
+
     }
-    function renderOrders() {
+
+
+    // FILTERS
+    function applyFilters() {
+
       const search =
-        document.getElementById("search")
+        document
+          .getElementById("searchInput")
           .value
           .toLowerCase()
           .trim();
+
       const location =
         document.getElementById("locationFilter").value;
-      const method =
-        document.getElementById("methodFilter").value;
+
+      const delivery =
+        document.getElementById("deliveryFilter").value;
+
       const status =
         document.getElementById("statusFilter").value;
+
+
       const filtered =
         allOrders.filter(order => {
+
           const searchable =
             (
-              String(order.order_id || "") +
+              order.order_id +
               " " +
-              String(order.customer_name || "") +
+              order.customer_name +
               " " +
-              String(order.phone || "")
+              order.phone
             ).toLowerCase();
+
           const matchesSearch =
             !search ||
             searchable.includes(search);
+
           const matchesLocation =
             !location ||
             order.location === location;
-          const matchesMethod =
-            !method ||
-            order.delivery_method === method;
+
+          const matchesDelivery =
+            !delivery ||
+            order.delivery_method === delivery;
+
           const matchesStatus =
             !status ||
             order.order_status === status;
+
           return (
             matchesSearch &&
             matchesLocation &&
-            matchesMethod &&
+            matchesDelivery &&
             matchesStatus
           );
+
         });
-      if (!filtered.length) {
-        document.getElementById("tableContent").innerHTML =
-          '<div class="empty">No orders found.</div>';
+
+
+      renderOrders(filtered);
+
+    }
+
+
+    // RENDER ORDERS
+    function renderOrders(orders) {
+
+      const body =
+        document.getElementById("ordersBody");
+
+      const table =
+        document.getElementById("ordersTable");
+
+      const empty =
+        document.getElementById("emptyOrders");
+
+      const count =
+        document.getElementById("ordersCount");
+
+      body.innerHTML = "";
+
+      count.textContent =
+        orders.length +
+        (orders.length === 1 ? " order" : " orders");
+
+
+      if (!orders.length) {
+
+        table.classList.add("hidden");
+        empty.classList.remove("hidden");
+
         return;
       }
-      let html = `
-        <table>
-          <thead>
-            <tr>
-              <th>Order ID</th>
-              <th>Date</th>
-              <th>Customer</th>
-              <th>Phone</th>
-              <th>Location</th>
-              <th>Qty</th>
-              <th>Price</th>
-              <th>Method</th>
-              <th>Payment</th>
-              <th>Required</th>
-              <th>Status</th>
-            </tr>
-          </thead>
-          <tbody>
-      `;
-      filtered.forEach(order => {
+
+      empty.classList.add("hidden");
+      table.classList.remove("hidden");
+
+
+      orders.forEach(order => {
+
+        const tr =
+          document.createElement("tr");
+
         const date =
           order.created_at
             ? new Date(order.created_at)
                 .toLocaleString()
             : "-";
-        const required =
-          order.required_datetime
-            ? new Date(order.required_datetime)
-                .toLocaleString()
-            : "-";
-        html += `
-          <tr>
-            <td>
-              <strong>
-                ${escapeHtml(order.order_id || "-")}
-              </strong>
-            </td>
-            <td>
-              ${escapeHtml(date)}
-            </td>
-            <td>
-              ${escapeHtml(order.customer_name || "-")}
-            </td>
-            <td>
-              ${escapeHtml(order.phone || "-")}
-            </td>
-            <td>
-              ${escapeHtml(order.location || "-")}
-            </td>
-            <td>
-              ${Number(order.quantity || 0)}
-            </td>
-            <td>
-              TSh ${Number(order.price || 0).toLocaleString()}
-            </td>
-            <td>
-              ${escapeHtml(order.delivery_method || "-")}
-            </td>
-            <td>
-              ${escapeHtml(order.payment_method || "-")}
-            </td>
-            <td>
-              ${escapeHtml(required)}
-            </td>
-            <td>
-              <select
-                class="status-select"
-                onchange="updateStatus('${escapeJs(order.order_id)}', this.value)"
-              >
-                <option value="Pending"
-                  ${order.order_status === "Pending" ? "selected" : ""}>
-                  Pending
-                </option>
-                <option value="Confirmed"
-                  ${order.order_status === "Confirmed" ? "selected" : ""}>
-                  Confirmed
-                </option>
-                <option value="Ready"
-                  ${order.order_status === "Ready" ? "selected" : ""}>
-                  Ready
-                </option>
-                <option value="Delivered"
-                  ${order.order_status === "Delivered" ? "selected" : ""}>
-                  Delivered
-                </option>
-                <option value="Cancelled"
-                  ${order.order_status === "Cancelled" ? "selected" : ""}>
-                  Cancelled
-                </option>
-              </select>
-            </td>
-          </tr>
+
+
+        tr.innerHTML = `
+
+          <td>
+            <span class="order-id">
+              ${escapeHtml(order.order_id || "-")}
+            </span>
+          </td>
+
+          <td>
+            ${escapeHtml(date)}
+          </td>
+
+          <td>
+            ${escapeHtml(order.customer_name || "-")}
+          </td>
+
+          <td>
+            ${escapeHtml(order.phone || "-")}
+          </td>
+
+          <td>
+            ${escapeHtml(order.location || "-")}
+          </td>
+
+          <td>
+            ${Number(order.quantity || 0)}
+          </td>
+
+          <td>
+            TSh ${Number(order.price || 0).toLocaleString()}
+          </td>
+
+          <td>
+            ${escapeHtml(order.delivery_method || "-")}
+          </td>
+
+          <td>
+            ${escapeHtml(order.payment_method || "-")}
+          </td>
+
+          <td>
+            <select
+              class="status-select status-${escapeHtml(order.order_status || "Pending")}"
+              onchange="changeStatus('${escapeJs(order.order_id)}', this.value)"
+            >
+
+              ${statusOption("Pending", order.order_status)}
+              ${statusOption("Confirmed", order.order_status)}
+              ${statusOption("Ready", order.order_status)}
+              ${statusOption("Delivered", order.order_status)}
+              ${statusOption("Cancelled", order.order_status)}
+
+            </select>
+          </td>
+
         `;
+
+        body.appendChild(tr);
+
       });
-      html += `
-          </tbody>
-        </table>
-      `;
-      document.getElementById("tableContent").innerHTML =
-        html;
+
     }
-    async function updateStatus(orderId, newStatus) {
-      const {
-        error
-      } = await supabaseClient
-        .from("orders")
-        .update({
-          order_status: newStatus
-        })
-        .eq("order_id", orderId);
+
+
+    // STATUS OPTION
+    function statusOption(value, current) {
+
+      return `
+        <option
+          value="${value}"
+          ${current === value ? "selected" : ""}
+        >
+          ${value}
+        </option>
+      `;
+
+    }
+
+
+    // CHANGE STATUS
+    async function changeStatus(orderId, newStatus) {
+
+      const { error } =
+        await supabaseClient
+          .from("orders")
+          .update({
+            order_status: newStatus
+          })
+          .eq("order_id", orderId);
+
+
       if (error) {
-        alert(
-          "Failed to update status:\n" +
-          error.message
+
+        showToast(
+          "Failed to update order."
         );
+
+        console.error(error);
+
         return;
       }
+
+
       const order =
         allOrders.find(
-          item => item.order_id === orderId
+          o => o.order_id === orderId
         );
+
       if (order) {
         order.order_status = newStatus;
       }
-      updateSummary();
-      renderOrders();
+
+
+      updateStats(allOrders);
+
+      applyFilters();
+
+      showToast(
+        "Order status updated: " +
+        newStatus
+      );
+
     }
+
+
+    // TOAST
+    function showToast(message) {
+
+      const toast =
+        document.getElementById("toast");
+
+      toast.textContent = message;
+
+      toast.classList.add("show");
+
+      setTimeout(() => {
+        toast.classList.remove("show");
+      }, 2500);
+
+    }
+
+
+    // ESCAPE HTML
     function escapeHtml(value) {
+
       return String(value)
         .replace(/&/g, "&amp;")
         .replace(/</g, "&lt;")
         .replace(/>/g, "&gt;")
         .replace(/"/g, "&quot;")
         .replace(/'/g, "&#039;");
+
     }
+
+
+    // ESCAPE JS
     function escapeJs(value) {
+
       return String(value)
         .replace(/\\/g, "\\\\")
-        .replace(/'/g, "\\'");
+        .replace(/'/g, "\\'")
+        .replace(/"/g, '\\"');
+
     }
-    supabaseClient.auth.onAuthStateChange(
-      (event, session) => {
-        if (session) {
-          showDashboard();
-        } else {
-          showLogin();
-        }
-      }
-    );
+
+
     checkSession();
+
   </script>
+
 </body>
 </html>
