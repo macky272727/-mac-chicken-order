@@ -4,21 +4,17 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Mac Chicken - Admin Dashboard</title>
-
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
   <style>
     * {
       box-sizing: border-box;
     }
-
     body {
       margin: 0;
       font-family: Arial, sans-serif;
       background: #f5f5f5;
       color: #222;
     }
-
     header {
       background: #111;
       color: white;
@@ -28,17 +24,14 @@
       align-items: center;
       gap: 10px;
     }
-
     header h1 {
       margin: 0;
       font-size: 21px;
     }
-
     header small {
       color: #d4af37;
       font-weight: bold;
     }
-
     button {
       border: none;
       border-radius: 8px;
@@ -46,18 +39,15 @@
       cursor: pointer;
       font-weight: bold;
     }
-
     .logout {
       background: #c62828;
       color: white;
     }
-
     .container {
       max-width: 1200px;
       margin: auto;
       padding: 18px;
     }
-
     .login-box {
       max-width: 420px;
       margin: 70px auto;
@@ -66,12 +56,10 @@
       border-radius: 14px;
       box-shadow: 0 5px 25px rgba(0,0,0,.08);
     }
-
     .login-box h2 {
       margin-top: 0;
       color: #b00000;
     }
-
     input,
     select {
       width: 100%;
@@ -83,44 +71,40 @@
       font-size: 15px;
       background: white;
     }
-
     .login-btn {
       width: 100%;
       background: #b00000;
       color: white;
       padding: 13px;
     }
-
     .dashboard {
       display: none;
     }
-
     .stats {
       display: grid;
-      grid-template-columns: repeat(4, 1fr);
+      grid-template-columns: repeat(5, 1fr);
       gap: 14px;
       margin: 20px 0;
     }
-
     .stat {
       background: white;
       padding: 18px;
       border-radius: 12px;
       box-shadow: 0 3px 12px rgba(0,0,0,.06);
     }
-
     .stat span {
       display: block;
       color: #777;
       font-size: 13px;
       margin-bottom: 8px;
     }
-
     .stat strong {
       font-size: 25px;
       color: #b00000;
     }
-
+    .stat.paid strong {
+      color: #16821c;
+    }
     .filters {
       background: white;
       padding: 18px;
@@ -128,13 +112,11 @@
       margin-bottom: 18px;
       box-shadow: 0 3px 12px rgba(0,0,0,.06);
     }
-
     .filter-grid {
       display: grid;
-      grid-template-columns: 2fr 1fr 1fr 1fr;
+      grid-template-columns: 2fr 1fr 1fr 1fr 1fr;
       gap: 12px;
     }
-
     .orders-box {
       background: white;
       border-radius: 12px;
@@ -142,24 +124,20 @@
       box-shadow: 0 3px 12px rgba(0,0,0,.06);
       overflow-x: auto;
     }
-
     .orders-title {
       display: flex;
       justify-content: space-between;
       align-items: center;
       margin-bottom: 15px;
     }
-
     .orders-title h2 {
       margin: 0;
     }
-
     table {
       width: 100%;
       border-collapse: collapse;
-      min-width: 900px;
+      min-width: 1050px;
     }
-
     th,
     td {
       padding: 11px 9px;
@@ -167,24 +145,24 @@
       text-align: left;
       font-size: 14px;
     }
-
     th {
       background: #fafafa;
       font-size: 13px;
     }
-
-    .status {
+    .status,
+    .payment-status {
       min-width: 125px;
       margin: 0;
       padding: 8px;
     }
-
+    .payment-status {
+      min-width: 145px;
+    }
     .empty {
       text-align: center;
       padding: 30px;
       color: #777;
     }
-
     .error {
       background: #ffe5e5;
       color: #a00000;
@@ -193,7 +171,6 @@
       margin-bottom: 15px;
       display: none;
     }
-
     .success {
       background: #e7f7e7;
       color: #176b17;
@@ -202,341 +179,278 @@
       margin-bottom: 15px;
       display: none;
     }
-
+    @media (max-width: 1000px) {
+      .stats {
+        grid-template-columns: repeat(3, 1fr);
+      }
+      .filter-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
     @media (max-width: 800px) {
       .stats {
         grid-template-columns: repeat(2, 1fr);
       }
-
       .filter-grid {
         grid-template-columns: 1fr;
       }
-
       header {
         align-items: flex-start;
       }
     }
-
     @media (max-width: 500px) {
       .stats {
         grid-template-columns: 1fr 1fr;
         gap: 8px;
       }
-
       .stat {
         padding: 13px;
       }
-
       .stat strong {
         font-size: 20px;
       }
-
       .container {
         padding: 10px;
       }
     }
   </style>
 </head>
-
 <body>
-
 <header>
   <div>
     <h1>🐔 Mac Chicken</h1>
     <small>ADMIN DASHBOARD</small>
   </div>
 
-  <button class="logout" onclick="logout()">Logout</button>
+Logout
+
 </header>
-
 <div id="loginSection" class="login-box">
-
   <h2>Admin Login</h2>
-
   <div id="loginError" class="error"></div>
 
-  <label>Email</label>
-  <input
-    type="email"
-    id="email"
-    placeholder="Admin email"
-  >
+Email
+<input
+type=“email”
+id=“email”
+placeholder=“Admin email”
 
-  <label>Password</label>
-  <input
-    type="password"
-    id="password"
-    placeholder="Password"
-  >
+Password
+<input
+type=“password”
+id=“password”
+placeholder=“Password”
 
   <button class="login-btn" onclick="login()">
     Login
   </button>
-
 </div>
-
 <div id="dashboard" class="dashboard">
-
   <div class="container">
-
-    <div id="errorBox" class="error"></div>
-    <div id="successBox" class="success"></div>
-
-    <div class="stats">
-
-      <div class="stat">
-        <span>Total Orders</span>
-        <strong id="totalOrders">0</strong>
-      </div>
-
-      <div class="stat">
-        <span>Pending</span>
-        <strong id="pendingOrders">0</strong>
-      </div>
-
-      <div class="stat">
-        <span>Chickens Sold</span>
-        <strong id="totalChickens">0</strong>
-      </div>
-
-      <div class="stat">
-        <span>Total Sales</span>
-        <strong id="totalSales">TSh 0</strong>
-      </div>
-
-    </div>
-
-    <div class="filters">
-
-      <h3>Search & Filter</h3>
-
-      <div class="filter-grid">
-
-        <input
-          type="text"
-          id="search"
-          placeholder="Search Order ID, name or phone..."
-          oninput="renderOrders()"
-        >
-
-        <select id="locationFilter" onchange="renderOrders()">
-          <option value="">All Locations</option>
-          <option value="Moshi">Moshi</option>
-          <option value="Arusha">Arusha</option>
-        </select>
-
-        <select id="deliveryFilter" onchange="renderOrders()">
-          <option value="">All Delivery Methods</option>
-          <option value="Delivery">Delivery</option>
-          <option value="Pickup">Pickup</option>
-        </select>
-
-        <select id="statusFilter" onchange="renderOrders()">
-          <option value="">All Status</option>
-          <option value="Pending">Pending</option>
-          <option value="Confirmed">Confirmed</option>
-          <option value="Ready">Ready</option>
-          <option value="Delivered">Delivered</option>
-          <option value="Cancelled">Cancelled</option>
-        </select>
-
-      </div>
-
-    </div>
-
-    <div class="orders-box">
-
-      <div class="orders-title">
-        <h2>Customer Orders</h2>
-        <button onclick="loadOrders()">🔄 Refresh</button>
-      </div>
-
-      <div id="orderCount">
-        0 orders
-      </div>
-
-      <br>
-
-      <table>
-
-        <thead>
-          <tr>
-            <th>Order ID</th>
-            <th>Customer</th>
-            <th>Phone</th>
-            <th>Location</th>
-            <th>Qty</th>
-            <th>Price</th>
-            <th>Delivery</th>
-            <th>Payment</th>
-            <th>Status</th>
-          </tr>
-        </thead>
-
-        <tbody id="ordersTable">
-        </tbody>
-
-      </table>
-
-    </div>
-
+<div id="errorBox" class="error"></div>
+<div id="successBox" class="success"></div>
+<div class="stats">
+  <div class="stat">
+    <span>Total Orders</span>
+    <strong id="totalOrders">0</strong>
   </div>
-
+  <div class="stat">
+    <span>Pending Orders</span>
+    <strong id="pendingOrders">0</strong>
+  </div>
+  <div class="stat">
+    <span>Chickens Sold</span>
+    <strong id="totalChickens">0</strong>
+  </div>
+  <div class="stat">
+    <span>Total Sales</span>
+    <strong id="totalSales">TSh 0</strong>
+  </div>
+  <div class="stat paid">
+    <span>Paid Orders</span>
+    <strong id="paidOrders">0</strong>
+  </div>
 </div>
-
+<div class="filters">
+  <h3>Search & Filter</h3>
+  <div class="filter-grid">
+    <input
+      type="text"
+      id="search"
+      placeholder="Search Order ID, name or phone..."
+      oninput="renderOrders()"
+    >
+    <select id="locationFilter" onchange="renderOrders()">
+      <option value="">All Locations</option>
+      <option value="Moshi">Moshi</option>
+      <option value="Arusha">Arusha</option>
+    </select>
+    <select id="deliveryFilter" onchange="renderOrders()">
+      <option value="">All Delivery Methods</option>
+      <option value="Delivery">Delivery</option>
+      <option value="Pickup">Pickup</option>
+    </select>
+    <select id="statusFilter" onchange="renderOrders()">
+      <option value="">All Order Status</option>
+      <option value="Pending">Pending</option>
+      <option value="Confirmed">Confirmed</option>
+      <option value="Ready">Ready</option>
+      <option value="Delivered">Delivered</option>
+      <option value="Cancelled">Cancelled</option>
+    </select>
+    <select id="paymentFilter" onchange="renderOrders()">
+      <option value="">All Payment Status</option>
+      <option value="Pending">Pending</option>
+      <option value="Paid">Paid</option>
+      <option value="Pay at Delivery">Pay at Delivery</option>
+    </select>
+  </div>
+</div>
+<div class="orders-box">
+  <div class="orders-title">
+    <h2>Customer Orders</h2>
+    <button onclick="loadOrders()">
+      🔄 Refresh
+    </button>
+  </div>
+  <div id="orderCount">
+    0 orders
+  </div>
+  <br>
+  <table>
+    <thead>
+      <tr>
+        <th>Order ID</th>
+        <th>Customer</th>
+        <th>Phone</th>
+        <th>Location</th>
+        <th>Qty</th>
+        <th>Price</th>
+        <th>Delivery</th>
+        <th>Payment Method</th>
+        <th>Payment Status</th>
+        <th>Order Status</th>
+      </tr>
+    </thead>
+    <tbody id="ordersTable">
+    </tbody>
+  </table>
+</div>
+  </div>
+</div>
 <script>
-
   const SUPABASE_URL =
     "https://tuqrnlaofriqggeaoqxb.supabase.co";
-
   const SUPABASE_KEY =
     "sb_publishable_NVTmWBHQVN8faM4tBcCpxg_IBW45wI_";
-
   const supabaseClient =
     window.supabase.createClient(
       SUPABASE_URL,
       SUPABASE_KEY
     );
-
   let allOrders = [];
-
   function showError(message, target = "errorBox") {
-
-    const box = document.getElementById(target);
-
+    const box =
+      document.getElementById(target);
     box.textContent = message;
     box.style.display = "block";
-
     setTimeout(() => {
       box.style.display = "none";
     }, 5000);
   }
-
   function showSuccess(message) {
-
-    const box = document.getElementById("successBox");
-
+    const box =
+      document.getElementById("successBox");
     box.textContent = message;
     box.style.display = "block";
-
     setTimeout(() => {
       box.style.display = "none";
     }, 4000);
   }
-
   async function login() {
-
     const email =
-      document.getElementById("email").value.trim();
-
+      document.getElementById("email")
+        .value
+        .trim();
     const password =
-      document.getElementById("password").value;
-
+      document.getElementById("password")
+        .value;
     if (!email || !password) {
-
       showError(
         "Please enter email and password.",
         "loginError"
       );
-
       return;
     }
-
     const { error } =
-      await supabaseClient.auth.signInWithPassword({
-        email: email,
-        password: password
-      });
-
+      await supabaseClient.auth
+        .signInWithPassword({
+          email: email,
+          password: password
+        });
     if (error) {
-
       showError(
         error.message,
         "loginError"
       );
-
       return;
     }
-
     await checkSession();
   }
-
   async function checkSession() {
-
     const { data } =
-      await supabaseClient.auth.getSession();
-
+      await supabaseClient.auth
+        .getSession();
     if (data.session) {
-
       document.getElementById(
         "loginSection"
       ).style.display = "none";
-
       document.getElementById(
         "dashboard"
       ).style.display = "block";
-
       await loadOrders();
-
     } else {
-
       document.getElementById(
         "loginSection"
       ).style.display = "block";
-
       document.getElementById(
         "dashboard"
       ).style.display = "none";
     }
   }
-
   async function logout() {
-
     await supabaseClient.auth.signOut();
-
     document.getElementById(
       "dashboard"
     ).style.display = "none";
-
     document.getElementById(
       "loginSection"
     ).style.display = "block";
   }
-
   async function loadOrders() {
-
     const { data, error } =
       await supabaseClient
         .from("orders")
         .select("*");
-
     if (error) {
-
       showError(
-        "Error loading orders: " + error.message
+        "Error loading orders: " +
+        error.message
       );
-
       return;
     }
-
     allOrders = data || [];
-
     updateStats();
-
     renderOrders();
   }
-
   function updateStats() {
-
     const totalOrders =
       allOrders.length;
-
     const pendingOrders =
       allOrders.filter(
         order =>
           order.order_status === "Pending"
       ).length;
-
     const totalChickens =
       allOrders
         .filter(
@@ -548,7 +462,6 @@
             sum + Number(order.quantity || 0),
           0
         );
-
     const totalSales =
       allOrders
         .filter(
@@ -560,53 +473,58 @@
             sum + Number(order.price || 0),
           0
         );
-
+    const paidOrders =
+      allOrders.filter(
+        order =>
+          order.payment_status === "Paid"
+      ).length;
     document.getElementById(
       "totalOrders"
-    ).textContent = totalOrders;
-
+    ).textContent =
+      totalOrders;
     document.getElementById(
       "pendingOrders"
-    ).textContent = pendingOrders;
-
+    ).textContent =
+      pendingOrders;
     document.getElementById(
       "totalChickens"
-    ).textContent = totalChickens;
-
+    ).textContent =
+      totalChickens;
     document.getElementById(
       "totalSales"
     ).textContent =
       "TSh " +
       totalSales.toLocaleString();
+    document.getElementById(
+      "paidOrders"
+    ).textContent =
+      paidOrders;
   }
-
   function renderOrders() {
-
     const search =
       document.getElementById(
         "search"
       ).value
       .toLowerCase()
       .trim();
-
     const location =
       document.getElementById(
         "locationFilter"
       ).value;
-
     const delivery =
       document.getElementById(
         "deliveryFilter"
       ).value;
-
     const status =
       document.getElementById(
         "statusFilter"
       ).value;
-
+    const paymentStatus =
+      document.getElementById(
+        "paymentFilter"
+      ).value;
     const filtered =
       allOrders.filter(order => {
-
         const matchesSearch =
           !search ||
           String(order.order_id || "")
@@ -618,185 +536,283 @@
           String(order.phone || "")
             .toLowerCase()
             .includes(search);
-
         const matchesLocation =
           !location ||
           order.location === location;
-
         const matchesDelivery =
           !delivery ||
           order.delivery_method === delivery;
-
         const matchesStatus =
           !status ||
           order.order_status === status;
-
+        const matchesPaymentStatus =
+          !paymentStatus ||
+          order.payment_status === paymentStatus;
         return (
           matchesSearch &&
           matchesLocation &&
           matchesDelivery &&
-          matchesStatus
+          matchesStatus &&
+          matchesPaymentStatus
         );
       });
-
     document.getElementById(
       "orderCount"
     ).textContent =
       filtered.length + " orders";
-
     const table =
       document.getElementById(
         "ordersTable"
       );
-
     if (!filtered.length) {
-
       table.innerHTML = `
         <tr>
-          <td colspan="9" class="empty">
+          <td colspan="10" class="empty">
             No orders found.
           </td>
         </tr>
       `;
-
       return;
     }
-
     table.innerHTML =
-      filtered.map(order => `
-
+      filtered.map(order => {
+        const paymentStatus =
+          order.payment_status ||
+          "Pending";
+        return `
         <tr>
-
           <td>
             <strong>
-              ${escapeHtml(order.order_id || "")}
+              ${escapeHtml(
+                order.order_id || ""
+              )}
             </strong>
           </td>
-
           <td>
-            ${escapeHtml(order.customer_name || "")}
+            ${escapeHtml(
+              order.customer_name || ""
+            )}
           </td>
-
           <td>
-            ${escapeHtml(order.phone || "")}
+            ${escapeHtml(
+              order.phone || ""
+            )}
           </td>
-
           <td>
-            ${escapeHtml(order.location || "")}
+            ${escapeHtml(
+              order.location || ""
+            )}
           </td>
-
           <td>
-            ${Number(order.quantity || 0)}
+            ${Number(
+              order.quantity || 0
+            )}
           </td>
-
           <td>
-            TSh ${Number(order.price || 0).toLocaleString()}
+            TSh ${
+              Number(
+                order.price || 0
+              ).toLocaleString()
+            }
           </td>
-
           <td>
-            ${escapeHtml(order.delivery_method || "")}
+            ${escapeHtml(
+              order.delivery_method || ""
+            )}
           </td>
-
           <td>
-            ${escapeHtml(order.payment_method || "")}
+            ${escapeHtml(
+              order.payment_method || ""
+            )}
           </td>
-
           <td>
-
             <select
-              class="status"
-              onchange="updateStatus('${escapeHtml(order.order_id)}', this.value)"
+              class="payment-status"
+              onchange="updatePaymentStatus(
+                '${escapeHtml(order.order_id)}',
+                this.value
+              )"
             >
-
               <option value="Pending"
-                ${order.order_status === "Pending" ? "selected" : ""}>
+                ${
+                  paymentStatus === "Pending"
+                    ? "selected"
+                    : ""
+                }>
                 Pending
               </option>
-
+              <option value="Paid"
+                ${
+                  paymentStatus === "Paid"
+                    ? "selected"
+                    : ""
+                }>
+                Paid
+              </option>
+              <option value="Pay at Delivery"
+                ${
+                  paymentStatus === "Pay at Delivery"
+                    ? "selected"
+                    : ""
+                }>
+                Pay at Delivery
+              </option>
+            </select>
+          </td>
+          <td>
+            <select
+              class="status"
+              onchange="updateStatus(
+                '${escapeHtml(order.order_id)}',
+                this.value
+              )"
+            >
+              <option value="Pending"
+                ${
+                  order.order_status === "Pending"
+                    ? "selected"
+                    : ""
+                }>
+                Pending
+              </option>
               <option value="Confirmed"
-                ${order.order_status === "Confirmed" ? "selected" : ""}>
+                ${
+                  order.order_status === "Confirmed"
+                    ? "selected"
+                    : ""
+                }>
                 Confirmed
               </option>
-
               <option value="Ready"
-                ${order.order_status === "Ready" ? "selected" : ""}>
+                ${
+                  order.order_status === "Ready"
+                    ? "selected"
+                    : ""
+                }>
                 Ready
               </option>
-
               <option value="Delivered"
-                ${order.order_status === "Delivered" ? "selected" : ""}>
+                ${
+                  order.order_status === "Delivered"
+                    ? "selected"
+                    : ""
+                }>
                 Delivered
               </option>
-
               <option value="Cancelled"
-                ${order.order_status === "Cancelled" ? "selected" : ""}>
+                ${
+                  order.order_status === "Cancelled"
+                    ? "selected"
+                    : ""
+                }>
                 Cancelled
               </option>
-
             </select>
-
           </td>
-
         </tr>
-
-      `).join("");
+        `;
+      }).join("");
   }
-
-  async function updateStatus(orderId, newStatus) {
-
+  async function updatePaymentStatus(
+    orderId,
+    newPaymentStatus
+  ) {
     const { error } =
       await supabaseClient
         .from("orders")
         .update({
-          order_status: newStatus
+          payment_status:
+            newPaymentStatus
         })
         .eq(
           "order_id",
           orderId
         );
-
     if (error) {
-
       showError(
-        "Failed to update status: " +
+        "Failed to update payment status: " +
         error.message
       );
-
+      await loadOrders();
       return;
     }
-
     const order =
       allOrders.find(
         item =>
           item.order_id === orderId
       );
-
     if (order) {
-      order.order_status = newStatus;
+      order.payment_status =
+        newPaymentStatus;
     }
-
     updateStats();
-
     renderOrders();
-
+    showSuccess(
+      "Payment status updated successfully."
+    );
+  }
+  async function updateStatus(
+    orderId,
+    newStatus
+  ) {
+    const { error } =
+      await supabaseClient
+        .from("orders")
+        .update({
+          order_status:
+            newStatus
+        })
+        .eq(
+          "order_id",
+          orderId
+        );
+    if (error) {
+      showError(
+        "Failed to update status: " +
+        error.message
+      );
+      await loadOrders();
+      return;
+    }
+    const order =
+      allOrders.find(
+        item =>
+          item.order_id === orderId
+      );
+    if (order) {
+      order.order_status =
+        newStatus;
+    }
+    updateStats();
+    renderOrders();
     showSuccess(
       "Order status updated successfully."
     );
   }
-
   function escapeHtml(value) {
-
     return String(value)
-      .replace(/&/g, "&amp;")
-      .replace(/</g, "&lt;")
-      .replace(/>/g, "&gt;")
-      .replace(/"/g, "&quot;")
-      .replace(/'/g, "&#039;");
+      .replace(
+        /&/g,
+        "&amp;"
+      )
+      .replace(
+        /</g,
+        "&lt;"
+      )
+      .replace(
+        />/g,
+        "&gt;"
+      )
+      .replace(
+        /"/g,
+        "&quot;"
+      )
+      .replace(
+        /'/g,
+        "&#039;"
+      );
   }
-
   checkSession();
-
 </script>
-
 </body>
 </html>
