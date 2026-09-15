@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mac Chicken Admin</title>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      font-family: Arial, sans-serif;
+      background: #f5f5f5;
+      color: #222;
+    }
+    header {
+      background: #111;
+      color: white;
+      padding: 18px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+    }
+    header h1 {
+      font-size: 22px;
+      color: #ffd700;
+    }
+    header p {
+      font-size: 12px;
+      color: #ddd;
+      margin-top: 4px;
+    }
+    button {
+      border: none;
+      cursor: pointer;
+      border-radius: 8px;
+      padding: 10px 14px;
+      font-weight: bold;
+    }
+    .logout {
+      background: #c62828;
+      color: white;
+    }
+    .container {
+      width: 95%;
+      max-width: 1200px;
+      margin: 20px auto;
+    }
+    .login-box,
+    .dashboard {
+      display: none;
+    }
+    .login-box {
+      max-width: 420px;
+      margin: 70px auto;
+      background: white;
+      padding: 25px;
+      border-radius: 15px;
+      box-shadow: 0 4px 15px rgba(0,0,0,.08);
+    }
+    .login-box h2 {
+      margin-bottom: 20px;
+      text-align: center;
+    }
+    input,
+    select {
+      width: 100%;
+      padding: 12px;
+      margin-top: 7px;
+      margin-bottom: 14px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      font-size: 15px;
+      background: white;
+    }
+    label {
+      font-weight: bold;
+      font-size: 14px;
+    }
+    .login-btn {
+      width: 100%;
+      background: #d32f2f;
+      color: white;
+      padding: 13px;
+      font-size: 16px;
+    }
+    .error {
+      color: #c62828;
+      margin-top: 12px;
+      text-align: center;
+      font-size: 14px;
+    }
+    .success {
+      color: #2e7d32;
+      margin-top: 12px;
+      text-align: center;
+      font-size: 14px;
+    }
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 15px;
+      margin-bottom: 20px;
+    }
+    .card {
+      background: white;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 3px 12px rgba(0,0,0,.06);
+    }
+    .card h3 {
+      font-size: 13px;
+      color: #666;
+      margin-bottom: 8px;
+    }
+    .card strong {
+      font-size: 25px;
+    }
+    .filters {
+      background: white;
+      padding: 15px;
+      border-radius: 12px;
+      margin-bottom: 20px;
+      box-shadow: 0 3px 12px rgba(0,0,0,.06);
+    }
+    .filter-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1fr auto;
+      gap: 10px;
+      align-items: end;
+    }
+    .refresh {
+      background: #222;
+      color: white;
+      height: 42px;
+    }
+    .table-box {
+      background: white;
+      border-radius: 12px;
+      padding: 15px;
+      overflow-x: auto;
+      box-shadow: 0 3px 12px rgba(0,0,0,.06);
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 1050px;
+    }
+    th,
+    td {
+      padding: 11px 9px;
+      border-bottom: 1px solid #eee;
+      text-align: left;
+      font-size: 13px;
+    }
+    th {
+      background: #111;
+      color: white;
+      position: sticky;
+      top: 0;
+    }
+    .status-select {
+      width: 135px;
+      margin: 0;
+      padding: 7px;
+      font-size: 12px;
+    }
+    .empty {
+      text-align: center;
+      padding: 30px;
+      color: #777;
+    }
+    .loading {
+      text-align: center;
+      padding: 25px;
+      color: #777;
+    }
+    @media (max-width: 800px) {
+      .cards {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      .filter-grid {
+        grid-template-columns: 1fr;
+      }
+      header {
+        align-items: flex-start;
+      }
+      header h1 {
+        font-size: 18px;
+      }
+    }
+    @media (max-width: 480px) {
+      .cards {
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+      }
+      .card {
+        padding: 15px;
+      }
+      .card strong {
+        font-size: 20px;
+      }
+      .container {
+        width: 94%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div>
+      <h1>🐔 Mac Chicken</h1>
+      <p>Admin Dashboard • QUALITY & HEALTH</p>
+    </div>
+    <button class="logout" onclick="logout()">Logout</button>
+  </header>
+  <div class="container">
+    <!-- LOGIN -->
+    <div class="login-box" id="loginBox">
+      <h2>Admin Login 🔐</h2>
+      <label>Email</label>
+      <input
+        type="email"
+        id="email"
+        placeholder="Admin email"
+      >
+      <label>Password</label>
+      <input
+        type="password"
+        id="password"
+        placeholder="Password"
+      >
+      <button class="login-btn" onclick="login()">
+        Login
+      </button>
+      <div id="loginMessage"></div>
+    </div>
+    <!-- DASHBOARD -->
+    <div class="dashboard" id="dashboard">
+      <div class="cards">
+        <div class="card">
+          <h3>Total Orders</h3>
+          <strong id="totalOrders">0</strong>
+        </div>
+        <div class="card">
+          <h3>Pending</h3>
+          <strong id="pendingOrders">0</strong>
+        </div>
+        <div class="card">
+          <h3>Chickens Sold</h3>
+          <strong id="totalChickens">0</strong>
+        </div>
+        <div class="card">
+          <h3>Total Sales</h3>
+          <strong id="totalSales">TSh 0</strong>
+        </div>
+      </div>
+      <div class="filters">
+        <div class="filter-grid">
+          <div>
+            <label>Search</label>
+            <input
+              type="text"
+              id="search"
+              placeholder="Order ID, name or phone"
+              oninput="renderOrders()"
+            >
+          </div>
+          <div>
+            <label>Location</label>
+            <select id="locationFilter" onchange="renderOrders()">
+              <option value="">All</option>
+              <option value="Moshi">Moshi</option>
+              <option value="Arusha">Arusha</option>
+            </select>
+          </div>
+          <div>
+            <label>Method</label>
+            <select id="methodFilter" onchange="renderOrders()">
+              <option value="">All</option>
+              <option value="Delivery">Delivery</option>
+              <option value="Pickup">Pickup</option>
+            </select>
+          </div>
+          <div>
+            <label>Status</label>
+            <select id="statusFilter" onchange="renderOrders()">
+              <option value="">All</option>
+              <option value="Pending">Pending</option>
+              <option value="Confirmed">Confirmed</option>
+              <option value="Ready">Ready</option>
+              <option value="Delivered">Delivered</option>
+              <option value="Cancelled">Cancelled</option>
+            </select>
+          </div>
+          <button class="refresh" onclick="loadOrders()">
+            🔄 Refresh
+          </button>
+        </div>
+      </div>
+      <div class="table-box">
+        <div id="tableContent" class="loading">
+          Loading orders...
+        </div>
+      </div>
+    </div>
+  </div>
+  <script>
+    const SUPABASE_URL =
+      "https://tuqrnlaofriqggeaoqxb.supabase.co";
+    const SUPABASE_KEY =
+      "sb_publishable_NVTmWBHQVN8faM4tBcCpxg_IBW45wI_";
+    const supabaseClient =
+      window.supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_KEY
+      );
+    let allOrders = [];
+    async function checkSession() {
+      const {
+        data: { session }
+      } = await supabaseClient.auth.getSession();
+      if (session) {
+        showDashboard();
+        loadOrders();
+      } else {
+        showLogin();
+      }
+    }
+    function showLogin() {
+      document.getElementById("loginBox").style.display = "block";
+      document.getElementById("dashboard").style.display = "none";
+    }
+    function showDashboard() {
+      document.getElementById("loginBox").style.display = "none";
+      document.getElementById("dashboard").style.display = "block";
+    }
+    async function login() {
+      const email =
+        document.getElementById("email").value.trim();
+      const password =
+        document.getElementById("password").value;
+      const message =
+        document.getElementById("loginMessage");
+      message.innerHTML = "";
+      if (!email || !password) {
+        message.className = "error";
+        message.textContent =
+          "Tafadhali jaza email na password.";
+        return;
+      }
+      const {
+        error
+      } = await supabaseClient.auth.signInWithPassword({
+        email,
+        password
+      });
+      if (error) {
+        message.className = "error";
+        message.textContent =
+          "Login failed: " + error.message;
+        return;
+      }
+      message.className = "success";
+      message.textContent =
+        "Login successful.";
+      showDashboard();
+      loadOrders();
+    }
+    async function logout() {
+      await supabaseClient.auth.signOut();
+      showLogin();
+    }
+    async function loadOrders() {
+      document.getElementById("tableContent").innerHTML =
+        '<div class="loading">Loading orders...</div>';
+      const {
+        data,
+        error
+      } = await supabaseClient
+        .from("orders")
+        .select("*")
+        .order("required_datetime", {
+          ascending: false
+        });
+      if (error) {
+        document.getElementById("tableContent").innerHTML =
+          '<div class="empty">Failed to load orders.<br>' +
+          escapeHtml(error.message) +
+          '</div>';
+        return;
+      }
+      allOrders = data || [];
+      updateSummary();
+      renderOrders();
+    }
+    function updateSummary() {
+      const totalOrders =
+        allOrders.length;
+      const pendingOrders =
+        allOrders.filter(
+          order => order.order_status === "Pending"
+        ).length;
+      const totalChickens =
+        allOrders.reduce(
+          (sum, order) =>
+            sum + Number(order.quantity || 0),
+          0
+        );
+      const totalSales =
+        allOrders.reduce(
+          (sum, order) =>
+            sum + Number(order.price || 0),
+          0
+        );
+      document.getElementById("totalOrders").textContent =
+        totalOrders;
+      document.getElementById("pendingOrders").textContent =
+        pendingOrders;
+      document.getElementById("totalChickens").textContent =
+        totalChickens;
+      document.getElementById("totalSales").textContent =
+        "TSh " + totalSales.toLocaleString();
+    }
+    function renderOrders() {
+      const search =
+        document.getElementById("search")
+          .value
+          .toLowerCase()
+          .trim();
+      const location =
+        document.getElementById("locationFilter").value;
+      const method =
+        document.getElementById("methodFilter").value;
+      const status =
+        document.getElementById("statusFilter").value;
+      const filtered =
+        allOrders.filter(order => {
+          const searchable =
+            (
+              String(order.order_id || "") +
+              " " +
+              String(order.customer_name || "") +
+              " " +
+              String(order.phone || "")
+            ).toLowerCase();
+          const matchesSearch =
+            !search ||
+            searchable.includes(search);
+          const matchesLocation =
+            !location ||
+            order.location === location;
+          const matchesMethod =
+            !method ||
+            order.delivery_method === method;
+          const matchesStatus =
+            !status ||
+            order.order_status === status;
+          return (
+            matchesSearch &&
+            matchesLocation &&
+            matchesMethod &&
+            matchesStatus
+          );
+        });
+      if (!filtered.length) {
+        document.getElementById("tableContent").innerHTML =
+          '<div class="empty">No orders found.</div>';
+        return;
+      }
+      let html = `
+        <table>
+          <thead>
+            <tr>
+              <th>Order ID</th>
+              <th>Date</th>
+              <th>Customer</th>
+              <th>Phone</th>
+              <th>Location</th>
+              <th>Qty</th>
+              <th>Price</th>
+              <th>Method</th>
+              <th>Payment</th>
+              <th>Required</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+      `;
+      filtered.forEach(order => {
+        const date =
+          order.created_at
+            ? new Date(order.created_at)
+                .toLocaleString()
+            : "-";
+        const required =
+          order.required_datetime
+            ? new Date(order.required_datetime)
+                .toLocaleString()
+            : "-";
+        html += `
+          <tr>
+            <td>
+              <strong>
+                ${escapeHtml(order.order_id || "-")}
+              </strong>
+            </td>
+            <td>
+              ${escapeHtml(date)}
+            </td>
+            <td>
+              ${escapeHtml(order.customer_name || "-")}
+            </td>
+            <td>
+              ${escapeHtml(order.phone || "-")}
+            </td>
+            <td>
+              ${escapeHtml(order.location || "-")}
+            </td>
+            <td>
+              ${Number(order.quantity || 0)}
+            </td>
+            <td>
+              TSh ${Number(order.price || 0).toLocaleString()}
+            </td>
+            <td>
+              ${escapeHtml(order.delivery_method || "-")}
+            </td>
+            <td>
+              ${escapeHtml(order.payment_method || "-")}
+            </td>
+            <td>
+              ${escapeHtml(required)}
+            </td>
+            <td>
+              <select
+                class="status-select"
+                onchange="updateStatus('${escapeJs(order.order_id)}', this.value)"
+              >
+                <option value="Pending"
+                  ${order.order_status === "Pending" ? "selected" : ""}>
+                  Pending
+                </option>
+                <option value="Confirmed"
+                  ${order.order_status === "Confirmed" ? "selected" : ""}>
+                  Confirmed
+                </option>
+                <option value="Ready"
+                  ${order.order_status === "Ready" ? "selected" : ""}>
+                  Ready
+                </option>
+                <option value="Delivered"
+                  ${order.order_status === "Delivered" ? "selected" : ""}>
+                  Delivered
+                </option>
+                <option value="Cancelled"
+                  ${order.order_status === "Cancelled" ? "selected" : ""}>
+                  Cancelled
+                </option>
+              </select>
+            </td>
+          </tr>
+        `;
+      });
+      html += `
+          </tbody>
+        </table>
+      `;
+      document.getElementById("tableContent").innerHTML =
+        html;
+    }
+    async function updateStatus(orderId, newStatus) {
+      const {
+        error
+      } = await supabaseClient
+        .from("orders")
+        .update({
+          order_status: newStatus
+        })
+        .eq("order_id", orderId);
+      if (error) {
+        alert(
+          "Failed to update status:\n" +
+          error.message
+        );
+        return;
+      }
+      const order =
+        allOrders.find(
+          item => item.order_id === orderId
+        );
+      if (order) {
+        order.order_status = newStatus;
+      }
+      updateSummary();
+      renderOrders();
+    }
+    function escapeHtml(value) {
+      return String(value)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+    }
+    function escapeJs(value) {
+      return String(value)
+        .replace(/\\/g, "\\\\")
+        .replace(/'/g, "\\'");
+    }
+    supabaseClient.auth.onAuthStateChange(
+      (event, session) => {
+        if (session) {
+          showDashboard();
+        } else {
+          showLogin();
+        }
+      }
+    );
+    checkSession();
+  </script>
+</body>
+</html>
