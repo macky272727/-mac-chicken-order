@@ -1022,15 +1022,17 @@ async function sendOrder(){
         }]);
     /* DATABASE ERROR */
     if(error){
-      console.error(
-        "Supabase error:",
-        error
-      );
-      alert(
-        "Samahani, order haijatumwa. Tafadhali jaribu tena."
-      );
-      return;
-    }
+  console.error("Supabase error:", error);
+
+  alert(
+    "SUPABASE ERROR:\n\n" +
+    error.message +
+    "\n\nCode: " +
+    error.code
+  );
+
+  return;
+}
     /* SUCCESS */
     alert(
       "Order yako imepokelewa vizuri! 🐔\n\n" +
