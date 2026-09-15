@@ -3,1060 +3,1288 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Mac Chicken | Fresh Chicken Orders</title>
+<title>Mac Chicken | Fresh Broiler Chicken</title>
+
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
 <style>
 *{
   box-sizing:border-box;
   margin:0;
   padding:0;
 }
-html{
-  scroll-behavior:smooth;
-}
+
 body{
   font-family:Arial,Helvetica,sans-serif;
-  background:#090909;
-  color:#fff;
-  line-height:1.6;
+  background:#f7f7f7;
+  color:#222;
+  line-height:1.5;
 }
-:root{
-  --red:#d71920;
-  --darkred:#8e0f14;
-  --gold:#f4c542;
-  --cream:#fff7df;
-  --green:#25d366;
-  --card:#151515;
-  --border:#292929;
-}
-a{
-  text-decoration:none;
-  color:inherit;
-}
-.container{
-  width:92%;
-  max-width:1100px;
-  margin:auto;
-}
-/* HEADER */
+
 header{
-  background:#090909;
-  border-bottom:1px solid var(--border);
+  background:#111;
+  color:white;
+  padding:12px 18px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
   position:sticky;
   top:0;
   z-index:1000;
 }
-.nav{
-  min-height:76px;
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:15px;
-}
-.brand{
+
+.logo-area{
   display:flex;
   align-items:center;
   gap:10px;
 }
-.brand img{
-  width:52px;
-  height:52px;
+
+.logo{
+  width:55px;
+  height:55px;
   object-fit:contain;
-  border-radius:50%;
+  border-radius:10px;
+  background:white;
 }
-.brand-text strong{
-  display:block;
-  font-size:20px;
-  color:var(--gold);
+
+.brand h1{
+  color:#d4af37;
+  font-size:22px;
 }
-.brand-text span{
+
+.brand p{
   font-size:10px;
-  color:#fff;
   letter-spacing:2px;
-}
-.whatsapp-top{
-  background:var(--green);
   color:#fff;
-  padding:10px 15px;
-  border-radius:30px;
+}
+
+.whatsapp-btn{
+  background:#25D366;
+  color:white;
+  text-decoration:none;
+  padding:9px 13px;
+  border-radius:8px;
   font-weight:bold;
   font-size:13px;
 }
-/* HERO */
+
 .hero{
-  min-height:520px;
+  min-height:430px;
+  background:
+    linear-gradient(rgba(0,0,0,.58),rgba(0,0,0,.58)),
+    url("87C07551-DB29-4DB1-AC25-C04776E594C9.png");
+  background-size:cover;
+  background-position:center;
   display:flex;
   align-items:center;
+  justify-content:center;
   text-align:center;
-  background:
-    linear-gradient(rgba(0,0,0,.72),rgba(0,0,0,.82)),
-    url('87C07551-DB29-4DB1-AC25-C04776E594C9.png') center/cover;
+  color:white;
+  padding:35px 18px;
 }
-.hero-content{
-  width:100%;
-  padding:60px 0;
+
+.hero h2{
+  font-size:38px;
+  color:#d4af37;
+  margin-bottom:10px;
 }
-.hero-logo{
-  width:90px;
-  height:90px;
-  object-fit:contain;
+
+.hero h3{
+  font-size:23px;
   margin-bottom:15px;
 }
-.badge{
-  display:inline-block;
-  background:var(--red);
-  padding:7px 15px;
-  border-radius:30px;
-  font-size:12px;
-  font-weight:bold;
-  margin-bottom:15px;
-}
-.hero h1{
-  font-size:clamp(35px,8vw,65px);
-  line-height:1.05;
-  margin-bottom:15px;
-}
-.hero h1 span{
-  color:var(--gold);
-}
+
 .hero p{
-  max-width:650px;
-  margin:0 auto 22px;
-  color:#ddd;
+  font-size:17px;
+  max-width:600px;
+  margin:auto;
 }
+
 .price{
-  font-size:26px;
+  margin-top:20px;
+  font-size:28px;
   font-weight:bold;
-  color:var(--gold);
-  margin-bottom:22px;
+  color:#fff;
 }
-.main-btn{
-  display:inline-block;
-  background:var(--red);
-  padding:15px 28px;
-  border-radius:35px;
-  font-weight:bold;
-  transition:.2s;
+
+.price span{
+  color:#d4af37;
 }
-.main-btn:hover{
-  transform:translateY(-2px);
-  background:#ef1c24;
+
+.container{
+  max-width:950px;
+  margin:auto;
+  padding:30px 16px;
 }
-/* QUICK BUTTONS */
-.quick-actions{
-  padding:30px 0 10px;
-}
-.action-grid{
-  display:grid;
-  grid-template-columns:repeat(2,1fr);
-  gap:15px;
-}
-.action-card{
-  background:var(--card);
-  border:1px solid var(--border);
-  border-radius:18px;
-  padding:22px;
-  text-align:center;
-}
-.action-card h3{
-  margin:7px 0;
-}
-.action-card p{
-  color:#aaa;
-  font-size:14px;
-  margin-bottom:15px;
-}
-.action-btn{
-  display:inline-block;
-  padding:11px 18px;
-  border-radius:25px;
-  background:var(--red);
-  font-weight:bold;
-  font-size:13px;
-}
-.action-btn.gold{
-  background:var(--gold);
-  color:#111;
-}
-/* SECTIONS */
-section{
-  padding:55px 0;
-}
+
 .section-title{
   text-align:center;
-  margin-bottom:30px;
+  margin-bottom:22px;
 }
+
 .section-title h2{
-  font-size:30px;
+  color:#111;
+  font-size:27px;
 }
+
 .section-title p{
-  color:#aaa;
-  font-size:14px;
+  color:#666;
   margin-top:5px;
 }
-/* PACKAGES */
-.packages{
+
+.quick-actions{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:12px;
+  margin-bottom:30px;
+}
+
+.quick-actions a{
+  text-decoration:none;
+  background:#111;
+  color:white;
+  padding:15px 8px;
+  text-align:center;
+  border-radius:10px;
+  font-weight:bold;
+}
+
+.card-grid{
   display:grid;
   grid-template-columns:repeat(3,1fr);
   gap:15px;
 }
-.package{
-  background:var(--card);
-  border:1px solid var(--border);
-  border-radius:18px;
-  padding:25px 15px;
+
+.card{
+  background:white;
+  border-radius:14px;
+  padding:20px;
+  box-shadow:0 3px 15px rgba(0,0,0,.08);
   text-align:center;
-  cursor:pointer;
-  transition:.2s;
 }
-.package:hover{
-  border-color:var(--gold);
-  transform:translateY(-3px);
+
+.card h3{
+  color:#111;
+  margin-bottom:8px;
 }
-.package .number{
-  font-size:35px;
+
+.card .card-price{
+  font-size:22px;
   font-weight:bold;
-  color:var(--gold);
-}
-.package h3{
-  margin:4px 0;
-}
-.package p{
-  color:#aaa;
-  font-size:13px;
-}
-.package .package-price{
-  color:var(--gold);
-  font-size:19px;
-  font-weight:bold;
+  color:#b28b00;
   margin:10px 0;
 }
-/* FORMS */
-.form-section{
-  background:#101010;
-}
-.form-box{
-  max-width:800px;
-  margin:auto;
-  background:var(--card);
-  border:1px solid var(--border);
-  border-radius:22px;
-  padding:25px;
-}
-.form-group{
-  margin-bottom:17px;
-}
-.form-group label{
-  display:block;
-  font-size:13px;
+
+button{
+  border:none;
+  cursor:pointer;
   font-weight:bold;
-  margin-bottom:7px;
 }
-input,
-select,
-textarea{
+
+.package-btn{
+  background:#111;
+  color:white;
+  padding:11px 18px;
+  border-radius:8px;
+}
+
+.order-box{
+  background:white;
+  padding:25px;
+  border-radius:15px;
+  box-shadow:0 3px 18px rgba(0,0,0,.08);
+  margin-top:25px;
+}
+
+label{
+  display:block;
+  font-weight:bold;
+  margin-bottom:6px;
+}
+
+input,select,textarea{
   width:100%;
-  background:#0d0d0d;
-  border:1px solid #333;
-  color:#fff;
   padding:13px;
-  border-radius:10px;
-  outline:none;
-  font-size:14px;
+  border:1px solid #ddd;
+  border-radius:8px;
+  margin-bottom:16px;
+  font-size:15px;
 }
-input:focus,
-select:focus,
-textarea:focus{
-  border-color:var(--gold);
-}
+
 textarea{
-  min-height:85px;
+  min-height:90px;
   resize:vertical;
 }
-.quantity-box{
+
+.qty-box{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  margin-bottom:18px;
+}
+
+.qty-box button{
+  width:40px;
+  height:40px;
+  border-radius:8px;
+  background:#111;
+  color:white;
+  font-size:20px;
+}
+
+.qty-number{
+  font-size:20px;
+  font-weight:bold;
+  min-width:30px;
+  text-align:center;
+}
+
+.radio-group{
+  display:flex;
+  gap:15px;
+  flex-wrap:wrap;
+  margin-bottom:15px;
+}
+
+.radio-group label{
+  font-weight:normal;
+  display:flex;
+  align-items:center;
+  gap:5px;
+}
+
+.radio-group input{
+  width:auto;
+  margin:0;
+}
+
+.summary{
+  background:#faf6df;
+  border:1px solid #d4af37;
+  padding:18px;
+  border-radius:10px;
+  margin-top:10px;
+  margin-bottom:20px;
+}
+
+.summary-row{
+  display:flex;
+  justify-content:space-between;
+  padding:5px 0;
+}
+
+.total{
+  font-size:22px;
+  font-weight:bold;
+  color:#a47c00;
+}
+
+.submit-btn{
+  width:100%;
+  background:#d4af37;
+  color:#111;
+  padding:15px;
+  border-radius:9px;
+  font-size:17px;
+}
+
+.track-box{
+  background:#111;
+  color:white;
+  padding:25px;
+  border-radius:15px;
+  margin-top:30px;
+  box-shadow:0 4px 18px rgba(0,0,0,.12);
+}
+
+.track-box h2{
+  color:#d4af37;
+  text-align:center;
+  margin-bottom:8px;
+}
+
+.track-box p{
+  text-align:center;
+  color:#ddd;
+  margin-bottom:18px;
+}
+
+.track-result{
+  display:none;
+  background:white;
+  color:#222;
+  padding:20px;
+  border-radius:12px;
+  margin-top:18px;
+}
+
+.track-id{
+  font-weight:bold;
+  margin-bottom:12px;
+}
+
+.status-timeline{
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-start;
+  gap:4px;
+  margin-top:25px;
+}
+
+.status-step{
+  flex:1;
+  text-align:center;
+  position:relative;
+}
+
+.status-circle{
+  width:30px;
+  height:30px;
+  border-radius:50%;
+  background:#ddd;
+  margin:auto;
   display:flex;
   align-items:center;
   justify-content:center;
-  gap:18px;
-  margin:10px 0 25px;
-}
-.qty-btn{
-  width:48px;
-  height:48px;
-  border:0;
-  border-radius:50%;
-  background:var(--red);
-  color:#fff;
-  font-size:25px;
+  font-size:13px;
   font-weight:bold;
-  cursor:pointer;
+  color:#555;
 }
-.qty-number{
-  font-size:30px;
+
+.status-step.active .status-circle{
+  background:#d4af37;
+  color:#111;
+}
+
+.status-step.done .status-circle{
+  background:#25D366;
+  color:white;
+}
+
+.status-label{
+  font-size:11px;
+  margin-top:7px;
   font-weight:bold;
-  min-width:50px;
+}
+
+.cancelled{
   text-align:center;
+  color:#c62828;
+  font-weight:bold;
+  padding:12px;
+  background:#ffeaea;
+  border-radius:8px;
 }
-.total-box{
-  text-align:center;
-  background:#0c0c0c;
-  border:1px solid var(--border);
-  border-radius:15px;
-  padding:18px;
-  margin-bottom:22px;
-}
-.total-box small{
-  color:#aaa;
-}
-.total-box strong{
-  display:block;
-  color:var(--gold);
-  font-size:28px;
-}
-.options{
+
+.delivery-info{
   display:grid;
   grid-template-columns:repeat(2,1fr);
-  gap:10px;
+  gap:18px;
 }
-.option{
-  background:#0c0c0c;
-  border:1px solid #333;
-  padding:13px;
-  border-radius:10px;
-}
-.option input{
-  width:auto;
-  margin-right:7px;
-}
-.hidden{
-  display:none;
-}
-.submit-btn{
-  width:100%;
-  border:0;
-  background:var(--green);
-  color:#fff;
-  padding:16px;
-  border-radius:12px;
-  font-size:16px;
-  font-weight:bold;
-  cursor:pointer;
-  margin-top:8px;
-}
-/* BUSINESS */
-.business{
-  background:#0d0d0d;
-}
-.business-grid{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:20px;
-}
-.business-card{
-  background:var(--card);
-  border:1px solid var(--border);
-  border-radius:20px;
+
+.info-card{
+  background:white;
+  border-radius:14px;
   overflow:hidden;
+  box-shadow:0 3px 15px rgba(0,0,0,.08);
 }
-.business-card img{
+
+.info-card img{
   width:100%;
   height:210px;
   object-fit:cover;
 }
-.business-content{
-  padding:20px;
-}
-.business-content h3{
-  color:var(--gold);
-  margin-bottom:7px;
-}
-.business-content p{
-  color:#aaa;
-  font-size:14px;
-  margin-bottom:17px;
-}
-.business-btn{
-  display:inline-block;
-  background:var(--red);
-  padding:11px 18px;
-  border-radius:25px;
-  font-weight:bold;
-  font-size:13px;
-}
-/* DELIVERY */
-.delivery{
-  background:#111;
-}
-.delivery-box{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:20px;
-  align-items:center;
-}
-.delivery-box img{
-  width:100%;
-  border-radius:20px;
-}
-.delivery-info{
-  padding:10px;
-}
-.delivery-info h2{
-  color:var(--gold);
-  margin-bottom:12px;
-}
-.delivery-info p{
-  color:#ccc;
-  margin-bottom:10px;
-}
-/* SUMMARY */
-.summary{
-  background:#0b0b0b;
-  border:1px solid var(--border);
-  border-radius:15px;
+
+.info-card-content{
   padding:18px;
-  margin:20px 0;
 }
-.summary h3{
-  color:var(--gold);
-  margin-bottom:10px;
-}
-.summary-row{
-  display:flex;
-  justify-content:space-between;
-  gap:15px;
-  border-bottom:1px solid #242424;
-  padding:7px 0;
-  font-size:14px;
-}
-.summary-row:last-child{
-  border:0;
-}
-/* FOOTER */
+
 footer{
-  background:#050505;
-  border-top:1px solid var(--border);
+  background:#111;
+  color:white;
   text-align:center;
-  padding:35px 0;
+  padding:28px 15px;
+  margin-top:30px;
 }
-footer img{
-  width:65px;
-  margin-bottom:10px;
+
+footer strong{
+  color:#d4af37;
 }
-footer h3{
-  color:var(--gold);
-}
-footer p{
-  color:#888;
+
+.small{
   font-size:13px;
+  color:#666;
 }
-.footer-wa{
-  display:inline-block;
-  margin-top:15px;
-  color:var(--green);
-  font-weight:bold;
-}
-/* MOBILE */
+
 @media(max-width:700px){
-  .nav{
-    min-height:68px;
+  .hero h2{
+    font-size:30px;
   }
-  .brand img{
-    width:45px;
-    height:45px;
+
+  .hero h3{
+    font-size:19px;
   }
-  .brand-text strong{
-    font-size:17px;
+
+  .quick-actions{
+    grid-template-columns:1fr;
   }
-  .whatsapp-top{
+
+  .card-grid{
+    grid-template-columns:1fr;
+  }
+
+  .delivery-info{
+    grid-template-columns:1fr;
+  }
+
+  .status-timeline{
+    gap:0;
+  }
+
+  .status-label{
+    font-size:9px;
+  }
+
+  header{
+    padding:9px 10px;
+  }
+
+  .brand h1{
+    font-size:18px;
+  }
+
+  .logo{
+    width:48px;
+    height:48px;
+  }
+
+  .whatsapp-btn{
     font-size:11px;
-    padding:8px 11px;
-  }
-  .hero{
-    min-height:500px;
-  }
-  .action-grid,
-  .business-grid,
-  .delivery-box{
-    grid-template-columns:1fr;
-  }
-  .packages{
-    grid-template-columns:1fr;
-  }
-  .options{
-    grid-template-columns:1fr;
-  }
-  .form-box{
-    padding:18px;
-  }
-  section{
-    padding:42px 0;
+    padding:8px 9px;
   }
 }
 </style>
 </head>
+
 <body>
-<!-- HEADER -->
+
 <header>
-  <div class="container nav">
-<a href="#" class="brand">
-  <img src="95622102-8212-413C-8849-91489284522F.png" alt="Mac Chicken Logo">
-  <div class="brand-text">
-    <strong>Mac Chicken</strong>
-    <span>QUALITY & HEALTH</span>
+  <div class="logo-area">
+    <img class="logo"
+         src="95622102-8212-413C-8849-91489284522F.png"
+         alt="Mac Chicken Logo">
+
+    <div class="brand">
+      <h1>Mac Chicken</h1>
+      <p>QUALITY & HEALTH</p>
+    </div>
   </div>
-</a>
-<a class="whatsapp-top" href="https://wa.me/255744107741">
-  WhatsApp
-</a>
-  </div>
+
+  <a class="whatsapp-btn"
+     href="https://wa.me/255744107741"
+     target="_blank">
+     WhatsApp
+  </a>
 </header>
-<!-- HERO -->
+
 <section class="hero">
-  <div class="container hero-content">
-<img class="hero-logo"
-     src="95622102-8212-413C-8849-91489284522F.png"
-     alt="Mac Chicken">
-<div class="badge">FRESH BROILER CHICKEN</div>
-<h1>
-  ORDER <span>FRESH CHICKEN</span>
-</h1>
-<p>
-  Fresh broiler chickens available for individuals,
-  businesses, restaurants and events in Moshi & Arusha.
-</p>
-<div class="price">
-  TSh 8,500 / KUKU
-</div>
-<a href="#quick-order" class="main-btn">
-  ORDER NOW 🐔
-</a>
-  </div>
-</section>
-<!-- QUICK ACTIONS -->
-<section class="quick-actions">
-  <div class="container">
-<div class="action-grid">
-  <div class="action-card">
-    <div style="font-size:38px;">🐔</div>
-    <h3>Quick Order</h3>
+  <div>
+    <h2>FRESH BROILER CHICKEN</h2>
+    <h3>ORDER FRESH CHICKEN</h3>
     <p>
-      Order fresh broiler chickens for your home
-      or personal needs.
+      Fresh, healthy and quality broiler chicken for individuals,
+      families, businesses and events.
     </p>
-    <a href="#quick-order" class="action-btn">
-      ORDER CHICKEN
-    </a>
-  </div>
-  <div class="action-card">
-    <div style="font-size:38px;">🏢</div>
-    <h3>Business & Events</h3>
-    <p>
-      Large orders for businesses, restaurants,
-      functions and events.
-    </p>
-    <a href="#business-events" class="action-btn gold">
-      REQUEST QUOTATION
-    </a>
-  </div>
-</div>
+
+    <div class="price">
+      <span>TSh 8,500</span> / KUKU
+    </div>
   </div>
 </section>
-<!-- PACKAGES -->
-<section>
-  <div class="container">
-<div class="section-title">
-  <h2>Popular Packages</h2>
-  <p>Chagua package yako au tumia idadi yoyote.</p>
-</div>
-<div class="packages">
-  <div class="package" onclick="selectPackage(5)">
-    <div class="number">5</div>
-    <h3>Chickens</h3>
-    <p>Perfect for home orders</p>
-    <div class="package-price">TSh 42,500</div>
-    <small>ORDER</small>
+
+<div class="container">
+
+  <div class="quick-actions">
+    <a href="#order">ORDER NOW</a>
+    <a href="#track-order">TRACK ORDER</a>
+    <a href="https://wa.me/255744107741" target="_blank">WHATSAPP</a>
   </div>
-  <div class="package" onclick="selectPackage(10)">
-    <div class="number">10</div>
-    <h3>Chickens</h3>
-    <p>Popular family package</p>
-    <div class="package-price">TSh 85,000</div>
-    <small>ORDER</small>
-  </div>
-  <div class="package" onclick="selectPackage(20)">
-    <div class="number">20</div>
-    <h3>Chickens</h3>
-    <p>Great for groups</p>
-    <div class="package-price">TSh 170,000</div>
-    <small>ORDER</small>
-  </div>
-</div>
-  </div>
-</section>
-<!-- QUICK ORDER -->
-<section class="form-section" id="quick-order">
-  <div class="container">
-<div class="section-title">
-  <h2>🐔 Quick Order</h2>
-  <p>Jaza taarifa zako kisha order yako itahifadhiwa moja kwa moja.</p>
-</div>
-<div class="form-box">
-  <div class="form-group">
-    <label>Idadi ya Kuku</label>
-    <div class="quantity-box">
-      <button type="button"
-              class="qty-btn"
-              onclick="changeQty(-1)">
-        −
+
+  <!-- TRACK ORDER -->
+  <section id="track-order">
+    <div class="track-box">
+      <h2>TRACK YOUR ORDER</h2>
+      <p>
+        Enter your Mac Chicken Order ID to check your order status.
+      </p>
+
+      <input
+        type="text"
+        id="trackOrderId"
+        placeholder="Example: MC-20260915-5740"
+        autocomplete="off"
+      >
+
+      <button
+        class="submit-btn"
+        onclick="trackOrder()">
+        TRACK ORDER
       </button>
-      <div class="qty-number" id="quantity">
-        1
+
+      <div id="trackResult" class="track-result"></div>
+    </div>
+  </section>
+
+  <!-- PACKAGES -->
+  <section>
+    <div class="section-title">
+      <h2>CHICKEN PACKAGES</h2>
+      <p>Choose your preferred quantity.</p>
+    </div>
+
+    <div class="card-grid">
+
+      <div class="card">
+        <h3>PACKAGE 5</h3>
+        <div class="card-price">TSh 42,500</div>
+        <p>5 Fresh Broiler Chickens</p>
+        <br>
+        <button class="package-btn" onclick="selectPackage(5)">
+          ORDER 5
+        </button>
       </div>
-      <button type="button"
-              class="qty-btn"
-              onclick="changeQty(1)">
-        +
+
+      <div class="card">
+        <h3>PACKAGE 10</h3>
+        <div class="card-price">TSh 85,000</div>
+        <p>10 Fresh Broiler Chickens</p>
+        <br>
+        <button class="package-btn" onclick="selectPackage(10)">
+          ORDER 10
+        </button>
+      </div>
+
+      <div class="card">
+        <h3>PACKAGE 20</h3>
+        <div class="card-price">TSh 170,000</div>
+        <p>20 Fresh Broiler Chickens</p>
+        <br>
+        <button class="package-btn" onclick="selectPackage(20)">
+          ORDER 20
+        </button>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ORDER -->
+  <section id="order" style="margin-top:40px;">
+
+    <div class="section-title">
+      <h2>QUICK ORDER</h2>
+      <p>Fill in your details and place your order.</p>
+    </div>
+
+    <div class="order-box">
+
+      <label>Number of Chickens</label>
+
+      <div class="qty-box">
+        <button onclick="changeQty(-1)">−</button>
+        <div id="qtyNumber" class="qty-number">1</div>
+        <button onclick="changeQty(1)">+</button>
+      </div>
+
+      <label for="customerName">Full Name</label>
+      <input
+        id="customerName"
+        type="text"
+        placeholder="Enter your full name"
+      >
+
+      <label for="phone">Phone Number</label>
+      <input
+        id="phone"
+        type="tel"
+        placeholder="Example: 0744xxxxxx"
+      >
+
+      <label>Location</label>
+
+      <div class="radio-group">
+        <label>
+          <input type="radio" name="location" value="Moshi" checked>
+          Moshi
+        </label>
+
+        <label>
+          <input type="radio" name="location" value="Arusha">
+          Arusha
+        </label>
+      </div>
+
+      <label for="address">Address / Area</label>
+      <input
+        id="address"
+        type="text"
+        placeholder="Example: Moshi mjini, Arusha mjini..."
+      >
+
+      <label>Delivery Method</label>
+
+      <div class="radio-group">
+        <label>
+          <input
+            type="radio"
+            name="delivery"
+            value="Delivery"
+            checked
+            onchange="toggleSchedule()">
+          Delivery
+        </label>
+
+        <label>
+          <input
+            type="radio"
+            name="delivery"
+            value="Pickup"
+            onchange="toggleSchedule()">
+          Pickup
+        </label>
+      </div>
+
+      <div id="deliveryLocationBox">
+        <label for="deliveryLocation">Delivery Location</label>
+        <input
+          id="deliveryLocation"
+          type="text"
+          placeholder="Where should we deliver?"
+        >
+      </div>
+
+      <label>Payment Method</label>
+
+      <div class="radio-group">
+        <label>
+          <input
+            type="radio"
+            name="payment"
+            value="Pay before delivery"
+            checked>
+          Pay before delivery
+        </label>
+
+        <label>
+          <input
+            type="radio"
+            name="payment"
+            value="Pay at delivery">
+          Pay at delivery
+        </label>
+      </div>
+
+      <label for="requiredDatetime">
+        Required Date & Time
+      </label>
+
+      <input
+        id="requiredDatetime"
+        type="datetime-local"
+      >
+
+      <div class="summary">
+        <div class="summary-row">
+          <span>Quantity</span>
+          <strong id="summaryQty">1</strong>
+        </div>
+
+        <div class="summary-row">
+          <span>Price per Chicken</span>
+          <strong>TSh 8,500</strong>
+        </div>
+
+        <div class="summary-row total">
+          <span>Total</span>
+          <span id="summaryTotal">TSh 8,500</span>
+        </div>
+
+        <p class="small">
+          Delivery fee will be confirmed based on location.
+        </p>
+      </div>
+
+      <button
+        class="submit-btn"
+        onclick="sendOrder()">
+        PLACE ORDER
       </button>
+
     </div>
-  </div>
-  <div class="total-box">
-    <small>JUMLA YA KUKU</small>
-    <strong id="total">TSh 8,500</strong>
-    <small>Delivery fee itathibitishwa kulingana na location.</small>
-  </div>
-  <div class="form-group">
-    <label>Jina Kamili</label>
-    <input type="text" id="name" placeholder="Andika jina lako">
-  </div>
-  <div class="form-group">
-    <label>Namba ya Simu</label>
-    <input type="tel" id="phone" placeholder="Mfano 0744xxxxxx">
-  </div>
-  <div class="form-group">
-    <label>Location</label>
-    <select id="location">
-      <option value="">Chagua location</option>
-      <option value="Moshi">Moshi</option>
-      <option value="Arusha">Arusha</option>
-    </select>
-  </div>
-  <div class="form-group">
-    <label>Address / Sehemu ya Delivery</label>
-    <textarea id="address"
-              placeholder="Mfano: Shanty Town, karibu na..."></textarea>
-  </div>
-  <div class="form-group">
-    <label>Unataka kupokea vipi?</label>
-    <div class="options">
-      <label class="option">
-        <input type="radio"
-               name="delivery"
-               value="Delivery">
-        Delivery
-      </label>
-      <label class="option">
-        <input type="radio"
-               name="delivery"
-               value="Pickup">
-        Pickup
-      </label>
-    </div>
-  </div>
-  <div class="form-group">
-    <label>Payment</label>
-    <div class="options">
-      <label class="option">
-        <input type="radio"
-               name="payment"
-               value="Lipa kabla ya delivery">
-        Lipa kabla ya delivery
-      </label>
-      <label class="option">
-        <input type="radio"
-               name="payment"
-               value="Lipa wakati wa delivery">
-        Lipa wakati wa delivery
-      </label>
-    </div>
-  </div>
-  <div class="form-group">
-    <label>Nahitaji lini?</label>
-    <div class="options">
-      <label class="option">
-        <input type="radio"
-               name="schedule"
-               value="Nahitaji sasa"
-               checked
-               onchange="toggleSchedule()">
-        Nahitaji sasa
-      </label>
-      <label class="option">
-        <input type="radio"
-               name="schedule"
-               value="Tarehe maalum"
-               onchange="toggleSchedule()">
-        Tarehe maalum
-      </label>
-    </div>
-  </div>
-  <div id="scheduleBox" class="hidden">
-    <div class="form-group">
-      <label>Tarehe</label>
-      <input type="date" id="date">
-    </div>
-    <div class="form-group">
-      <label>Muda</label>
-      <input type="time" id="time">
-    </div>
-  </div>
-  <div class="summary">
-    <h3>Order Summary</h3>
-    <div class="summary-row">
-      <span>Order ID</span>
-      <strong id="orderId"></strong>
-    </div>
-    <div class="summary-row">
-      <span>Quantity</span>
-      <strong id="summaryQty">1</strong>
-    </div>
-    <div class="summary-row">
-      <span>Chicken Cost</span>
-      <strong id="summaryTotal">TSh 8,500</strong>
-    </div>
-    <div class="summary-row">
-      <span>Delivery</span>
-      <strong>Confirmed by location</strong>
-    </div>
-  </div>
-  <button class="submit-btn"
-          onclick="sendOrder()">
-    TUMA ORDER 🐔
-  </button>
-</div>
-  </div>
-</section>
-<!-- BUSINESS & EVENTS -->
-<section class="business" id="business-events">
-  <div class="container">
-<div class="section-title">
-  <h2>🏢 Business & Events</h2>
-  <p>
-    Tunahudumia businesses, restaurants,
-    functions na events kwa orders kubwa.
-  </p>
-</div>
-<div class="business-grid">
-  <div class="business-card">
-    <img src="657D522F-8FA9-4632-BDCC-1C71BC833232.png"
-         alt="Mac Chicken Business Supply">
-    <div class="business-content">
-      <h3>Business Supply</h3>
+  </section>
+
+  <!-- BUSINESS & EVENTS -->
+  <section style="margin-top:45px;">
+
+    <div class="section-title">
+      <h2>BUSINESS & EVENTS</h2>
       <p>
-        Kwa restaurants, hotels, shops na
-        businesses zinazohitaji chicken supply
-        kwa quantity kubwa.
+        Need chicken for your business, restaurant or event?
       </p>
-      <a class="business-btn"
-         href="https://wa.me/255744107741?text=Hello%20Mac%20Chicken%2C%20I%20would%20like%20to%20request%20a%20Business%20Chicken%20Quotation.">
-        REQUEST QUOTATION
-      </a>
     </div>
-  </div>
-  <div class="business-card">
-    <img src="6A5449E0-15A1-4713-9607-AE43AB121FD4.png"
-         alt="Mac Chicken Events">
-    <div class="business-content">
-      <h3>Events & Functions</h3>
-      <p>
-        Harusi, birthday, sherehe, meetings
-        na functions nyingine.
-        Tuma mahitaji yako tupange order yako.
-      </p>
-      <a class="business-btn"
-         href="https://wa.me/255744107741?text=Hello%20Mac%20Chicken%2C%20I%20would%20like%20to%20place%20an%20Events%20%2F%20Functions%20Chicken%20Order.">
-        EVENT ORDER
-      </a>
+
+    <div class="delivery-info">
+
+      <div class="info-card">
+        <img
+          src="657D522F-8FA9-4632-BDCC-1C71BC833232.png"
+          alt="Business Supply">
+
+        <div class="info-card-content">
+          <h3>Business Supply</h3>
+          <p>
+            We supply fresh broiler chickens to businesses,
+            restaurants and other customers.
+          </p>
+
+          <br>
+
+          <a
+            class="whatsapp-btn"
+            href="https://wa.me/255744107741"
+            target="_blank">
+            Contact Us
+          </a>
+        </div>
+      </div>
+
+      <div class="info-card">
+        <img
+          src="6A5449E0-15A1-4713-9607-AE43AB121FD4.png"
+          alt="Events & Functions">
+
+        <div class="info-card-content">
+          <h3>Events & Functions</h3>
+          <p>
+            Planning a wedding, party, ceremony or large event?
+            Contact us for your chicken supply.
+          </p>
+
+          <br>
+
+          <a
+            class="whatsapp-btn"
+            href="https://wa.me/255744107741"
+            target="_blank">
+            Contact Us
+          </a>
+        </div>
+      </div>
+
     </div>
-  </div>
+  </section>
+
+  <!-- DELIVERY -->
+  <section style="margin-top:45px;">
+
+    <div class="section-title">
+      <h2>DELIVERY</h2>
+      <p>We deliver based on your location.</p>
+    </div>
+
+    <div class="info-card">
+
+      <img
+        src="87C07551-DB29-4DB1-AC25-C04776E594C9.png"
+        alt="Mac Chicken Delivery">
+
+      <div class="info-card-content">
+        <h3>Fresh Chicken Delivered</h3>
+
+        <p>
+          Delivery fee is not fixed. It will be confirmed
+          according to your delivery location.
+        </p>
+
+        <br>
+
+        <p>
+          Available for customers in Moshi and Arusha.
+        </p>
+      </div>
+
+    </div>
+  </section>
+
 </div>
-  </div>
-</section>
-<!-- DELIVERY -->
-<section class="delivery">
-  <div class="container delivery-box">
-<img src="87C07551-DB29-4DB1-AC25-C04776E594C9.png"
-     alt="Mac Chicken Delivery">
-<div class="delivery-info">
-  <h2>🚚 Delivery</h2>
-  <p>
-    Tunadeliver fresh chicken ndani ya
-    <strong>Moshi na Arusha.</strong>
-  </p>
-  <p>
-    Delivery fee <strong>haijawekwa fixed</strong>.
-    Itathibitishwa kulingana na location
-    ya customer.
-  </p>
-  <p>
-    Unaweza pia kuchagua <strong>Pickup</strong>
-    kama hutaki delivery.
-  </p>
-</div>
-  </div>
-</section>
-<!-- FOOTER -->
+
 <footer>
-  <div class="container">
-<img src="95622102-8212-413C-8849-91489284522F.png"
-     alt="Mac Chicken Logo">
-<h3>Mac Chicken</h3>
-<p>QUALITY & HEALTH</p>
-<p>Moshi | Arusha</p>
-<a class="footer-wa"
-   href="https://wa.me/255744107741">
-  WhatsApp: +255 744 107 741
-</a>
-<p style="margin-top:15px;">
-  © 2026 Mac Chicken. All Rights Reserved.
-</p>
-  </div>
+  <p>
+    <strong>Mac Chicken</strong>
+  </p>
+
+  <p>
+    QUALITY & HEALTH
+  </p>
+
+  <br>
+
+  <p>
+    Fresh Broiler Chicken • Moshi • Arusha
+  </p>
+
+  <br>
+
+  <a
+    class="whatsapp-btn"
+    href="https://wa.me/255744107741"
+    target="_blank">
+    WhatsApp: +255 744 107 741
+  </a>
+
+  <br><br>
+
+  <p style="font-size:12px;color:#aaa;">
+    © 2026 Mac Chicken. All rights reserved.
+  </p>
 </footer>
+
 <script>
-/* SUPABASE CONNECTION */
+
 const SUPABASE_URL =
   "https://tuqrnlaofriqggeaoqxb.supabase.co";
+
 const SUPABASE_KEY =
   "sb_publishable_NVTmWBHQVN8faM4tBcCpxg_IBW45wI_";
+
 const supabaseClient =
   window.supabase.createClient(
     SUPABASE_URL,
     SUPABASE_KEY
   );
-/* PRICE */
+
 const PRICE = 8500;
+
 let quantity = 1;
-/* ORDER ID */
-function generateOrderId(){
-  const now = new Date();
-  const date =
-    now.getFullYear() +
-    String(now.getMonth()+1).padStart(2,'0') +
-    String(now.getDate()).padStart(2,'0');
-  const random =
-    Math.floor(1000 + Math.random()*9000);
-  return "MC-" + date + "-" + random;
+
+function money(amount){
+  return new Intl.NumberFormat("en-TZ").format(amount);
 }
-document.getElementById("orderId").textContent =
-  generateOrderId();
-/* FORMAT MONEY */
-function money(number){
-  return "TSh " +
-    number.toLocaleString("en-US");
-}
-/* QUANTITY */
-function changeQty(amount){
-  quantity += amount;
+
+function changeQty(change){
+
+  quantity += change;
+
   if(quantity < 1){
     quantity = 1;
   }
+
+  document.getElementById("qtyNumber").textContent =
+    quantity;
+
   updateOrder();
 }
-/* PACKAGE */
-function selectPackage(number){
-  quantity = number;
+
+function selectPackage(qty){
+
+  quantity = qty;
+
+  document.getElementById("qtyNumber").textContent =
+    quantity;
+
   updateOrder();
-  document.getElementById("quick-order")
-    .scrollIntoView({
-      behavior:"smooth"
-    });
+
+  document.getElementById("order").scrollIntoView({
+    behavior:"smooth"
+  });
 }
-/* UPDATE ORDER */
+
 function updateOrder(){
+
   const total = quantity * PRICE;
-  document.getElementById("quantity")
-    .textContent = quantity;
-  document.getElementById("total")
-    .textContent = money(total);
-  document.getElementById("summaryQty")
-    .textContent = quantity;
-  document.getElementById("summaryTotal")
-    .textContent = money(total);
+
+  document.getElementById("summaryQty").textContent =
+    quantity;
+
+  document.getElementById("summaryTotal").textContent =
+    "TSh " + money(total);
 }
-/* SCHEDULE */
+
 function toggleSchedule(){
-  const selected =
+
+  const delivery =
     document.querySelector(
-      'input[name="schedule"]:checked'
-    );
+      'input[name="delivery"]:checked'
+    ).value;
+
   const box =
-    document.getElementById("scheduleBox");
-  if(selected &&
-     selected.value === "Tarehe maalum"){
-    box.classList.remove("hidden");
+    document.getElementById("deliveryLocationBox");
+
+  if(delivery === "Delivery"){
+    box.style.display = "block";
   }else{
-    box.classList.add("hidden");
+    box.style.display = "none";
   }
 }
-/* MINIMUM DATE = TODAY */
-const dateInput =
-  document.getElementById("date");
-const today =
-  new Date();
-const localToday =
-  today.getFullYear() +
-  "-" +
-  String(today.getMonth()+1).padStart(2,"0") +
-  "-" +
-  String(today.getDate()).padStart(2,"0");
-dateInput.min = localToday;
-/* GET RADIO */
+
 function getRadio(name){
+
   const selected =
     document.querySelector(
       'input[name="' + name + '"]:checked'
     );
+
   return selected ? selected.value : "";
 }
-/* SEND ORDER */
+
+function generateOrderId(){
+
+  const now = new Date();
+
+  const year =
+    now.getFullYear();
+
+  const month =
+    String(now.getMonth()+1).padStart(2,"0");
+
+  const day =
+    String(now.getDate()).padStart(2,"0");
+
+  const random =
+    Math.floor(1000 + Math.random()*9000);
+
+  return `MC-${year}${month}${day}-${random}`;
+}
+
+function escapeHtml(value){
+
+  if(value === null || value === undefined){
+    return "";
+  }
+
+  return String(value)
+    .replace(/&/g,"&amp;")
+    .replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;")
+    .replace(/"/g,"&quot;")
+    .replace(/'/g,"&#039;");
+}
+
 async function sendOrder(){
-  const name =
-    document.getElementById("name")
+
+  const customerName =
+    document.getElementById("customerName")
       .value.trim();
+
   const phone =
     document.getElementById("phone")
       .value.trim();
+
   const location =
-    document.getElementById("location")
-      .value;
+    getRadio("location");
+
   const address =
     document.getElementById("address")
       .value.trim();
-  const delivery =
+
+  const deliveryMethod =
     getRadio("delivery");
-  const payment =
+
+  const deliveryLocation =
+    document.getElementById("deliveryLocation")
+      .value.trim();
+
+  const paymentMethod =
     getRadio("payment");
-  const schedule =
-    getRadio("schedule");
-  const date =
-    document.getElementById("date")
+
+  const requiredDatetime =
+    document.getElementById("requiredDatetime")
       .value;
-  const time =
-    document.getElementById("time")
-      .value;
-  /* REQUIRED FIELDS */
-  if(!name ||
+
+  if(!customerName ||
      !phone ||
      !location ||
-     !address ||
-     !delivery ||
-     !payment){
+     !address){
+
     alert(
-      "Tafadhali jaza taarifa zote muhimu kabla ya kutuma order."
+      "Tafadhali jaza taarifa zote muhimu."
     );
+
     return;
   }
-  /* SCHEDULE VALIDATION */
-  if(schedule === "Tarehe maalum" &&
-     (!date || !time)){
+
+  if(
+    deliveryMethod === "Delivery" &&
+    !deliveryLocation
+  ){
+
     alert(
-      "Tafadhali chagua tarehe na muda wa order yako."
+      "Tafadhali weka eneo la delivery."
     );
+
     return;
   }
+
+  const orderId =
+    generateOrderId();
+
   const total =
     quantity * PRICE;
-  let requiredTime =
-    "Nahitaji sasa";
-  if(schedule === "Tarehe maalum"){
-    requiredTime =
-      date + " saa " + time;
+
+  const orderData = {
+
+    order_id: orderId,
+
+    customer_name:
+      customerName,
+
+    phone:
+      phone,
+
+    location:
+      location,
+
+    address:
+      address,
+
+    quantity:
+      quantity,
+
+    price:
+      total,
+
+    delivery_method:
+      deliveryMethod,
+
+    delivery_location:
+      deliveryMethod === "Delivery"
+        ? deliveryLocation
+        : null,
+
+    payment_method:
+      paymentMethod,
+
+    required_datetime:
+      requiredDatetime
+        ? new Date(requiredDatetime).toISOString()
+        : null,
+
+    order_status:
+      "Pending",
+
+    order_type:
+      "Retail",
+
+    delivery_fee:
+      0,
+
+    notes:
+      ""
+
+  };
+
+  const {
+    error
+  } =
+    await supabaseClient
+      .from("orders")
+      .insert([orderData]);
+
+  if(error){
+
+    console.error(error);
+
+    alert(
+      "Samahani, order haikufanikiwa.\n\n" +
+      error.message
+    );
+
+    return;
   }
-  const orderId =
-    document.getElementById("orderId")
-      .textContent;
-  /* DISABLE BUTTON WHILE SAVING */
-  const button =
-    document.querySelector(".submit-btn");
-  button.disabled = true;
-  button.textContent =
-    "INATUMA ORDER...";
-  try{
-    const { error } =
-      await supabaseClient
-        .from("orders")
-        .insert([{
-          order_id:
-            orderId,
-          customer_name:
-            name,
-          phone:
-            phone,
-          location:
-            location,
-          address:
-            address,
-          quantity:
-            quantity,
-          price:
-            total,
-          delivery_method:
-            delivery,
-          delivery_location:
-            delivery === "Delivery"
-              ? address
-              : null,
-          payment_method:
-            payment,
-          required_datetime:
-            schedule === "Tarehe maalum"
-              ? `${date}T${time}:00`
-              : new Date().toISOString(),
-          order_status:
-            "Pending",
-          order_type:
-            "Retail",
-          delivery_fee:
-            0,
-          notes:
-            ""
-        }]);
-    /* DATABASE ERROR */
-    if(error){
-  console.error("Supabase error:", error);
+
+  document.getElementById("trackOrderId").value =
+    orderId;
 
   alert(
-    "SUPABASE ERROR:\n\n" +
-    error.message +
-    "\n\nCode: " +
-    error.code
+    "Order yako imepokelewa vizuri!\n\n" +
+    "Order ID:\n" +
+    orderId +
+    "\n\n" +
+    "Mac Chicken itawasiliana nawe kuthibitisha order yako."
   );
 
-  return;
+  document.getElementById("track-order")
+    .scrollIntoView({
+      behavior:"smooth"
+    });
 }
-    /* SUCCESS */
-    alert(
-      "Order yako imepokelewa vizuri! 🐔\n\n" +
-      "Order ID: " +
-      orderId +
-      "\n\n" +
-      "Mac Chicken itawasiliana nawe kuthibitisha order yako."
-    );
-  }catch(error){
-    console.error(
-      "Order error:",
-      error
-    );
-    alert(
-      "Kumetokea tatizo wakati wa kutuma order. Tafadhali jaribu tena."
-    );
-  }finally{
-    button.disabled = false;
-    button.textContent =
-      "TUMA ORDER 🐔";
+
+async function trackOrder(){
+
+  const input =
+    document.getElementById("trackOrderId");
+
+  const result =
+    document.getElementById("trackResult");
+
+  const orderId =
+    input.value.trim().toUpperCase();
+
+  if(!orderId){
+
+    result.style.display = "block";
+
+    result.innerHTML =
+      "<p style='color:#c62828;font-weight:bold;'>Tafadhali weka Order ID.</p>";
+
+    return;
   }
+
+  result.style.display = "block";
+
+  result.innerHTML =
+    "<p>Inatafuta order yako...</p>";
+
+  const {
+    data,
+    error
+  } =
+    await supabaseClient
+      .rpc(
+        "track_mac_chicken_order",
+        {
+          p_order_id: orderId
+        }
+      );
+
+  if(error){
+
+    console.error(error);
+
+    result.innerHTML =
+      "<p style='color:#c62828;font-weight:bold;'>Imeshindikana kufuatilia order. Tafadhali jaribu tena.</p>";
+
+    return;
+  }
+
+  if(!data || data.length === 0){
+
+    result.innerHTML =
+      "<p style='color:#c62828;font-weight:bold;'>Order ID haijapatikana.</p>" +
+      "<p class='small'>Hakikisha umeingiza Order ID sahihi.</p>";
+
+    return;
+  }
+
+  const order =
+    data[0];
+
+  const status =
+    order.order_status || "Pending";
+
+  let timeline = "";
+
+  if(status === "Cancelled"){
+
+    timeline =
+      "<div class='cancelled'>" +
+      "❌ ORDER CANCELLED" +
+      "</div>";
+
+  }else{
+
+    const statuses = [
+      "Pending",
+      "Confirmed",
+      "Ready",
+      "Delivered"
+    ];
+
+    const currentIndex =
+      statuses.indexOf(status);
+
+    timeline =
+      "<div class='status-timeline'>";
+
+    statuses.forEach(
+      function(item,index){
+
+        let className = "";
+
+        if(index < currentIndex){
+          className = "done";
+        }
+
+        if(index === currentIndex){
+          className = "active";
+        }
+
+        let icon =
+          index < currentIndex
+            ? "✓"
+            : index + 1;
+
+        timeline +=
+          "<div class='status-step " +
+          className +
+          "'>" +
+
+          "<div class='status-circle'>" +
+          icon +
+          "</div>" +
+
+          "<div class='status-label'>" +
+          item +
+          "</div>" +
+
+          "</div>";
+      }
+    );
+
+    timeline +=
+      "</div>";
+  }
+
+  result.innerHTML =
+
+    "<div class='track-id'>" +
+    "Order ID: " +
+    escapeHtml(order.order_id) +
+    "</div>" +
+
+    "<p style='text-align:left;color:#222;margin-bottom:5px;'>" +
+    "<strong>Current Status:</strong> " +
+    escapeHtml(status) +
+    "</p>" +
+
+    timeline;
 }
-/* INITIAL UPDATE */
+
+const today =
+  new Date();
+
+const year =
+  today.getFullYear();
+
+const month =
+  String(today.getMonth()+1)
+    .padStart(2,"0");
+
+const day =
+  String(today.getDate())
+    .padStart(2,"0");
+
+const minDate =
+  `${year}-${month}-${day}T00:00`;
+
+document.getElementById(
+  "requiredDatetime"
+).min = minDate;
+
 updateOrder();
+
+toggleSchedule();
+
 </script>
+
 </body>
 </html>
