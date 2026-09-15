@@ -4,1196 +4,1958 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Mac Chicken - Admin Dashboard</title>
+
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
   <style>
     * {
       box-sizing: border-box;
-    }
-    body {
       margin: 0;
+      padding: 0;
+    }
+
+    body {
       font-family: Arial, sans-serif;
       background: #f5f5f5;
       color: #222;
     }
+
     header {
-      background: #111;
-      color: white;
-      padding: 18px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 10px;
-    }
-    header h1 {
-      margin: 0;
-      font-size: 21px;
-    }
-    header small {
-      color: #d4af37;
-      font-weight: bold;
-    }
-    button {
-      border: none;
-      border-radius: 8px;
-      padding: 10px 15px;
-      cursor: pointer;
-      font-weight: bold;
-    }
-    .logout {
-      background: #c62828;
-      color: white;
-    }
-    .container {
-      max-width: 1200px;
-      margin: auto;
-      padding: 18px;
-    }
-    .login-box {
-      max-width: 420px;
-      margin: 70px auto;
-      background: white;
-      padding: 25px;
-      border-radius: 14px;
-      box-shadow: 0 5px 25px rgba(0,0,0,.08);
-    }
-    .login-box h2 {
-      margin-top: 0;
-      color: #b00000;
-    }
-    input,
-    select {
-      width: 100%;
-      padding: 12px;
-      margin-top: 7px;
-      margin-bottom: 15px;
-      border: 1px solid #ccc;
-      border-radius: 8px;
-      font-size: 15px;
-      background: white;
-    }
-    .login-btn {
-      width: 100%;
-      background: #b00000;
-      color: white;
-      padding: 13px;
-    }
-    .dashboard {
-      display: none;
-    }
-    .stats {
-      display: grid;
-      grid-template-columns: repeat(5, 1fr);
-      gap: 14px;
-      margin: 20px 0;
-    }
-    .stat {
-      background: white;
-      padding: 18px;
-      border-radius: 12px;
-      box-shadow: 0 3px 12px rgba(0,0,0,.06);
-    }
-    .stat span {
-      display: block;
-      color: #777;
-      font-size: 13px;
-      margin-bottom: 8px;
-    }
-    .stat strong {
-      font-size: 25px;
-      color: #b00000;
-    }
-    .stat.paid strong {
-      color: #16821c;
-    }
-    .filters {
-      background: white;
-      padding: 18px;
-      border-radius: 12px;
-      margin-bottom: 18px;
-      box-shadow: 0 3px 12px rgba(0,0,0,.06);
-    }
-    .filter-grid {
-      display: grid;
-      grid-template-columns: 2fr 1fr 1fr 1fr 1fr;
-      gap: 12px;
-    }
-    .orders-box {
-      background: white;
-      border-radius: 12px;
-      padding: 18px;
-      box-shadow: 0 3px 12px rgba(0,0,0,.06);
-      overflow-x: auto;
-    }
-    .orders-title {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 15px;
-    }
-    .orders-title h2 {
-      margin: 0;
-    }
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      min-width: 1150px;
-    }
-    th,
-    td {
-      padding: 11px 9px;
-      border-bottom: 1px solid #eee;
-      text-align: left;
-      font-size: 14px;
-    }
-    th {
-      background: #fafafa;
-      font-size: 13px;
-    }
-    .status,
-    .payment-status {
-      min-width: 125px;
-      margin: 0;
-      padding: 8px;
-    }
-    .payment-status {
-      min-width: 145px;
-    }
-    .view-btn {
-      background: #111;
-      color: white;
-      padding: 8px 12px;
-      font-size: 12px;
-      white-space: nowrap;
-    }
-    .empty {
-      text-align: center;
-      padding: 30px;
-      color: #777;
-    }
-    .error {
-      background: #ffe5e5;
-      color: #a00000;
-      padding: 13px;
-      border-radius: 8px;
-      margin-bottom: 15px;
-      display: none;
-    }
-    .success {
-      background: #e7f7e7;
-      color: #176b17;
-      padding: 13px;
-      border-radius: 8px;
-      margin-bottom: 15px;
-      display: none;
-    }
-    /* ORDER DETAILS MODAL */
-    .modal {
-      display: none;
-      position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,.72);
-      z-index: 2000;
-      padding: 20px;
-      overflow-y: auto;
-    }
-    .modal-box {
-      max-width: 650px;
-      margin: 30px auto;
-      background: white;
-      border-radius: 18px;
-      overflow: hidden;
-      box-shadow: 0 10px 40px rgba(0,0,0,.3);
-    }
-    .modal-header {
       background: #111;
       color: white;
       padding: 18px 20px;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      gap: 10px;
+      gap: 15px;
+      flex-wrap: wrap;
     }
-    .modal-header h2 {
-      margin: 0;
-      font-size: 20px;
+
+    header h1 {
+      font-size: 22px;
     }
-    .close-btn {
+
+    header small {
+      color: #ddd;
+    }
+
+    button {
+      border: none;
+      cursor: pointer;
+      border-radius: 8px;
+      padding: 10px 14px;
+      font-weight: bold;
+    }
+
+    .logout-btn {
       background: #c62828;
       color: white;
-      border-radius: 50%;
+    }
+
+    .refresh-btn {
+      background: #111;
+      color: white;
+    }
+
+    .container {
+      width: 95%;
+      max-width: 1400px;
+      margin: 20px auto;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    /* LOGIN */
+
+    .login-box {
+      max-width: 420px;
+      margin: 70px auto;
+      background: white;
+      padding: 30px;
+      border-radius: 14px;
+      box-shadow: 0 5px 25px rgba(0,0,0,0.08);
+    }
+
+    .login-box h2 {
+      margin-bottom: 8px;
+    }
+
+    .login-box p {
+      color: #777;
+      margin-bottom: 20px;
+    }
+
+    input,
+    select,
+    textarea {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      margin-bottom: 12px;
+      font-size: 14px;
+      background: white;
+    }
+
+    .login-btn {
+      width: 100%;
+      background: #b71c1c;
+      color: white;
+      padding: 13px;
+    }
+
+    .error {
+      color: #c62828;
+      margin-top: 10px;
+      font-size: 14px;
+    }
+
+    /* DASHBOARD */
+
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 15px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
+
+    .topbar h2 {
+      font-size: 24px;
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 15px;
+      margin-bottom: 15px;
+    }
+
+    .analytics-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 15px;
+      margin-bottom: 25px;
+    }
+
+    .stat-card {
+      background: white;
+      border-radius: 12px;
+      padding: 18px;
+      box-shadow: 0 3px 15px rgba(0,0,0,0.06);
+    }
+
+    .stat-card .label {
+      color: #777;
+      font-size: 13px;
+      margin-bottom: 8px;
+    }
+
+    .stat-card .value {
+      font-size: 24px;
+      font-weight: bold;
+    }
+
+    .stat-card .sub {
+      color: #999;
+      font-size: 12px;
+      margin-top: 5px;
+    }
+
+    .analytics-title {
+      font-size: 20px;
+      margin: 25px 0 15px;
+    }
+
+    /* SEARCH/FILTERS */
+
+    .filters {
+      background: white;
+      padding: 15px;
+      border-radius: 12px;
+      margin-bottom: 20px;
+      box-shadow: 0 3px 15px rgba(0,0,0,0.05);
+    }
+
+    .filters-grid {
+      display: grid;
+      grid-template-columns: 2fr repeat(4, 1fr);
+      gap: 10px;
+    }
+
+    .filters input,
+    .filters select {
+      margin-bottom: 0;
+    }
+
+    /* CHART */
+
+    .chart-card {
+      background: white;
+      border-radius: 12px;
+      padding: 20px;
+      box-shadow: 0 3px 15px rgba(0,0,0,0.05);
+      margin-bottom: 25px;
+    }
+
+    .chart-title {
+      font-size: 18px;
+      font-weight: bold;
+      margin-bottom: 5px;
+    }
+
+    .chart-subtitle {
+      color: #777;
+      font-size: 13px;
+      margin-bottom: 20px;
+    }
+
+    .chart {
+      height: 260px;
+      display: flex;
+      align-items: flex-end;
+      gap: 10px;
+      padding: 10px 5px 0;
+      border-bottom: 1px solid #ddd;
+    }
+
+    .bar-wrapper {
+      flex: 1;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      align-items: center;
+      min-width: 0;
+    }
+
+    .bar-value {
+      font-size: 10px;
+      color: #555;
+      margin-bottom: 5px;
+      white-space: nowrap;
+    }
+
+    .bar {
+      width: 70%;
+      max-width: 55px;
+      background: #b71c1c;
+      border-radius: 6px 6px 0 0;
+      min-height: 3px;
+      transition: height 0.3s ease;
+    }
+
+    .bar-label {
+      font-size: 11px;
+      color: #666;
+      margin-top: 7px;
+    }
+
+    /* TABLE */
+
+    .orders-card {
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 3px 15px rgba(0,0,0,0.05);
+      overflow: hidden;
+    }
+
+    .orders-header {
+      padding: 18px;
+      border-bottom: 1px solid #eee;
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .table-wrapper {
+      overflow-x: auto;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 1100px;
+    }
+
+    th,
+    td {
+      padding: 13px 10px;
+      border-bottom: 1px solid #eee;
+      text-align: left;
+      font-size: 13px;
+      vertical-align: middle;
+    }
+
+    th {
+      background: #fafafa;
+      font-size: 12px;
+      text-transform: uppercase;
+      color: #666;
+    }
+
+    .status-select {
+      padding: 7px;
+      margin: 0;
+      min-width: 120px;
+    }
+
+    .payment-select {
+      padding: 7px;
+      margin: 0;
+      min-width: 120px;
+    }
+
+    .view-btn {
+      background: #111;
+      color: white;
+      padding: 7px 10px;
+      font-size: 12px;
+    }
+
+    .empty {
+      text-align: center;
+      padding: 35px;
+      color: #777;
+    }
+
+    /* MODAL */
+
+    .modal {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.65);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 15px;
+      z-index: 9999;
+    }
+
+    .modal.show {
+      display: flex;
+    }
+
+    .modal-box {
+      width: 100%;
+      max-width: 650px;
+      max-height: 90vh;
+      overflow-y: auto;
+      background: white;
+      border-radius: 14px;
+      padding: 22px;
+      position: relative;
+    }
+
+    .modal-close {
+      position: absolute;
+      right: 15px;
+      top: 15px;
+      background: #eee;
+      font-size: 18px;
       width: 38px;
       height: 38px;
       padding: 0;
-      font-size: 20px;
     }
-    .details-body {
-      padding: 20px;
-    }
-    .details-id {
-      background: #fff8df;
-      border: 1px solid #ead68b;
-      border-radius: 12px;
-      padding: 14px;
-      text-align: center;
+
+    .modal-box h2 {
       margin-bottom: 18px;
+      padding-right: 45px;
     }
-    .details-id small {
-      display: block;
-      color: #777;
-      margin-bottom: 5px;
-    }
-    .details-id strong {
-      font-size: 20px;
-      color: #a00000;
-    }
+
     .detail-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 12px;
+      gap: 10px;
     }
-    .detail-card {
+
+    .detail {
       background: #f7f7f7;
-      border-radius: 11px;
-      padding: 13px;
+      padding: 12px;
+      border-radius: 8px;
     }
-    .detail-card.full {
+
+    .detail.full {
       grid-column: 1 / -1;
     }
-    .detail-card small {
-      display: block;
-      color: #777;
+
+    .detail-label {
       font-size: 11px;
+      color: #777;
       margin-bottom: 5px;
-      text-transform: uppercase;
-      font-weight: bold;
     }
-    .detail-card strong {
-      display: block;
-      font-size: 15px;
+
+    .detail-value {
+      font-weight: bold;
+      font-size: 14px;
       word-break: break-word;
     }
-    .detail-price {
-      color: #a00000;
-      font-size: 20px !important;
-    }
+
     .modal-actions {
       display: flex;
       gap: 10px;
-      margin-top: 20px;
+      margin-top: 18px;
+      flex-wrap: wrap;
     }
+
     .whatsapp-btn {
-      flex: 1;
-      background: #25d366;
+      background: #25D366;
       color: white;
+    }
+
+    .close-btn {
+      background: #eee;
+    }
+
+    .loading {
       text-align: center;
-      padding: 13px;
-      border-radius: 10px;
-      font-weight: bold;
-      text-decoration: none;
+      padding: 30px;
+      color: #777;
     }
-    .close-large {
-      flex: 1;
-      background: #222;
-      color: white;
-      padding: 13px;
+
+    .success-message {
+      color: #2e7d32;
+      font-size: 13px;
     }
+
     @media (max-width: 1000px) {
-      .stats {
-        grid-template-columns: repeat(3, 1fr);
+      .stats-grid,
+      .analytics-grid {
+        grid-template-columns: repeat(2, 1fr);
       }
-      .filter-grid {
+
+      .filters-grid {
         grid-template-columns: 1fr 1fr;
       }
     }
-    @media (max-width: 800px) {
-      .stats {
-        grid-template-columns: repeat(2, 1fr);
-      }
-      .filter-grid {
-        grid-template-columns: 1fr;
-      }
+
+    @media (max-width: 600px) {
       header {
         align-items: flex-start;
       }
-    }
-    @media (max-width: 500px) {
-      .stats {
-        grid-template-columns: 1fr 1fr;
-        gap: 8px;
+
+      header h1 {
+        font-size: 19px;
       }
-      .stat {
-        padding: 13px;
-      }
-      .stat strong {
-        font-size: 20px;
-      }
+
       .container {
-        padding: 10px;
+        width: 94%;
       }
+
+      .stats-grid,
+      .analytics-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+      }
+
+      .stat-card {
+        padding: 14px;
+      }
+
+      .stat-card .value {
+        font-size: 19px;
+      }
+
+      .filters-grid {
+        grid-template-columns: 1fr;
+      }
+
       .detail-grid {
         grid-template-columns: 1fr;
       }
-      .detail-card.full {
+
+      .detail.full {
         grid-column: auto;
       }
-      .modal {
-        padding: 10px;
+
+      .chart {
+        height: 220px;
+        gap: 5px;
       }
-      .modal-box {
-        margin: 10px auto;
-      }
-      .modal-actions {
-        flex-direction: column;
+
+      .bar {
+        width: 75%;
       }
     }
   </style>
 </head>
+
 <body>
-<header>
-  <div>
-    <h1>🐔 Mac Chicken</h1>
-    <small>ADMIN DASHBOARD</small>
-  </div>
-  <button class="logout" onclick="logout()">
-    Logout
-  </button>
-</header>
-<!-- LOGIN -->
-<div id="loginSection" class="login-box">
-  <h2>Admin Login</h2>
-  <div id="loginError" class="error"></div>
 
-Email
+  <!-- LOGIN -->
+  <div id="loginSection">
+    <div class="login-box">
+      <h2>Mac Chicken Admin 🔐</h2>
+      <p>Login to manage customer orders.</p>
 
-<input
-type=“email”
-id=“email”
-placeholder=“Admin email”
+      <input
+        type="email"
+        id="email"
+        placeholder="Admin email"
+        autocomplete="email"
+      >
 
-Password
+      <input
+        type="password"
+        id="password"
+        placeholder="Password"
+        autocomplete="current-password"
+      >
 
-<input
-type=“password”
-id=“password”
-placeholder=“Password”
+      <button class="login-btn" onclick="login()">
+        Login
+      </button>
 
-<button
-class=“login-btn”
-onclick=“login()”
+      <div id="loginError" class="error"></div>
+    </div>
+  </div>
 
-Login
-  </button>
-</div>
-<!-- DASHBOARD -->
-<div id="dashboard" class="dashboard">
-  <div class="container">
-<div id="errorBox" class="error"></div>
-<div id="successBox" class="success"></div>
-<!-- STATS -->
-<div class="stats">
-  <div class="stat">
-    <span>Total Orders</span>
-    <strong id="totalOrders">
-      0
-    </strong>
+
+  <!-- DASHBOARD -->
+  <div id="dashboardSection" class="hidden">
+
+    <header>
+      <div>
+        <h1>Mac Chicken 🐔</h1>
+        <small>Admin Dashboard • Quality & Health</small>
+      </div>
+
+      <button class="logout-btn" onclick="logout()">
+        Logout
+      </button>
+    </header>
+
+    <div class="container">
+
+      <div class="topbar">
+        <div>
+          <h2>Dashboard</h2>
+          <small id="lastUpdated">Not updated yet</small>
+        </div>
+
+        <button class="refresh-btn" onclick="loadOrders()">
+          🔄 Refresh
+        </button>
+      </div>
+
+
+      <!-- MAIN STATS -->
+
+      <div class="stats-grid">
+
+        <div class="stat-card">
+          <div class="label">Total Orders</div>
+          <div class="value" id="totalOrders">0</div>
+          <div class="sub">All non-cancelled orders</div>
+        </div>
+
+        <div class="stat-card">
+          <div class="label">Pending Orders</div>
+          <div class="value" id="pendingOrders">0</div>
+          <div class="sub">Awaiting confirmation</div>
+        </div>
+
+        <div class="stat-card">
+          <div class="label">Chickens Sold</div>
+          <div class="value" id="totalChickens">0</div>
+          <div class="sub">Non-cancelled orders</div>
+        </div>
+
+        <div class="stat-card">
+          <div class="label">Total Sales</div>
+          <div class="value" id="totalSales">TSh 0</div>
+          <div class="sub">Non-cancelled orders</div>
+        </div>
+
+      </div>
+
+
+      <!-- ANALYTICS -->
+
+      <div class="analytics-title">
+        📊 Sales Analytics
+      </div>
+
+      <div class="analytics-grid">
+
+        <div class="stat-card">
+          <div class="label">Today's Sales</div>
+          <div class="value" id="todaySales">TSh 0</div>
+          <div class="sub">Today's non-cancelled sales</div>
+        </div>
+
+        <div class="stat-card">
+          <div class="label">Today's Orders</div>
+          <div class="value" id="todayOrders">0</div>
+          <div class="sub">Orders placed today</div>
+        </div>
+
+        <div class="stat-card">
+          <div class="label">Today's Chickens</div>
+          <div class="value" id="todayChickens">0</div>
+          <div class="sub">Chickens ordered today</div>
+        </div>
+
+        <div class="stat-card">
+          <div class="label">Paid Orders</div>
+          <div class="value" id="paidOrders">0</div>
+          <div class="sub" id="paidOrdersSub">Pending payment: 0</div>
+        </div>
+
+        <div class="stat-card">
+          <div class="label">This Week</div>
+          <div class="value" id="weeklySales">TSh 0</div>
+          <div class="sub">Monday to today</div>
+        </div>
+
+        <div class="stat-card">
+          <div class="label">This Month</div>
+          <div class="value" id="monthlySales">TSh 0</div>
+          <div class="sub">Current calendar month</div>
+        </div>
+
+        <div class="stat-card">
+          <div class="label">Paid Sales</div>
+          <div class="value" id="paidSales">TSh 0</div>
+          <div class="sub">Orders marked Paid</div>
+        </div>
+
+        <div class="stat-card">
+          <div class="label">To Collect</div>
+          <div class="value" id="pendingSales">TSh 0</div>
+          <div class="sub">Not marked Paid</div>
+        </div>
+
+      </div>
+
+
+      <!-- SALES CHART -->
+
+      <div class="chart-card">
+
+        <div class="chart-title">
+          📈 Sales — Last 7 Days
+        </div>
+
+        <div class="chart-subtitle">
+          Daily sales from non-cancelled orders
+        </div>
+
+        <div id="salesChart" class="chart">
+          <div class="loading">
+            Loading chart...
+          </div>
+        </div>
+
+      </div>
+
+
+      <!-- FILTERS -->
+
+      <div class="filters">
+
+        <div class="filters-grid">
+
+          <input
+            type="text"
+            id="searchInput"
+            placeholder="Search Order ID, name or phone..."
+            oninput="renderOrders()"
+          >
+
+          <select id="locationFilter" onchange="renderOrders()">
+            <option value="">All Locations</option>
+            <option value="Moshi">Moshi</option>
+            <option value="Arusha">Arusha</option>
+          </select>
+
+          <select id="deliveryFilter" onchange="renderOrders()">
+            <option value="">All Delivery</option>
+            <option value="Delivery">Delivery</option>
+            <option value="Pickup">Pickup</option>
+          </select>
+
+          <select id="statusFilter" onchange="renderOrders()">
+            <option value="">All Status</option>
+            <option value="Pending">Pending</option>
+            <option value="Confirmed">Confirmed</option>
+            <option value="Ready">Ready</option>
+            <option value="Delivered">Delivered</option>
+            <option value="Cancelled">Cancelled</option>
+          </select>
+
+          <select id="paymentFilter" onchange="renderOrders()">
+            <option value="">All Payment</option>
+            <option value="Pending">Pending</option>
+            <option value="Paid">Paid</option>
+            <option value="Pay at Delivery">Pay at Delivery</option>
+          </select>
+
+        </div>
+
+      </div>
+
+
+      <!-- ORDERS -->
+
+      <div class="orders-card">
+
+        <div class="orders-header">
+          <div>
+            <strong>Customer Orders</strong>
+            <span id="visibleOrdersCount"></span>
+          </div>
+
+          <div id="ordersMessage"></div>
+        </div>
+
+        <div class="table-wrapper">
+
+          <table>
+
+            <thead>
+              <tr>
+                <th>Order ID</th>
+                <th>Customer</th>
+                <th>Phone</th>
+                <th>Location</th>
+                <th>Qty</th>
+                <th>Price</th>
+                <th>Delivery</th>
+                <th>Payment</th>
+                <th>Payment Status</th>
+                <th>Order Status</th>
+                <th>Details</th>
+              </tr>
+            </thead>
+
+            <tbody id="ordersTableBody">
+              <tr>
+                <td colspan="11" class="loading">
+                  Loading orders...
+                </td>
+              </tr>
+            </tbody>
+
+          </table>
+
+        </div>
+
+      </div>
+
+    </div>
+
   </div>
-  <div class="stat">
-    <span>Pending Orders</span>
-    <strong id="pendingOrders">
-      0
-    </strong>
+
+
+  <!-- ORDER MODAL -->
+
+  <div id="orderModal" class="modal">
+
+    <div class="modal-box">
+
+      <button
+        class="modal-close"
+        onclick="closeModal()"
+      >
+        ×
+      </button>
+
+      <h2>Order Details</h2>
+
+      <div id="modalContent"></div>
+
+    </div>
+
   </div>
-  <div class="stat">
-    <span>Chickens Sold</span>
-    <strong id="totalChickens">
-      0
-    </strong>
-  </div>
-  <div class="stat">
-    <span>Total Sales</span>
-    <strong id="totalSales">
-      TSh 0
-    </strong>
-  </div>
-  <div class="stat paid">
-    <span>Paid Orders</span>
-    <strong id="paidOrders">
-      0
-    </strong>
-  </div>
-</div>
-<!-- FILTERS -->
-<div class="filters">
-  <h3>
-    Search & Filter
-  </h3>
-  <div class="filter-grid">
-    <input
-      type="text"
-      id="search"
-      placeholder="Search Order ID, name or phone..."
-      oninput="renderOrders()"
-    >
-    <select
-      id="locationFilter"
-      onchange="renderOrders()"
-    >
-      <option value="">
-        All Locations
-      </option>
-      <option value="Moshi">
-        Moshi
-      </option>
-      <option value="Arusha">
-        Arusha
-      </option>
-    </select>
-    <select
-      id="deliveryFilter"
-      onchange="renderOrders()"
-    >
-      <option value="">
-        All Delivery Methods
-      </option>
-      <option value="Delivery">
-        Delivery
-      </option>
-      <option value="Pickup">
-        Pickup
-      </option>
-    </select>
-    <select
-      id="statusFilter"
-      onchange="renderOrders()"
-    >
-      <option value="">
-        All Order Status
-      </option>
-      <option value="Pending">
-        Pending
-      </option>
-      <option value="Confirmed">
-        Confirmed
-      </option>
-      <option value="Ready">
-        Ready
-      </option>
-      <option value="Delivered">
-        Delivered
-      </option>
-      <option value="Cancelled">
-        Cancelled
-      </option>
-    </select>
-    <select
-      id="paymentFilter"
-      onchange="renderOrders()"
-    >
-      <option value="">
-        All Payment Status
-      </option>
-      <option value="Pending">
-        Pending
-      </option>
-      <option value="Paid">
-        Paid
-      </option>
-      <option value="Pay at Delivery">
-        Pay at Delivery
-      </option>
-    </select>
-  </div>
-</div>
-<!-- ORDERS -->
-<div class="orders-box">
-  <div class="orders-title">
-    <h2>
-      Customer Orders
-    </h2>
-    <button onclick="loadOrders()">
-      🔄 Refresh
-    </button>
-  </div>
-  <div id="orderCount">
-    0 orders
-  </div>
-  <br>
-  <table>
-    <thead>
-      <tr>
-        <th>
-          Order ID
-        </th>
-        <th>
-          Customer
-        </th>
-        <th>
-          Phone
-        </th>
-        <th>
-          Location
-        </th>
-        <th>
-          Qty
-        </th>
-        <th>
-          Price
-        </th>
-        <th>
-          Delivery
-        </th>
-        <th>
-          Payment Method
-        </th>
-        <th>
-          Payment Status
-        </th>
-        <th>
-          Order Status
-        </th>
-        <th>
-          Details
-        </th>
-      </tr>
-    </thead>
-    <tbody id="ordersTable">
-    </tbody>
-  </table>
-</div>
-  </div>
-</div>
-<!-- ORDER DETAILS MODAL -->
-<div
-  id="orderModal"
-  class="modal"
-  onclick="closeModalOutside(event)"
->
-  <div
-    class="modal-box"
-    onclick="event.stopPropagation()"
-  >
-<div class="modal-header">
-  <h2>
-    🐔 Order Details
-  </h2>
-  <button
-    class="close-btn"
-    onclick="closeOrderDetails()"
-  >
-    ×
-  </button>
-</div>
-<div
-  id="detailsBody"
-  class="details-body"
->
-</div>
-  </div>
-</div>
+
+
 <script>
-  /* SUPABASE */
+
+  /* =========================
+     SUPABASE
+  ========================= */
+
   const SUPABASE_URL =
     "https://tuqrnlaofriqggeaoqxb.supabase.co";
+
   const SUPABASE_KEY =
     "sb_publishable_NVTmWBHQVN8faM4tBcCpxg_IBW45wI_";
+
   const supabaseClient =
     window.supabase.createClient(
       SUPABASE_URL,
       SUPABASE_KEY
     );
+
+
+  /* =========================
+     GLOBAL DATA
+  ========================= */
+
   let allOrders = [];
-  /* ALERTS */
-  function showError(
-    message,
-    target = "errorBox"
-  ) {
-    const box =
-      document.getElementById(target);
-    box.textContent =
-      message;
-    box.style.display =
-      "block";
-    setTimeout(() => {
-      box.style.display =
-        "none";
-    }, 5000);
-  }
-  function showSuccess(message) {
-    const box =
-      document.getElementById(
-        "successBox"
-      );
-    box.textContent =
-      message;
-    box.style.display =
-      "block";
-    setTimeout(() => {
-      box.style.display =
-        "none";
-    }, 4000);
-  }
-  /* LOGIN */
-  async function login() {
-    const email =
-      document.getElementById(
-        "email"
-      ).value.trim();
-    const password =
-      document.getElementById(
-        "password"
-      ).value;
-    if (!email || !password) {
-      showError(
-        "Please enter email and password.",
-        "loginError"
-      );
-      return;
-    }
-    const { error } =
-      await supabaseClient.auth
-        .signInWithPassword({
-          email:
-            email,
-          password:
-            password
-        });
-    if (error) {
-      showError(
-        error.message,
-        "loginError"
-      );
-      return;
-    }
-    await checkSession();
-  }
-  /* SESSION */
+  let currentModalOrder = null;
+
+
+  /* =========================
+     LOGIN CHECK
+  ========================= */
+
   async function checkSession() {
-    const { data } =
-      await supabaseClient.auth
-        .getSession();
-    if (data.session) {
-      document.getElementById(
-        "loginSection"
-      ).style.display =
-        "none";
-      document.getElementById(
-        "dashboard"
-      ).style.display =
-        "block";
-      await loadOrders();
+
+    const {
+      data: { session }
+    } = await supabaseClient.auth.getSession();
+
+    if (session) {
+      showDashboard();
+      loadOrders();
     } else {
-      document.getElementById(
-        "loginSection"
-      ).style.display =
-        "block";
-      document.getElementById(
-        "dashboard"
-      ).style.display =
-        "none";
+      showLogin();
     }
   }
-  /* LOGOUT */
-  async function logout() {
-    await supabaseClient.auth
-      .signOut();
-    document.getElementById(
-      "dashboard"
-    ).style.display =
-      "none";
-    document.getElementById(
-      "loginSection"
-    ).style.display =
-      "block";
+
+
+  function showLogin() {
+
+    document
+      .getElementById("loginSection")
+      .classList.remove("hidden");
+
+    document
+      .getElementById("dashboardSection")
+      .classList.add("hidden");
   }
-  /* LOAD ORDERS */
-  async function loadOrders() {
-    const { data, error } =
-      await supabaseClient
-        .from("orders")
-        .select("*");
-    if (error) {
-      showError(
-        "Error loading orders: " +
-        error.message
-      );
+
+
+  function showDashboard() {
+
+    document
+      .getElementById("loginSection")
+      .classList.add("hidden");
+
+    document
+      .getElementById("dashboardSection")
+      .classList.remove("hidden");
+  }
+
+
+  /* =========================
+     LOGIN
+  ========================= */
+
+  async function login() {
+
+    const email =
+      document.getElementById("email").value.trim();
+
+    const password =
+      document.getElementById("password").value;
+
+    const errorBox =
+      document.getElementById("loginError");
+
+    errorBox.textContent = "";
+
+    if (!email || !password) {
+
+      errorBox.textContent =
+        "Please enter email and password.";
+
       return;
     }
-    allOrders =
-      data || [];
-    updateStats();
-    renderOrders();
+
+    const {
+      error
+    } = await supabaseClient.auth.signInWithPassword({
+      email,
+      password
+    });
+
+    if (error) {
+
+      errorBox.textContent =
+        error.message;
+
+      return;
+    }
+
+    showDashboard();
+    loadOrders();
   }
-  /* STATS */
+
+
+  /* =========================
+     LOGOUT
+  ========================= */
+
+  async function logout() {
+
+    await supabaseClient.auth.signOut();
+
+    allOrders = [];
+
+    showLogin();
+  }
+
+
+  /* =========================
+     LOAD ORDERS
+  ========================= */
+
+  async function loadOrders() {
+
+    const tbody =
+      document.getElementById("ordersTableBody");
+
+    tbody.innerHTML = `
+      <tr>
+        <td colspan="11" class="loading">
+          Loading orders...
+        </td>
+      </tr>
+    `;
+
+    const {
+      data,
+      error
+    } = await supabaseClient
+      .from("orders")
+      .select("*")
+      .order("created_at", {
+        ascending: false
+      });
+
+    if (error) {
+
+      tbody.innerHTML = `
+        <tr>
+          <td colspan="11" class="empty">
+            Error loading orders:<br>
+            ${escapeHtml(error.message)}
+          </td>
+        </tr>
+      `;
+
+      return;
+    }
+
+    allOrders = data || [];
+
+    updateStats();
+    updateAnalytics();
+    renderSalesChart();
+    renderOrders();
+
+    document.getElementById("lastUpdated").textContent =
+      "Last updated: " +
+      new Date().toLocaleString("en-TZ");
+  }
+
+
+  /* =========================
+     BASIC HELPERS
+  ========================= */
+
+  function isCancelled(order) {
+
+    return String(order.order_status || "")
+      .toLowerCase() === "cancelled";
+  }
+
+
+  function validOrders() {
+
+    return allOrders.filter(
+      order => !isCancelled(order)
+    );
+  }
+
+
+  function getPrice(order) {
+
+    return Number(order.price || 0);
+  }
+
+
+  function getQuantity(order) {
+
+    return Number(order.quantity || 0);
+  }
+
+
+  function getPaymentStatus(order) {
+
+    return order.payment_status ||
+      "Pending";
+  }
+
+
+  function formatMoney(amount) {
+
+    return "TSh " +
+      Number(amount || 0)
+        .toLocaleString("en-TZ");
+  }
+
+
+  function escapeHtml(value) {
+
+    if (value === null ||
+        value === undefined) {
+      return "";
+    }
+
+    return String(value)
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#039;");
+  }
+
+
+  /* =========================
+     DATE HELPERS
+  ========================= */
+
+  const TZ =
+    "Africa/Dar_es_Salaam";
+
+
+  function dateKeyTZ(dateValue) {
+
+    if (!dateValue) return "";
+
+    return new Intl.DateTimeFormat(
+      "en-CA",
+      {
+        timeZone: TZ,
+        year: "numeric",
+        month: "2-digit",
+        day: "2-digit"
+      }
+    ).format(new Date(dateValue));
+  }
+
+
+  function todayKey() {
+
+    return dateKeyTZ(new Date());
+  }
+
+
+  function getStartOfWeek() {
+
+    const now = new Date();
+
+    const day = now.getDay();
+
+    const diff =
+      day === 0 ? 6 : day - 1;
+
+    const start =
+      new Date(now);
+
+    start.setHours(
+      0,
+      0,
+      0,
+      0
+    );
+
+    start.setDate(
+      start.getDate() - diff
+    );
+
+    return start;
+  }
+
+
+  function getStartOfMonth() {
+
+    const now = new Date();
+
+    return new Date(
+      now.getFullYear(),
+      now.getMonth(),
+      1,
+      0,
+      0,
+      0,
+      0
+    );
+  }
+
+
+  /* =========================
+     MAIN STATS
+  ========================= */
+
   function updateStats() {
+
+    const orders =
+      validOrders();
+
     const totalOrders =
-      allOrders.length;
+      orders.length;
+
     const pendingOrders =
-      allOrders.filter(
+      orders.filter(
         order =>
-          order.order_status ===
-          "Pending"
+          String(order.order_status || "")
+            .toLowerCase() === "pending"
       ).length;
+
     const totalChickens =
-      allOrders
-        .filter(
-          order =>
-            order.order_status !==
-            "Cancelled"
-        )
-        .reduce(
-          (sum, order) =>
-            sum +
-            Number(
-              order.quantity || 0
-            ),
-          0
-        );
+      orders.reduce(
+        (sum, order) =>
+          sum + getQuantity(order),
+        0
+      );
+
     const totalSales =
-      allOrders
-        .filter(
-          order =>
-            order.order_status !==
-            "Cancelled"
-        )
-        .reduce(
-          (sum, order) =>
-            sum +
-            Number(
-              order.price || 0
-            ),
-          0
-        );
-    const paidOrders =
-      allOrders.filter(
-        order =>
-          order.payment_status ===
-          "Paid"
-      ).length;
+      orders.reduce(
+        (sum, order) =>
+          sum + getPrice(order),
+        0
+      );
+
     document.getElementById(
       "totalOrders"
     ).textContent =
-      totalOrders;
+      totalOrders.toLocaleString();
+
     document.getElementById(
       "pendingOrders"
     ).textContent =
-      pendingOrders;
+      pendingOrders.toLocaleString();
+
     document.getElementById(
       "totalChickens"
     ).textContent =
-      totalChickens;
+      totalChickens.toLocaleString();
+
     document.getElementById(
       "totalSales"
     ).textContent =
-      "TSh " +
-      totalSales.toLocaleString();
+      formatMoney(totalSales);
+  }
+
+
+  /* =========================
+     ANALYTICS
+  ========================= */
+
+  function updateAnalytics() {
+
+    const orders =
+      validOrders();
+
+    const today =
+      todayKey();
+
+    const todayOrdersList =
+      orders.filter(
+        order =>
+          dateKeyTZ(order.created_at) === today
+      );
+
+    const todaySales =
+      todayOrdersList.reduce(
+        (sum, order) =>
+          sum + getPrice(order),
+        0
+      );
+
+    const todayChickens =
+      todayOrdersList.reduce(
+        (sum, order) =>
+          sum + getQuantity(order),
+        0
+      );
+
+
+    /* TODAY */
+
+    document.getElementById(
+      "todaySales"
+    ).textContent =
+      formatMoney(todaySales);
+
+    document.getElementById(
+      "todayOrders"
+    ).textContent =
+      todayOrdersList.length.toLocaleString();
+
+    document.getElementById(
+      "todayChickens"
+    ).textContent =
+      todayChickens.toLocaleString();
+
+
+    /* WEEK */
+
+    const weekStart =
+      getStartOfWeek();
+
+    const weeklyOrders =
+      orders.filter(order => {
+
+        if (!order.created_at) {
+          return false;
+        }
+
+        return new Date(order.created_at)
+          >= weekStart;
+      });
+
+    const weeklySales =
+      weeklyOrders.reduce(
+        (sum, order) =>
+          sum + getPrice(order),
+        0
+      );
+
+    document.getElementById(
+      "weeklySales"
+    ).textContent =
+      formatMoney(weeklySales);
+
+
+    /* MONTH */
+
+    const monthStart =
+      getStartOfMonth();
+
+    const monthlyOrders =
+      orders.filter(order => {
+
+        if (!order.created_at) {
+          return false;
+        }
+
+        return new Date(order.created_at)
+          >= monthStart;
+      });
+
+    const monthlySales =
+      monthlyOrders.reduce(
+        (sum, order) =>
+          sum + getPrice(order),
+        0
+      );
+
+    document.getElementById(
+      "monthlySales"
+    ).textContent =
+      formatMoney(monthlySales);
+
+
+    /* PAYMENT */
+
+    const paid =
+      orders.filter(
+        order =>
+          getPaymentStatus(order)
+            .toLowerCase() === "paid"
+      );
+
+    const unpaid =
+      orders.filter(
+        order =>
+          getPaymentStatus(order)
+            .toLowerCase() !== "paid"
+      );
+
+    const paidSales =
+      paid.reduce(
+        (sum, order) =>
+          sum + getPrice(order),
+        0
+      );
+
+    const pendingSales =
+      unpaid.reduce(
+        (sum, order) =>
+          sum + getPrice(order),
+        0
+      );
+
     document.getElementById(
       "paidOrders"
     ).textContent =
-      paidOrders;
+      paid.length.toLocaleString();
+
+    document.getElementById(
+      "paidOrdersSub"
+    ).textContent =
+      "Pending payment: " +
+      unpaid.length.toLocaleString();
+
+    document.getElementById(
+      "paidSales"
+    ).textContent =
+      formatMoney(paidSales);
+
+    document.getElementById(
+      "pendingSales"
+    ).textContent =
+      formatMoney(pendingSales);
   }
-  /* RENDER ORDERS */
+
+
+  /* =========================
+     SALES CHART
+  ========================= */
+
+  function getLastSevenDays() {
+
+    const days = [];
+
+    const now = new Date();
+
+    for (let i = 6; i >= 0; i--) {
+
+      const date =
+        new Date(now);
+
+      date.setHours(
+        0,
+        0,
+        0,
+        0
+      );
+
+      date.setDate(
+        date.getDate() - i
+      );
+
+      days.push(date);
+    }
+
+    return days;
+  }
+
+
+  function renderSalesChart() {
+
+    const chart =
+      document.getElementById(
+        "salesChart"
+      );
+
+    const days =
+      getLastSevenDays();
+
+    const values =
+      days.map(day => {
+
+        const key =
+          dateKeyTZ(day);
+
+        return allOrders
+          .filter(order =>
+            !isCancelled(order) &&
+            dateKeyTZ(order.created_at) === key
+          )
+          .reduce(
+            (sum, order) =>
+              sum + getPrice(order),
+            0
+          );
+      });
+
+    const max =
+      Math.max(...values, 1);
+
+    chart.innerHTML = "";
+
+    days.forEach(
+      (day, index) => {
+
+        const value =
+          values[index];
+
+        const height =
+          Math.max(
+            3,
+            (value / max) * 85
+          );
+
+        const wrapper =
+          document.createElement(
+            "div"
+          );
+
+        wrapper.className =
+          "bar-wrapper";
+
+        const valueLabel =
+          document.createElement(
+            "div"
+          );
+
+        valueLabel.className =
+          "bar-value";
+
+        valueLabel.textContent =
+          value > 0
+            ? formatCompactMoney(value)
+            : "0";
+
+        const bar =
+          document.createElement(
+            "div"
+          );
+
+        bar.className =
+          "bar";
+
+        bar.style.height =
+          height + "%";
+
+        const label =
+          document.createElement(
+            "div"
+          );
+
+        label.className =
+          "bar-label";
+
+        label.textContent =
+          day.toLocaleDateString(
+            "en-US",
+            {
+              weekday: "short"
+            }
+          );
+
+        wrapper.appendChild(
+          valueLabel
+        );
+
+        wrapper.appendChild(
+          bar
+        );
+
+        wrapper.appendChild(
+          label
+        );
+
+        chart.appendChild(
+          wrapper
+        );
+      }
+    );
+  }
+
+
+  function formatCompactMoney(value) {
+
+    const amount =
+      Number(value || 0);
+
+    if (amount >= 1000000) {
+
+      return (
+        "TSh " +
+        (amount / 1000000)
+          .toFixed(1) +
+        "M"
+      );
+    }
+
+    if (amount >= 1000) {
+
+      return (
+        "TSh " +
+        (amount / 1000)
+          .toFixed(0) +
+        "K"
+      );
+    }
+
+    return (
+      "TSh " +
+      amount.toLocaleString()
+    );
+  }
+
+
+  /* =========================
+     FILTER + RENDER ORDERS
+  ========================= */
+
   function renderOrders() {
+
     const search =
       document.getElementById(
-        "search"
+        "searchInput"
       ).value
       .toLowerCase()
       .trim();
+
     const location =
       document.getElementById(
         "locationFilter"
       ).value;
+
     const delivery =
       document.getElementById(
         "deliveryFilter"
       ).value;
+
     const status =
       document.getElementById(
         "statusFilter"
       ).value;
-    const paymentStatus =
+
+    const payment =
       document.getElementById(
         "paymentFilter"
       ).value;
+
+
     const filtered =
       allOrders.filter(order => {
-        const matchesSearch =
-          !search ||
-          String(
-            order.order_id || ""
-          )
-            .toLowerCase()
-            .includes(search) ||
-          String(
-            order.customer_name || ""
-          )
-            .toLowerCase()
-            .includes(search) ||
-          String(
-            order.phone || ""
-          )
-            .toLowerCase()
-            .includes(search);
-        const matchesLocation =
-          !location ||
-          order.location ===
-            location;
-        const matchesDelivery =
-          !delivery ||
-          order.delivery_method ===
-            delivery;
-        const matchesStatus =
-          !status ||
-          order.order_status ===
-            status;
-        const matchesPaymentStatus =
-          !paymentStatus ||
+
+        const searchable =
           (
-            order.payment_status ||
-            "Pending"
-          ) ===
-            paymentStatus;
-        return (
-          matchesSearch &&
-          matchesLocation &&
-          matchesDelivery &&
-          matchesStatus &&
-          matchesPaymentStatus
-        );
+            String(order.order_id || "") +
+            " " +
+            String(order.customer_name || "") +
+            " " +
+            String(order.phone || "")
+          ).toLowerCase();
+
+        if (
+          search &&
+          !searchable.includes(search)
+        ) {
+          return false;
+        }
+
+        if (
+          location &&
+          order.location !== location
+        ) {
+          return false;
+        }
+
+        if (
+          delivery &&
+          order.delivery_method !== delivery
+        ) {
+          return false;
+        }
+
+        if (
+          status &&
+          order.order_status !== status
+        ) {
+          return false;
+        }
+
+        if (
+          payment &&
+          getPaymentStatus(order) !== payment
+        ) {
+          return false;
+        }
+
+        return true;
       });
+
+
     document.getElementById(
-      "orderCount"
+      "visibleOrdersCount"
     ).textContent =
+      " • " +
       filtered.length +
-      " orders";
-    const table =
+      " shown";
+
+
+    const tbody =
       document.getElementById(
-        "ordersTable"
+        "ordersTableBody"
       );
+
     if (!filtered.length) {
-      table.innerHTML = `
+
+      tbody.innerHTML = `
         <tr>
-          <td
-            colspan="11"
-            class="empty"
-          >
+          <td colspan="11" class="empty">
             No orders found.
           </td>
         </tr>
       `;
+
       return;
     }
-    table.innerHTML =
+
+
+    tbody.innerHTML =
       filtered.map(order => {
+
+        const orderId =
+          escapeHtml(order.order_id);
+
+        const customer =
+          escapeHtml(order.customer_name);
+
+        const phone =
+          escapeHtml(order.phone);
+
+        const loc =
+          escapeHtml(order.location);
+
+        const deliveryMethod =
+          escapeHtml(order.delivery_method);
+
+        const paymentMethod =
+          escapeHtml(order.payment_method);
+
+        const qty =
+          getQuantity(order);
+
+        const price =
+          getPrice(order);
+
         const paymentStatus =
-          order.payment_status ||
+          getPaymentStatus(order);
+
+        const orderStatus =
+          order.order_status ||
           "Pending";
+
+
         return `
           <tr>
+
             <td>
-              <strong>
-                ${escapeHtml(
-                  order.order_id || ""
-                )}
-              </strong>
+              <strong>${orderId}</strong>
             </td>
+
             <td>
-              ${escapeHtml(
-                order.customer_name || ""
-              )}
+              ${customer}
             </td>
+
             <td>
-              ${escapeHtml(
-                order.phone || ""
-              )}
+              ${phone}
             </td>
+
             <td>
-              ${escapeHtml(
-                order.location || ""
-              )}
+              ${loc}
             </td>
+
             <td>
-              ${Number(
-                order.quantity || 0
-              )}
+              ${qty}
             </td>
+
             <td>
-              TSh ${
-                Number(
-                  order.price || 0
-                ).toLocaleString()
-              }
+              ${formatMoney(price)}
             </td>
+
             <td>
-              ${escapeHtml(
-                order.delivery_method || ""
-              )}
+              ${deliveryMethod}
             </td>
+
             <td>
-              ${escapeHtml(
-                order.payment_method || ""
-              )}
+              ${paymentMethod}
             </td>
+
             <td>
+
               <select
-                class="payment-status"
-                onchange="updatePaymentStatus(
-                  '${escapeHtml(
-                    order.order_id
-                  )}',
-                  this.value
-                )"
+                class="payment-select"
+                onchange="updatePaymentStatus('${orderId}', this.value)"
               >
+
                 <option
                   value="Pending"
-                  ${
-                    paymentStatus ===
-                    "Pending"
-                      ? "selected"
-                      : ""
-                  }
+                  ${paymentStatus === "Pending" ? "selected" : ""}
                 >
                   Pending
                 </option>
+
                 <option
                   value="Paid"
-                  ${
-                    paymentStatus ===
-                    "Paid"
-                      ? "selected"
-                      : ""
-                  }
+                  ${paymentStatus === "Paid" ? "selected" : ""}
                 >
                   Paid
                 </option>
+
                 <option
                   value="Pay at Delivery"
-                  ${
-                    paymentStatus ===
-                    "Pay at Delivery"
-                      ? "selected"
-                      : ""
-                  }
+                  ${paymentStatus === "Pay at Delivery" ? "selected" : ""}
                 >
                   Pay at Delivery
                 </option>
+
               </select>
+
             </td>
+
             <td>
+
               <select
-                class="status"
-                onchange="updateStatus(
-                  '${escapeHtml(
-                    order.order_id
-                  )}',
-                  this.value
-                )"
+                class="status-select"
+                onchange="updateOrderStatus('${orderId}', this.value)"
               >
+
                 <option
                   value="Pending"
-                  ${
-                    order.order_status ===
-                    "Pending"
-                      ? "selected"
-                      : ""
-                  }
+                  ${orderStatus === "Pending" ? "selected" : ""}
                 >
                   Pending
                 </option>
+
                 <option
                   value="Confirmed"
-                  ${
-                    order.order_status ===
-                    "Confirmed"
-                      ? "selected"
-                      : ""
-                  }
+                  ${orderStatus === "Confirmed" ? "selected" : ""}
                 >
                   Confirmed
                 </option>
+
                 <option
                   value="Ready"
-                  ${
-                    order.order_status ===
-                    "Ready"
-                      ? "selected"
-                      : ""
-                  }
+                  ${orderStatus === "Ready" ? "selected" : ""}
                 >
                   Ready
                 </option>
+
                 <option
                   value="Delivered"
-                  ${
-                    order.order_status ===
-                    "Delivered"
-                      ? "selected"
-                      : ""
-                  }
+                  ${orderStatus === "Delivered" ? "selected" : ""}
                 >
                   Delivered
                 </option>
+
                 <option
                   value="Cancelled"
-                  ${
-                    order.order_status ===
-                    "Cancelled"
-                      ? "selected"
-                      : ""
-                  }
+                  ${orderStatus === "Cancelled" ? "selected" : ""}
                 >
                   Cancelled
                 </option>
+
               </select>
+
             </td>
+
             <td>
+
               <button
                 class="view-btn"
-                onclick="viewOrder(
-                  '${escapeHtml(
-                    order.order_id
-                  )}'
-                )"
+                onclick="viewOrder('${orderId}')"
               >
-                👁️ View
+                View
               </button>
+
             </td>
+
           </tr>
         `;
       }).join("");
   }
-  /* PAYMENT STATUS */
+
+
+  /* =========================
+     UPDATE PAYMENT
+  ========================= */
+
   async function updatePaymentStatus(
     orderId,
     newPaymentStatus
   ) {
-    const { error } =
-      await supabaseClient
-        .from("orders")
-        .update({
-          payment_status:
-            newPaymentStatus
-        })
-        .eq(
-          "order_id",
-          orderId
-        );
+
+    const {
+      error
+    } = await supabaseClient
+      .from("orders")
+      .update({
+        payment_status:
+          newPaymentStatus
+      })
+      .eq(
+        "order_id",
+        orderId
+      );
+
     if (error) {
-      showError(
-        "Failed to update payment status: " +
+
+      alert(
+        "Failed to update payment status:\n" +
         error.message
       );
-      await loadOrders();
+
       return;
     }
+
+
     const order =
       allOrders.find(
-        item =>
-          item.order_id ===
-          orderId
+        o => o.order_id === orderId
       );
+
     if (order) {
+
       order.payment_status =
         newPaymentStatus;
     }
+
     updateStats();
+    updateAnalytics();
+    renderSalesChart();
     renderOrders();
-    showSuccess(
-      "Payment status updated successfully."
+
+    showMessage(
+      "Payment status updated ✓"
     );
   }
-  /* ORDER STATUS */
-  async function updateStatus(
+
+
+  /* =========================
+     UPDATE ORDER STATUS
+  ========================= */
+
+  async function updateOrderStatus(
     orderId,
     newStatus
   ) {
-    const { error } =
-      await supabaseClient
-        .from("orders")
-        .update({
-          order_status:
-            newStatus
-        })
-        .eq(
-          "order_id",
-          orderId
-        );
+
+    const {
+      error
+    } = await supabaseClient
+      .from("orders")
+      .update({
+        order_status:
+          newStatus
+      })
+      .eq(
+        "order_id",
+        orderId
+      );
+
     if (error) {
-      showError(
-        "Failed to update status: " +
+
+      alert(
+        "Failed to update order status:\n" +
         error.message
       );
-      await loadOrders();
+
       return;
     }
+
+
     const order =
       allOrders.find(
-        item =>
-          item.order_id ===
-          orderId
+        o => o.order_id === orderId
       );
+
     if (order) {
+
       order.order_status =
         newStatus;
     }
+
     updateStats();
+    updateAnalytics();
+    renderSalesChart();
     renderOrders();
-    showSuccess(
-      "Order status updated successfully."
+
+    showMessage(
+      "Order status updated ✓"
     );
   }
-  /* VIEW ORDER DETAILS */
+
+
+  /* =========================
+     MESSAGE
+  ========================= */
+
+  function showMessage(message) {
+
+    const box =
+      document.getElementById(
+        "ordersMessage"
+      );
+
+    box.innerHTML =
+      `<span class="success-message">
+        ${escapeHtml(message)}
+      </span>`;
+
+    setTimeout(() => {
+
+      box.innerHTML = "";
+
+    }, 2500);
+  }
+
+
+  /* =========================
+     VIEW ORDER
+  ========================= */
+
   function viewOrder(orderId) {
+
     const order =
       allOrders.find(
-        item =>
-          item.order_id ===
-          orderId
+        o => o.order_id === orderId
       );
+
     if (!order) {
-      showError(
-        "Order not found."
-      );
+
+      alert("Order not found.");
+
       return;
     }
+
+    currentModalOrder =
+      order;
+
+
+    const requiredDate =
+      order.required_datetime
+        ? new Date(
+            order.required_datetime
+          ).toLocaleString("en-TZ")
+        : "Not specified";
+
+
+    const createdDate =
+      order.created_at
+        ? new Date(
+            order.created_at
+          ).toLocaleString("en-TZ")
+        : "Not available";
+
+
     const paymentStatus =
-      order.payment_status ||
-      "Pending";
-    let requiredDate =
-      order.required_datetime ||
-      "";
-    if (requiredDate) {
-      try {
-        requiredDate =
-          new Date(
-            requiredDate
-          ).toLocaleString(
-            "en-GB"
-          );
-      } catch (error) {
-        requiredDate =
-          String(
-            requiredDate
-          );
-      }
-    }
-    const phone =
+      getPaymentStatus(order);
+
+
+    const deliveryFee =
+      Number(
+        order.delivery_fee || 0
+      );
+
+
+    const whatsappNumber =
       String(
         order.phone || ""
       ).replace(
-        /\D/g,
+        /[^0-9]/g,
         ""
       );
-    let whatsappPhone =
-      phone;
-    if (
-      whatsappPhone.startsWith("0")
-    ) {
-      whatsappPhone =
-        "255" +
-        whatsappPhone.substring(1);
-    }
-    const message =
+
+
+    const whatsappMessage =
       encodeURIComponent(
         "Hello " +
         (order.customer_name || "") +
@@ -1201,250 +1963,266 @@ Login
         (order.order_id || "") +
         "."
       );
-    const whatsappLink =
-      whatsappPhone
-        ? "https://wa.me/" +
-          whatsappPhone +
-          "?text=" +
-          message
-        : "#";
+
+
     document.getElementById(
-      "detailsBody"
+      "modalContent"
     ).innerHTML = `
-      <div class="details-id">
-        <small>
-          ORDER ID
-        </small>
-        <strong>
-          ${escapeHtml(
-            order.order_id || ""
-          )}
-        </strong>
-      </div>
+
       <div class="detail-grid">
-        <div class="detail-card">
-          <small>
-            Customer
-          </small>
-          <strong>
-            ${escapeHtml(
-              order.customer_name || "-"
-            )}
-          </strong>
+
+        <div class="detail">
+          <div class="detail-label">
+            Order ID
+          </div>
+          <div class="detail-value">
+            ${escapeHtml(order.order_id)}
+          </div>
         </div>
-        <div class="detail-card">
-          <small>
-            Phone
-          </small>
-          <strong>
-            ${escapeHtml(
-              order.phone || "-"
-            )}
-          </strong>
-        </div>
-        <div class="detail-card">
-          <small>
-            Location
-          </small>
-          <strong>
-            ${escapeHtml(
-              order.location || "-"
-            )}
-          </strong>
-        </div>
-        <div class="detail-card">
-          <small>
-            Delivery Method
-          </small>
-          <strong>
-            ${escapeHtml(
-              order.delivery_method || "-"
-            )}
-          </strong>
-        </div>
-        <div class="detail-card full">
-          <small>
-            Address / Delivery Location
-          </small>
-          <strong>
-            ${escapeHtml(
-              order.address ||
-              order.delivery_location ||
-              "-"
-            )}
-          </strong>
-        </div>
-        <div class="detail-card">
-          <small>
-            Quantity
-          </small>
-          <strong>
-            ${Number(
-              order.quantity || 0
-            )} Chicken(s)
-          </strong>
-        </div>
-        <div class="detail-card">
-          <small>
-            Chicken Cost
-          </small>
-          <strong class="detail-price">
-            TSh ${
-              Number(
-                order.price || 0
-              ).toLocaleString()
-            }
-          </strong>
-        </div>
-        <div class="detail-card">
-          <small>
-            Payment Method
-          </small>
-          <strong>
-            ${escapeHtml(
-              order.payment_method || "-"
-            )}
-          </strong>
-        </div>
-        <div class="detail-card">
-          <small>
-            Payment Status
-          </small>
-          <strong>
-            ${escapeHtml(
-              paymentStatus
-            )}
-          </strong>
-        </div>
-        <div class="detail-card">
-          <small>
+
+        <div class="detail">
+          <div class="detail-label">
             Order Status
-          </small>
-          <strong>
-            ${escapeHtml(
-              order.order_status || "-"
-            )}
-          </strong>
+          </div>
+          <div class="detail-value">
+            ${escapeHtml(order.order_status || "Pending")}
+          </div>
         </div>
-        <div class="detail-card">
-          <small>
-            Order Type
-          </small>
-          <strong>
-            ${escapeHtml(
-              order.order_type || "-"
-            )}
-          </strong>
+
+        <div class="detail">
+          <div class="detail-label">
+            Customer
+          </div>
+          <div class="detail-value">
+            ${escapeHtml(order.customer_name)}
+          </div>
         </div>
-        <div class="detail-card">
-          <small>
+
+        <div class="detail">
+          <div class="detail-label">
+            Phone
+          </div>
+          <div class="detail-value">
+            ${escapeHtml(order.phone)}
+          </div>
+        </div>
+
+        <div class="detail">
+          <div class="detail-label">
+            Location
+          </div>
+          <div class="detail-value">
+            ${escapeHtml(order.location)}
+          </div>
+        </div>
+
+        <div class="detail">
+          <div class="detail-label">
+            Quantity
+          </div>
+          <div class="detail-value">
+            ${getQuantity(order)} chickens
+          </div>
+        </div>
+
+        <div class="detail">
+          <div class="detail-label">
+            Sales Amount
+          </div>
+          <div class="detail-value">
+            ${formatMoney(getPrice(order))}
+          </div>
+        </div>
+
+        <div class="detail">
+          <div class="detail-label">
+            Payment Method
+          </div>
+          <div class="detail-value">
+            ${escapeHtml(order.payment_method)}
+          </div>
+        </div>
+
+        <div class="detail">
+          <div class="detail-label">
+            Payment Status
+          </div>
+          <div class="detail-value">
+            ${escapeHtml(paymentStatus)}
+          </div>
+        </div>
+
+        <div class="detail">
+          <div class="detail-label">
+            Delivery Method
+          </div>
+          <div class="detail-value">
+            ${escapeHtml(order.delivery_method)}
+          </div>
+        </div>
+
+        <div class="detail">
+          <div class="detail-label">
             Delivery Fee
-          </small>
-          <strong>
-            TSh ${
-              Number(
-                order.delivery_fee || 0
-              ).toLocaleString()
-            }
-          </strong>
+          </div>
+          <div class="detail-value">
+            ${formatMoney(deliveryFee)}
+          </div>
         </div>
-        <div class="detail-card full">
-          <small>
+
+        <div class="detail">
+          <div class="detail-label">
+            Order Type
+          </div>
+          <div class="detail-value">
+            ${escapeHtml(order.order_type || "Standard")}
+          </div>
+        </div>
+
+        <div class="detail">
+          <div class="detail-label">
+            Order Placed
+          </div>
+          <div class="detail-value">
+            ${escapeHtml(createdDate)}
+          </div>
+        </div>
+
+        <div class="detail">
+          <div class="detail-label">
             Required Date / Time
-          </small>
-          <strong>
-            ${escapeHtml(
-              requiredDate || "-"
-            )}
-          </strong>
+          </div>
+          <div class="detail-value">
+            ${escapeHtml(requiredDate)}
+          </div>
         </div>
-        <div class="detail-card full">
-          <small>
+
+        <div class="detail full">
+          <div class="detail-label">
+            Address
+          </div>
+          <div class="detail-value">
+            ${escapeHtml(order.address || "Not specified")}
+          </div>
+        </div>
+
+        <div class="detail full">
+          <div class="detail-label">
+            Delivery Location
+          </div>
+          <div class="detail-value">
+            ${escapeHtml(order.delivery_location || "Not specified")}
+          </div>
+        </div>
+
+        <div class="detail full">
+          <div class="detail-label">
             Notes
-          </small>
-          <strong>
-            ${escapeHtml(
-              order.notes || "-"
-            )}
-          </strong>
+          </div>
+          <div class="detail-value">
+            ${escapeHtml(order.notes || "No notes")}
+          </div>
         </div>
+
       </div>
+
+
       <div class="modal-actions">
+
         ${
-          whatsappPhone
+          whatsappNumber
           ? `
             <a
-              class="whatsapp-btn"
-              href="${whatsappLink}"
+              href="https://wa.me/${whatsappNumber}?text=${whatsappMessage}"
               target="_blank"
-              rel="noopener"
+              style="text-decoration:none;"
             >
-              📲 WhatsApp Customer
+              <button class="whatsapp-btn">
+                💬 WhatsApp Customer
+              </button>
             </a>
           `
-          : `
-            <button
-              class="whatsapp-btn"
-              disabled
-            >
-              📲 No Phone Number
-            </button>
-          `
+          : ""
         }
+
         <button
-          class="close-large"
-          onclick="closeOrderDetails()"
+          class="close-btn"
+          onclick="closeModal()"
         >
           Close
         </button>
+
       </div>
     `;
-    document.getElementById(
-      "orderModal"
-    ).style.display =
-      "block";
+
+
+    document
+      .getElementById("orderModal")
+      .classList.add("show");
   }
-  /* CLOSE MODAL */
-  function closeOrderDetails() {
-    document.getElementById(
-      "orderModal"
-    ).style.display =
-      "none";
+
+
+  /* =========================
+     CLOSE MODAL
+  ========================= */
+
+  function closeModal() {
+
+    document
+      .getElementById("orderModal")
+      .classList.remove("show");
+
+    currentModalOrder =
+      null;
   }
-  function closeModalOutside(event) {
-    if (
-      event.target.id ===
-      "orderModal"
-    ) {
-      closeOrderDetails();
-    }
-  }
-  /* ESCAPE HTML */
-  function escapeHtml(value) {
-    return String(value)
-      .replace(
-        /&/g,
-        "&amp;"
-      )
-      .replace(
-        /</g,
-        "&lt;"
-      )
-      .replace(
-        />/g,
-        "&gt;"
-      )
-      .replace(
-        /"/g,
-        "&quot;"
-      )
-      .replace(
-        /'/g,
-        "&#039;"
-      );
-  }
-  /* START */
+
+
+  document
+    .getElementById("orderModal")
+    .addEventListener(
+      "click",
+      function(event) {
+
+        if (
+          event.target ===
+          this
+        ) {
+          closeModal();
+        }
+
+      }
+    );
+
+
+  /* =========================
+     AUTH STATE
+  ========================= */
+
+  supabaseClient.auth
+    .onAuthStateChange(
+      (event, session) => {
+
+        if (session) {
+
+          showDashboard();
+
+        } else {
+
+          showLogin();
+
+        }
+
+      }
+    );
+
+
+  /* =========================
+     START
+  ========================= */
+
   checkSession();
+
 </script>
+
 </body>
 </html>
