@@ -58,6 +58,24 @@ header{
   color:#fff;
 }
 
+.header-right{
+  display:flex;
+  align-items:center;
+  gap:8px;
+}
+
+.language-select{
+  background:#222;
+  color:white;
+  border:1px solid #555;
+  border-radius:8px;
+  padding:8px 7px;
+  font-size:12px;
+  cursor:pointer;
+  margin:0;
+  width:auto;
+}
+
 .whatsapp-btn{
   background:#25D366;
   color:white;
@@ -417,6 +435,7 @@ footer strong{
 }
 
 @media(max-width:700px){
+
   .hero h2{
     font-size:30px;
   }
@@ -458,6 +477,16 @@ footer strong{
     height:48px;
   }
 
+  .header-right{
+    gap:5px;
+  }
+
+  .language-select{
+    font-size:10px;
+    padding:7px 4px;
+    max-width:78px;
+  }
+
   .whatsapp-btn{
     font-size:11px;
     padding:8px 9px;
@@ -469,52 +498,106 @@ footer strong{
 <body>
 
 <header>
+
   <div class="logo-area">
-    <img class="logo"
-         src="95622102-8212-413C-8849-91489284522F.png"
-         alt="Mac Chicken Logo">
+
+    <img
+      class="logo"
+      src="95622102-8212-413C-8849-91489284522F.png"
+      alt="Mac Chicken Logo">
 
     <div class="brand">
       <h1>Mac Chicken</h1>
       <p>QUALITY & HEALTH</p>
     </div>
+
   </div>
 
-  <a class="whatsapp-btn"
-     href="https://wa.me/255744107741"
-     target="_blank">
-     WhatsApp
-  </a>
+  <div class="header-right">
+
+    <select
+      id="languageSelect"
+      class="language-select"
+      onchange="changeLanguage(this.value)"
+      aria-label="Language">
+
+      <option value="sw">🇹🇿 Kiswahili</option>
+      <option value="en">🇬🇧 English</option>
+      <option value="hi">🇮🇳 हिन्दी</option>
+      <option value="fr">🇫🇷 Français</option>
+      <option value="de">🇩🇪 Deutsch</option>
+      <option value="zh">🇨🇳 中文</option>
+
+    </select>
+
+    <a
+      class="whatsapp-btn"
+      href="https://wa.me/255744107741"
+      target="_blank">
+      WhatsApp
+    </a>
+
+  </div>
+
 </header>
 
 <section class="hero">
+
   <div>
-    <h2>FRESH BROILER CHICKEN</h2>
-    <h3>ORDER FRESH CHICKEN</h3>
-    <p>
+
+    <h2 data-i18n="heroTitle">
+      FRESH BROILER CHICKEN
+    </h2>
+
+    <h3 data-i18n="heroSubtitle">
+      ORDER FRESH CHICKEN
+    </h3>
+
+    <p data-i18n="heroText">
       Fresh, healthy and quality broiler chicken for individuals,
       families, businesses and events.
     </p>
 
     <div class="price">
-      <span>TSh 8,500</span> / KUKU
+      <span>TSh 8,500</span>
+      <span data-i18n="perChicken"> / KUKU</span>
     </div>
+
   </div>
+
 </section>
 
 <div class="container">
 
   <div class="quick-actions">
-    <a href="#order">ORDER NOW</a>
-    <a href="#track-order">TRACK ORDER</a>
-    <a href="https://wa.me/255744107741" target="_blank">WHATSAPP</a>
+
+    <a href="#order" data-i18n="orderNow">
+      ORDER NOW
+    </a>
+
+    <a href="#track-order" data-i18n="trackOrder">
+      TRACK ORDER
+    </a>
+
+    <a
+      href="https://wa.me/255744107741"
+      target="_blank">
+      WhatsApp
+    </a>
+
   </div>
 
   <!-- TRACK ORDER -->
+
   <section id="track-order">
+
     <div class="track-box">
-      <h2>TRACK YOUR ORDER</h2>
-      <p>
+
+      <h2 data-i18n="trackTitle">
+        TRACK YOUR ORDER
+      </h2>
+
+      <p data-i18n="trackDescription">
         Enter your Mac Chicken Order ID to check your order status.
       </p>
 
@@ -522,117 +605,231 @@ footer strong{
         type="text"
         id="trackOrderId"
         placeholder="Example: MC-20260915-5740"
-        autocomplete="off"
-      >
+        data-i18n-placeholder="trackPlaceholder"
+        autocomplete="off">
 
       <button
         class="submit-btn"
-        onclick="trackOrder()">
+        onclick="trackOrder()"
+        data-i18n="trackButton">
         TRACK ORDER
       </button>
 
-      <div id="trackResult" class="track-result"></div>
+      <div
+        id="trackResult"
+        class="track-result">
+      </div>
+
     </div>
+
   </section>
 
   <!-- PACKAGES -->
+
   <section>
+
     <div class="section-title">
-      <h2>CHICKEN PACKAGES</h2>
-      <p>Choose your preferred quantity.</p>
+
+      <h2 data-i18n="packagesTitle">
+        CHICKEN PACKAGES
+      </h2>
+
+      <p data-i18n="packagesDescription">
+        Choose your preferred quantity.
+      </p>
+
     </div>
 
     <div class="card-grid">
 
       <div class="card">
-        <h3>PACKAGE 5</h3>
-        <div class="card-price">TSh 42,500</div>
-        <p>5 Fresh Broiler Chickens</p>
+
+        <h3 data-i18n="package5">
+          PACKAGE 5
+        </h3>
+
+        <div class="card-price">
+          TSh 42,500
+        </div>
+
+        <p data-i18n="fiveChickens">
+          5 Fresh Broiler Chickens
+        </p>
+
         <br>
-        <button class="package-btn" onclick="selectPackage(5)">
+
+        <button
+          class="package-btn"
+          onclick="selectPackage(5)"
+          data-i18n="order5">
           ORDER 5
         </button>
+
       </div>
 
       <div class="card">
-        <h3>PACKAGE 10</h3>
-        <div class="card-price">TSh 85,000</div>
-        <p>10 Fresh Broiler Chickens</p>
+
+        <h3 data-i18n="package10">
+          PACKAGE 10
+        </h3>
+
+        <div class="card-price">
+          TSh 85,000
+        </div>
+
+        <p data-i18n="tenChickens">
+          10 Fresh Broiler Chickens
+        </p>
+
         <br>
-        <button class="package-btn" onclick="selectPackage(10)">
+
+        <button
+          class="package-btn"
+          onclick="selectPackage(10)"
+          data-i18n="order10">
           ORDER 10
         </button>
+
       </div>
 
       <div class="card">
-        <h3>PACKAGE 20</h3>
-        <div class="card-price">TSh 170,000</div>
-        <p>20 Fresh Broiler Chickens</p>
+
+        <h3 data-i18n="package20">
+          PACKAGE 20
+        </h3>
+
+        <div class="card-price">
+          TSh 170,000
+        </div>
+
+        <p data-i18n="twentyChickens">
+          20 Fresh Broiler Chickens
+        </p>
+
         <br>
-        <button class="package-btn" onclick="selectPackage(20)">
+
+        <button
+          class="package-btn"
+          onclick="selectPackage(20)"
+          data-i18n="order20">
           ORDER 20
         </button>
+
       </div>
 
     </div>
+
   </section>
 
   <!-- ORDER -->
-  <section id="order" style="margin-top:40px;">
+
+  <section
+    id="order"
+    style="margin-top:40px;">
 
     <div class="section-title">
-      <h2>QUICK ORDER</h2>
-      <p>Fill in your details and place your order.</p>
+
+      <h2 data-i18n="quickOrder">
+        QUICK ORDER
+      </h2>
+
+      <p data-i18n="quickOrderDescription">
+        Fill in your details and place your order.
+      </p>
+
     </div>
 
     <div class="order-box">
 
-      <label>Number of Chickens</label>
+      <label data-i18n="numberOfChickens">
+        Number of Chickens
+      </label>
 
       <div class="qty-box">
-        <button onclick="changeQty(-1)">−</button>
-        <div id="qtyNumber" class="qty-number">1</div>
-        <button onclick="changeQty(1)">+</button>
+
+        <button onclick="changeQty(-1)">
+          −
+        </button>
+
+        <div
+          id="qtyNumber"
+          class="qty-number">
+          1
+        </div>
+
+        <button onclick="changeQty(1)">
+          +
+        </button>
+
       </div>
 
-      <label for="customerName">Full Name</label>
+      <label
+        for="customerName"
+        data-i18n="fullName">
+        Full Name
+      </label>
+
       <input
         id="customerName"
         type="text"
         placeholder="Enter your full name"
-      >
+        data-i18n-placeholder="fullNamePlaceholder">
 
-      <label for="phone">Phone Number</label>
+      <label
+        for="phone"
+        data-i18n="phoneNumber">
+        Phone Number
+      </label>
+
       <input
         id="phone"
         type="tel"
         placeholder="Example: 0744xxxxxx"
-      >
+        data-i18n-placeholder="phonePlaceholder">
 
-      <label>Location</label>
+      <label data-i18n="location">
+        Location
+      </label>
 
       <div class="radio-group">
+
         <label>
-          <input type="radio" name="location" value="Moshi" checked>
+          <input
+            type="radio"
+            name="location"
+            value="Moshi"
+            checked>
           Moshi
         </label>
 
         <label>
-          <input type="radio" name="location" value="Arusha">
+          <input
+            type="radio"
+            name="location"
+            value="Arusha">
           Arusha
         </label>
+
       </div>
 
-      <label for="address">Address / Area</label>
+      <label
+        for="address"
+        data-i18n="addressArea">
+        Address / Area
+      </label>
+
       <input
         id="address"
         type="text"
         placeholder="Example: Moshi mjini, Arusha mjini..."
-      >
+        data-i18n-placeholder="addressPlaceholder">
 
-      <label>Delivery Method</label>
+      <label data-i18n="deliveryMethod">
+        Delivery Method
+      </label>
 
       <div class="radio-group">
+
         <label>
           <input
             type="radio"
@@ -640,7 +837,9 @@ footer strong{
             value="Delivery"
             checked
             onchange="toggleSchedule()">
-          Delivery
+          <span data-i18n="delivery">
+            Delivery
+          </span>
         </label>
 
         <label>
@@ -649,99 +848,162 @@ footer strong{
             name="delivery"
             value="Pickup"
             onchange="toggleSchedule()">
-          Pickup
+          <span data-i18n="pickup">
+            Pickup
+          </span>
         </label>
+
       </div>
 
       <div id="deliveryLocationBox">
-        <label for="deliveryLocation">Delivery Location</label>
+
+        <label
+          for="deliveryLocation"
+          data-i18n="deliveryLocation">
+          Delivery Location
+        </label>
+
         <input
           id="deliveryLocation"
           type="text"
           placeholder="Where should we deliver?"
-        >
+          data-i18n-placeholder="deliveryLocationPlaceholder">
+
       </div>
 
-      <label>Payment Method</label>
+      <label data-i18n="paymentMethod">
+        Payment Method
+      </label>
 
       <div class="radio-group">
+
         <label>
+
           <input
             type="radio"
             name="payment"
             value="Pay before delivery"
             checked>
-          Pay before delivery
+
+          <span data-i18n="payBefore">
+            Pay before delivery
+          </span>
+
         </label>
 
         <label>
+
           <input
             type="radio"
             name="payment"
             value="Pay at delivery">
-          Pay at delivery
+
+          <span data-i18n="payAtDelivery">
+            Pay at delivery
+          </span>
+
         </label>
+
       </div>
 
-      <label for="requiredDatetime">
+      <label
+        for="requiredDatetime"
+        data-i18n="requiredDateTime">
         Required Date & Time
       </label>
 
       <input
         id="requiredDatetime"
-        type="datetime-local"
-      >
+        type="datetime-local">
 
       <div class="summary">
+
         <div class="summary-row">
-          <span>Quantity</span>
-          <strong id="summaryQty">1</strong>
+
+          <span data-i18n="quantity">
+            Quantity
+          </span>
+
+          <strong id="summaryQty">
+            1
+          </strong>
+
         </div>
 
         <div class="summary-row">
-          <span>Price per Chicken</span>
-          <strong>TSh 8,500</strong>
+
+          <span data-i18n="pricePerChicken">
+            Price per Chicken
+          </span>
+
+          <strong>
+            TSh 8,500
+          </strong>
+
         </div>
 
         <div class="summary-row total">
-          <span>Total</span>
-          <span id="summaryTotal">TSh 8,500</span>
+
+          <span data-i18n="total">
+            Total
+          </span>
+
+          <span id="summaryTotal">
+            TSh 8,500
+          </span>
+
         </div>
 
-        <p class="small">
+        <p
+          class="small"
+          data-i18n="deliveryFeeNote">
           Delivery fee will be confirmed based on location.
         </p>
+
       </div>
 
       <button
         class="submit-btn"
-        onclick="sendOrder()">
+        onclick="sendOrder()"
+        data-i18n="placeOrder">
         PLACE ORDER
       </button>
 
     </div>
+
   </section>
 
   <!-- BUSINESS & EVENTS -->
+
   <section style="margin-top:45px;">
 
     <div class="section-title">
-      <h2>BUSINESS & EVENTS</h2>
-      <p>
+
+      <h2 data-i18n="businessEvents">
+        BUSINESS & EVENTS
+      </h2>
+
+      <p data-i18n="businessEventsDescription">
         Need chicken for your business, restaurant or event?
       </p>
+
     </div>
 
     <div class="delivery-info">
 
       <div class="info-card">
+
         <img
           src="657D522F-8FA9-4632-BDCC-1C71BC833232.png"
           alt="Business Supply">
 
         <div class="info-card-content">
-          <h3>Business Supply</h3>
-          <p>
+
+          <h3 data-i18n="businessSupply">
+            Business Supply
+          </h3>
+
+          <p data-i18n="businessSupplyText">
             We supply fresh broiler chickens to businesses,
             restaurants and other customers.
           </p>
@@ -751,20 +1013,28 @@ footer strong{
           <a
             class="whatsapp-btn"
             href="https://wa.me/255744107741"
-            target="_blank">
+            target="_blank"
+            data-i18n="contactUs">
             Contact Us
           </a>
+
         </div>
+
       </div>
 
       <div class="info-card">
+
         <img
           src="6A5449E0-15A1-4713-9607-AE43AB121FD4.png"
           alt="Events & Functions">
 
         <div class="info-card-content">
-          <h3>Events & Functions</h3>
-          <p>
+
+          <h3 data-i18n="eventsFunctions">
+            Events & Functions
+          </h3>
+
+          <p data-i18n="eventsFunctionsText">
             Planning a wedding, party, ceremony or large event?
             Contact us for your chicken supply.
           </p>
@@ -774,21 +1044,33 @@ footer strong{
           <a
             class="whatsapp-btn"
             href="https://wa.me/255744107741"
-            target="_blank">
+            target="_blank"
+            data-i18n="contactUs">
             Contact Us
           </a>
+
         </div>
+
       </div>
 
     </div>
+
   </section>
 
   <!-- DELIVERY -->
+
   <section style="margin-top:45px;">
 
     <div class="section-title">
-      <h2>DELIVERY</h2>
-      <p>We deliver based on your location.</p>
+
+      <h2 data-i18n="deliveryTitle">
+        DELIVERY
+      </h2>
+
+      <p data-i18n="deliveryDescription">
+        We deliver based on your location.
+      </p>
+
     </div>
 
     <div class="info-card">
@@ -798,26 +1080,32 @@ footer strong{
         alt="Mac Chicken Delivery">
 
       <div class="info-card-content">
-        <h3>Fresh Chicken Delivered</h3>
 
-        <p>
+        <h3 data-i18n="freshChickenDelivered">
+          Fresh Chicken Delivered
+        </h3>
+
+        <p data-i18n="deliveryFeeText">
           Delivery fee is not fixed. It will be confirmed
           according to your delivery location.
         </p>
 
         <br>
 
-        <p>
+        <p data-i18n="availableMoshiArusha">
           Available for customers in Moshi and Arusha.
         </p>
+
       </div>
 
     </div>
+
   </section>
 
 </div>
 
 <footer>
+
   <p>
     <strong>Mac Chicken</strong>
   </p>
@@ -828,7 +1116,7 @@ footer strong{
 
   <br>
 
-  <p>
+  <p data-i18n="footerLocation">
     Fresh Broiler Chicken • Moshi • Arusha
   </p>
 
@@ -843,9 +1131,12 @@ footer strong{
 
   <br><br>
 
-  <p style="font-size:12px;color:#aaa;">
+  <p
+    style="font-size:12px;color:#aaa;"
+    data-i18n="copyright">
     © 2026 Mac Chicken. All rights reserved.
   </p>
+
 </footer>
 
 <script>
@@ -866,8 +1157,1101 @@ const PRICE = 8500;
 
 let quantity = 1;
 
+const translations = {
+
+  sw: {
+
+    heroTitle:
+      "FRESH BROILER CHICKEN",
+
+    heroSubtitle:
+      "AGIZA KUKU WABICHI",
+
+    heroText:
+      "Kuku wa broiler wabichi, wenye afya na ubora kwa watu binafsi, familia, biashara na hafla.",
+
+    perChicken:
+      " / KUKU",
+
+    orderNow:
+      "AGIZA SASA",
+
+    trackOrder:
+      "FUATILIA ORDER",
+
+    trackTitle:
+      "FUATILIA ORDER YAKO",
+
+    trackDescription:
+      "Weka Order ID yako ya Mac Chicken kuangalia hali ya order yako.",
+
+    trackPlaceholder:
+      "Mfano: MC-20260915-5740",
+
+    trackButton:
+      "FUATILIA ORDER",
+
+    packagesTitle:
+      "PACKAGES ZA KUKU",
+
+    packagesDescription:
+      "Chagua kiasi unachohitaji.",
+
+    package5:
+      "PACKAGE 5",
+
+    package10:
+      "PACKAGE 10",
+
+    package20:
+      "PACKAGE 20",
+
+    fiveChickens:
+      "Kuku 5 wa Broiler Wabichi",
+
+    tenChickens:
+      "Kuku 10 wa Broiler Wabichi",
+
+    twentyChickens:
+      "Kuku 20 wa Broiler Wabichi",
+
+    order5:
+      "AGIZA 5",
+
+    order10:
+      "AGIZA 10",
+
+    order20:
+      "AGIZA 20",
+
+    quickOrder:
+      "ORDER YA HARAKA",
+
+    quickOrderDescription:
+      "Jaza taarifa zako na tuma order yako.",
+
+    numberOfChickens:
+      "Idadi ya Kuku",
+
+    fullName:
+      "Jina Kamili",
+
+    fullNamePlaceholder:
+      "Weka jina lako kamili",
+
+    phoneNumber:
+      "Namba ya Simu",
+
+    phonePlaceholder:
+      "Mfano: 0744xxxxxx",
+
+    location:
+      "Eneo",
+
+    addressArea:
+      "Anwani / Eneo",
+
+    addressPlaceholder:
+      "Mfano: Moshi mjini, Arusha mjini...",
+
+    deliveryMethod:
+      "Njia ya Kupokea",
+
+    delivery:
+      "Delivery",
+
+    pickup:
+      "Pickup",
+
+    deliveryLocation:
+      "Eneo la Delivery",
+
+    deliveryLocationPlaceholder:
+      "Tulete wapi?",
+
+    paymentMethod:
+      "Njia ya Malipo",
+
+    payBefore:
+      "Lipa kabla ya delivery",
+
+    payAtDelivery:
+      "Lipa wakati wa delivery",
+
+    requiredDateTime:
+      "Tarehe na Muda Unaohitajika",
+
+    quantity:
+      "Idadi",
+
+    pricePerChicken:
+      "Bei kwa Kuku",
+
+    total:
+      "Jumla",
+
+    deliveryFeeNote:
+      "Ada ya delivery itathibitishwa kulingana na eneo.",
+
+    placeOrder:
+      "TUMA ORDER",
+
+    businessEvents:
+      "BIASHARA & HAFLA",
+
+    businessEventsDescription:
+      "Unahitaji kuku kwa biashara, restaurant au hafla yako?",
+
+    businessSupply:
+      "Supply kwa Biashara",
+
+    businessSupplyText:
+      "Tunasupply kuku wa broiler wabichi kwa biashara, restaurants na wateja wengine.",
+
+    eventsFunctions:
+      "Hafla & Shughuli",
+
+    eventsFunctionsText:
+      "Unaandaa harusi, party, sherehe au hafla kubwa? Wasiliana nasi kwa supply ya kuku.",
+
+    contactUs:
+      "Wasiliana Nasi",
+
+    deliveryTitle:
+      "DELIVERY",
+
+    deliveryDescription:
+      "Tunakuletea kuku kulingana na eneo lako.",
+
+    freshChickenDelivered:
+      "Kuku Wabichi Wanaletwa Kwako",
+
+    deliveryFeeText:
+      "Ada ya delivery siyo fixed. Itathibitishwa kulingana na eneo lako la delivery.",
+
+    availableMoshiArusha:
+      "Huduma inapatikana kwa wateja wa Moshi na Arusha.",
+
+    footerLocation:
+      "Kuku wa Broiler Wabichi • Moshi • Arusha",
+
+    copyright:
+      "© 2026 Mac Chicken. Haki zote zimehifadhiwa."
+
+  },
+
+  en: {
+
+    heroTitle:
+      "FRESH BROILER CHICKEN",
+
+    heroSubtitle:
+      "ORDER FRESH CHICKEN",
+
+    heroText:
+      "Fresh, healthy and quality broiler chicken for individuals, families, businesses and events.",
+
+    perChicken:
+      " / CHICKEN",
+
+    orderNow:
+      "ORDER NOW",
+
+    trackOrder:
+      "TRACK ORDER",
+
+    trackTitle:
+      "TRACK YOUR ORDER",
+
+    trackDescription:
+      "Enter your Mac Chicken Order ID to check your order status.",
+
+    trackPlaceholder:
+      "Example: MC-20260915-5740",
+
+    trackButton:
+      "TRACK ORDER",
+
+    packagesTitle:
+      "CHICKEN PACKAGES",
+
+    packagesDescription:
+      "Choose your preferred quantity.",
+
+    package5:
+      "PACKAGE 5",
+
+    package10:
+      "PACKAGE 10",
+
+    package20:
+      "PACKAGE 20",
+
+    fiveChickens:
+      "5 Fresh Broiler Chickens",
+
+    tenChickens:
+      "10 Fresh Broiler Chickens",
+
+    twentyChickens:
+      "20 Fresh Broiler Chickens",
+
+    order5:
+      "ORDER 5",
+
+    order10:
+      "ORDER 10",
+
+    order20:
+      "ORDER 20",
+
+    quickOrder:
+      "QUICK ORDER",
+
+    quickOrderDescription:
+      "Fill in your details and place your order.",
+
+    numberOfChickens:
+      "Number of Chickens",
+
+    fullName:
+      "Full Name",
+
+    fullNamePlaceholder:
+      "Enter your full name",
+
+    phoneNumber:
+      "Phone Number",
+
+    phonePlaceholder:
+      "Example: 0744xxxxxx",
+
+    location:
+      "Location",
+
+    addressArea:
+      "Address / Area",
+
+    addressPlaceholder:
+      "Example: Moshi town, Arusha town...",
+
+    deliveryMethod:
+      "Delivery Method",
+
+    delivery:
+      "Delivery",
+
+    pickup:
+      "Pickup",
+
+    deliveryLocation:
+      "Delivery Location",
+
+    deliveryLocationPlaceholder:
+      "Where should we deliver?",
+
+    paymentMethod:
+      "Payment Method",
+
+    payBefore:
+      "Pay before delivery",
+
+    payAtDelivery:
+      "Pay at delivery",
+
+    requiredDateTime:
+      "Required Date & Time",
+
+    quantity:
+      "Quantity",
+
+    pricePerChicken:
+      "Price per Chicken",
+
+    total:
+      "Total",
+
+    deliveryFeeNote:
+      "Delivery fee will be confirmed based on location.",
+
+    placeOrder:
+      "PLACE ORDER",
+
+    businessEvents:
+      "BUSINESS & EVENTS",
+
+    businessEventsDescription:
+      "Need chicken for your business, restaurant or event?",
+
+    businessSupply:
+      "Business Supply",
+
+    businessSupplyText:
+      "We supply fresh broiler chickens to businesses, restaurants and other customers.",
+
+    eventsFunctions:
+      "Events & Functions",
+
+    eventsFunctionsText:
+      "Planning a wedding, party, ceremony or large event? Contact us for your chicken supply.",
+
+    contactUs:
+      "Contact Us",
+
+    deliveryTitle:
+      "DELIVERY",
+
+    deliveryDescription:
+      "We deliver based on your location.",
+
+    freshChickenDelivered:
+      "Fresh Chicken Delivered",
+
+    deliveryFeeText:
+      "Delivery fee is not fixed. It will be confirmed according to your delivery location.",
+
+    availableMoshiArusha:
+      "Available for customers in Moshi and Arusha.",
+
+    footerLocation:
+      "Fresh Broiler Chicken • Moshi • Arusha",
+
+    copyright:
+      "© 2026 Mac Chicken. All rights reserved."
+
+  },
+
+  hi: {
+
+    heroTitle:
+      "ताज़ा ब्रॉयलर चिकन",
+
+    heroSubtitle:
+      "ताज़ा चिकन ऑर्डर करें",
+
+    heroText:
+      "व्यक्तियों, परिवारों, व्यवसायों और कार्यक्रमों के लिए ताज़ा, स्वस्थ और गुणवत्तापूर्ण ब्रॉयलर चिकन।",
+
+    perChicken:
+      " / चिकन",
+
+    orderNow:
+      "अभी ऑर्डर करें",
+
+    trackOrder:
+      "ऑर्डर ट्रैक करें",
+
+    trackTitle:
+      "अपना ऑर्डर ट्रैक करें",
+
+    trackDescription:
+      "अपने ऑर्डर की स्थिति देखने के लिए Mac Chicken Order ID दर्ज करें।",
+
+    trackPlaceholder:
+      "उदाहरण: MC-20260915-5740",
+
+    trackButton:
+      "ऑर्डर ट्रैक करें",
+
+    packagesTitle:
+      "चिकन पैकेज",
+
+    packagesDescription:
+      "अपनी पसंद की मात्रा चुनें।",
+
+    package5:
+      "पैकेज 5",
+
+    package10:
+      "पैकेज 10",
+
+    package20:
+      "पैकेज 20",
+
+    fiveChickens:
+      "5 ताज़ा ब्रॉयलर चिकन",
+
+    tenChickens:
+      "10 ताज़ा ब्रॉयलर चिकन",
+
+    twentyChickens:
+      "20 ताज़ा ब्रॉयलर चिकन",
+
+    order5:
+      "5 ऑर्डर करें",
+
+    order10:
+      "10 ऑर्डर करें",
+
+    order20:
+      "20 ऑर्डर करें",
+
+    quickOrder:
+      "त्वरित ऑर्डर",
+
+    quickOrderDescription:
+      "अपनी जानकारी भरें और ऑर्डर करें।",
+
+    numberOfChickens:
+      "चिकन की संख्या",
+
+    fullName:
+      "पूरा नाम",
+
+    fullNamePlaceholder:
+      "अपना पूरा नाम दर्ज करें",
+
+    phoneNumber:
+      "फोन नंबर",
+
+    phonePlaceholder:
+      "उदाहरण: 0744xxxxxx",
+
+    location:
+      "स्थान",
+
+    addressArea:
+      "पता / क्षेत्र",
+
+    addressPlaceholder:
+      "उदाहरण: Moshi town, Arusha town...",
+
+    deliveryMethod:
+      "डिलीवरी का तरीका",
+
+    delivery:
+      "डिलीवरी",
+
+    pickup:
+      "पिकअप",
+
+    deliveryLocation:
+      "डिलीवरी स्थान",
+
+    deliveryLocationPlaceholder:
+      "हम कहाँ डिलीवर करें?",
+
+    paymentMethod:
+      "भुगतान का तरीका",
+
+    payBefore:
+      "डिलीवरी से पहले भुगतान",
+
+    payAtDelivery:
+      "डिलीवरी के समय भुगतान",
+
+    requiredDateTime:
+      "आवश्यक तारीख और समय",
+
+    quantity:
+      "मात्रा",
+
+    pricePerChicken:
+      "प्रति चिकन कीमत",
+
+    total:
+      "कुल",
+
+    deliveryFeeNote:
+      "डिलीवरी शुल्क स्थान के अनुसार पुष्टि किया जाएगा।",
+
+    placeOrder:
+      "ऑर्डर करें",
+
+    businessEvents:
+      "व्यवसाय और कार्यक्रम",
+
+    businessEventsDescription:
+      "अपने व्यवसाय, रेस्टोरेंट या कार्यक्रम के लिए चिकन चाहिए?",
+
+    businessSupply:
+      "बिज़नेस सप्लाई",
+
+    businessSupplyText:
+      "हम व्यवसायों, रेस्टोरेंट और अन्य ग्राहकों को ताज़ा ब्रॉयलर चिकन सप्लाई करते हैं।",
+
+    eventsFunctions:
+      "कार्यक्रम और समारोह",
+
+    eventsFunctionsText:
+      "शादी, पार्टी, समारोह या बड़े कार्यक्रम की योजना बना रहे हैं? चिकन सप्लाई के लिए हमसे संपर्क करें।",
+
+    contactUs:
+      "हमसे संपर्क करें",
+
+    deliveryTitle:
+      "डिलीवरी",
+
+    deliveryDescription:
+      "हम आपके स्थान के अनुसार डिलीवरी करते हैं।",
+
+    freshChickenDelivered:
+      "ताज़ा चिकन आपके पास",
+
+    deliveryFeeText:
+      "डिलीवरी शुल्क निश्चित नहीं है। यह आपके डिलीवरी स्थान के अनुसार पुष्टि किया जाएगा।",
+
+    availableMoshiArusha:
+      "Moshi और Arusha के ग्राहकों के लिए उपलब्ध।",
+
+    footerLocation:
+      "ताज़ा ब्रॉयलर चिकन • Moshi • Arusha",
+
+    copyright:
+      "© 2026 Mac Chicken. सर्वाधिकार सुरक्षित।"
+
+  },
+
+  fr: {
+
+    heroTitle:
+      "POULET DE CHAIR FRAIS",
+
+    heroSubtitle:
+      "COMMANDER DU POULET FRAIS",
+
+    heroText:
+      "Poulet de chair frais, sain et de qualité pour les particuliers, les familles, les entreprises et les événements.",
+
+    perChicken:
+      " / POULET",
+
+    orderNow:
+      "COMMANDER",
+
+    trackOrder:
+      "SUIVRE LA COMMANDE",
+
+    trackTitle:
+      "SUIVEZ VOTRE COMMANDE",
+
+    trackDescription:
+      "Entrez votre identifiant de commande Mac Chicken pour vérifier son statut.",
+
+    trackPlaceholder:
+      "Exemple : MC-20260915-5740",
+
+    trackButton:
+      "SUIVRE LA COMMANDE",
+
+    packagesTitle:
+      "PACKS DE POULET",
+
+    packagesDescription:
+      "Choisissez la quantité souhaitée.",
+
+    package5:
+      "PACK 5",
+
+    package10:
+      "PACK 10",
+
+    package20:
+      "PACK 20",
+
+    fiveChickens:
+      "5 poulets de chair frais",
+
+    tenChickens:
+      "10 poulets de chair frais",
+
+    twentyChickens:
+      "20 poulets de chair frais",
+
+    order5:
+      "COMMANDER 5",
+
+    order10:
+      "COMMANDER 10",
+
+    order20:
+      "COMMANDER 20",
+
+    quickOrder:
+      "COMMANDE RAPIDE",
+
+    quickOrderDescription:
+      "Remplissez vos informations et passez votre commande.",
+
+    numberOfChickens:
+      "Nombre de poulets",
+
+    fullName:
+      "Nom complet",
+
+    fullNamePlaceholder:
+      "Entrez votre nom complet",
+
+    phoneNumber:
+      "Numéro de téléphone",
+
+    phonePlaceholder:
+      "Exemple : 0744xxxxxx",
+
+    location:
+      "Localisation",
+
+    addressArea:
+      "Adresse / Zone",
+
+    addressPlaceholder:
+      "Exemple : centre-ville de Moshi, centre-ville d'Arusha...",
+
+    deliveryMethod:
+      "Mode de livraison",
+
+    delivery:
+      "Livraison",
+
+    pickup:
+      "Retrait",
+
+    deliveryLocation:
+      "Lieu de livraison",
+
+    deliveryLocationPlaceholder:
+      "Où devons-nous livrer ?",
+
+    paymentMethod:
+      "Mode de paiement",
+
+    payBefore:
+      "Payer avant la livraison",
+
+    payAtDelivery:
+      "Payer à la livraison",
+
+    requiredDateTime:
+      "Date et heure souhaitées",
+
+    quantity:
+      "Quantité",
+
+    pricePerChicken:
+      "Prix par poulet",
+
+    total:
+      "Total",
+
+    deliveryFeeNote:
+      "Les frais de livraison seront confirmés selon la localisation.",
+
+    placeOrder:
+      "PASSER LA COMMANDE",
+
+    businessEvents:
+      "ENTREPRISES & ÉVÉNEMENTS",
+
+    businessEventsDescription:
+      "Besoin de poulet pour votre entreprise, restaurant ou événement ?",
+
+    businessSupply:
+      "Approvisionnement professionnel",
+
+    businessSupplyText:
+      "Nous fournissons du poulet de chair frais aux entreprises, restaurants et autres clients.",
+
+    eventsFunctions:
+      "ÉVÉNEMENTS & CÉRÉMONIES",
+
+    eventsFunctionsText:
+      "Vous préparez un mariage, une fête, une cérémonie ou un grand événement ? Contactez-nous pour votre approvisionnement en poulet.",
+
+    contactUs:
+      "Nous contacter",
+
+    deliveryTitle:
+      "LIVRAISON",
+
+    deliveryDescription:
+      "Nous livrons selon votre localisation.",
+
+    freshChickenDelivered:
+      "Poulet frais livré",
+
+    deliveryFeeText:
+      "Les frais de livraison ne sont pas fixes. Ils seront confirmés selon votre lieu de livraison.",
+
+    availableMoshiArusha:
+      "Disponible pour les clients de Moshi et Arusha.",
+
+    footerLocation:
+      "Poulet de chair frais • Moshi • Arusha",
+
+    copyright:
+      "© 2026 Mac Chicken. Tous droits réservés."
+
+  },
+
+  de: {
+
+    heroTitle:
+      "FRISCHES BROILER-HÄHNCHEN",
+
+    heroSubtitle:
+      "FRISCHES HÄHNCHEN BESTELLEN",
+
+    heroText:
+      "Frisches, gesundes und hochwertiges Broiler-Hähnchen für Privatpersonen, Familien, Unternehmen und Veranstaltungen.",
+
+    perChicken:
+      " / HÄHNCHEN",
+
+    orderNow:
+      "JETZT BESTELLEN",
+
+    trackOrder:
+      "BESTELLUNG VERFOLGEN",
+
+    trackTitle:
+      "BESTELLUNG VERFOLGEN",
+
+    trackDescription:
+      "Geben Sie Ihre Mac Chicken Bestell-ID ein, um den Bestellstatus zu prüfen.",
+
+    trackPlaceholder:
+      "Beispiel: MC-20260915-5740",
+
+    trackButton:
+      "BESTELLUNG VERFOLGEN",
+
+    packagesTitle:
+      "HÄHNCHEN-PAKETE",
+
+    packagesDescription:
+      "Wählen Sie Ihre gewünschte Menge.",
+
+    package5:
+      "PAKET 5",
+
+    package10:
+      "PAKET 10",
+
+    package20:
+      "PAKET 20",
+
+    fiveChickens:
+      "5 frische Broiler-Hähnchen",
+
+    tenChickens:
+      "10 frische Broiler-Hähnchen",
+
+    twentyChickens:
+      "20 frische Broiler-Hähnchen",
+
+    order5:
+      "5 BESTELLEN",
+
+    order10:
+      "10 BESTELLEN",
+
+    order20:
+      "20 BESTELLEN",
+
+    quickOrder:
+      "SCHNELLBESTELLUNG",
+
+    quickOrderDescription:
+      "Füllen Sie Ihre Daten aus und geben Sie Ihre Bestellung auf.",
+
+    numberOfChickens:
+      "Anzahl der Hähnchen",
+
+    fullName:
+      "Vollständiger Name",
+
+    fullNamePlaceholder:
+      "Geben Sie Ihren vollständigen Namen ein",
+
+    phoneNumber:
+      "Telefonnummer",
+
+    phonePlaceholder:
+      "Beispiel: 0744xxxxxx",
+
+    location:
+      "Ort",
+
+    addressArea:
+      "Adresse / Gebiet",
+
+    addressPlaceholder:
+      "Beispiel: Moshi Stadt, Arusha Stadt...",
+
+    deliveryMethod:
+      "Liefermethode",
+
+    delivery:
+      "Lieferung",
+
+    pickup:
+      "Abholung",
+
+    deliveryLocation:
+      "Lieferort",
+
+    deliveryLocationPlaceholder:
+      "Wohin sollen wir liefern?",
+
+    paymentMethod:
+      "Zahlungsmethode",
+
+    payBefore:
+      "Vor der Lieferung bezahlen",
+
+    payAtDelivery:
+      "Bei Lieferung bezahlen",
+
+    requiredDateTime:
+      "Gewünschtes Datum & Uhrzeit",
+
+    quantity:
+      "Menge",
+
+    pricePerChicken:
+      "Preis pro Hähnchen",
+
+    total:
+      "Gesamt",
+
+    deliveryFeeNote:
+      "Die Liefergebühr wird je nach Standort bestätigt.",
+
+    placeOrder:
+      "BESTELLUNG AUFGEBEN",
+
+    businessEvents:
+      "GESCHÄFT & VERANSTALTUNGEN",
+
+    businessEventsDescription:
+      "Benötigen Sie Hähnchen für Ihr Geschäft, Restaurant oder Ihre Veranstaltung?",
+
+    businessSupply:
+      "Geschäftsversorgung",
+
+    businessSupplyText:
+      "Wir liefern frische Broiler-Hähnchen an Unternehmen, Restaurants und andere Kunden.",
+
+    eventsFunctions:
+      "VERANSTALTUNGEN & FEIERN",
+
+    eventsFunctionsText:
+      "Planen Sie eine Hochzeit, Party, Zeremonie oder große Veranstaltung? Kontaktieren Sie uns für Ihre Hähnchenversorgung.",
+
+    contactUs:
+      "Kontaktieren Sie uns",
+
+    deliveryTitle:
+      "LIEFERUNG",
+
+    deliveryDescription:
+      "Wir liefern entsprechend Ihrem Standort.",
+
+    freshChickenDelivered:
+      "Frisches Hähnchen geliefert",
+
+    deliveryFeeText:
+      "Die Liefergebühr ist nicht fest. Sie wird entsprechend Ihrem Lieferort bestätigt.",
+
+    availableMoshiArusha:
+      "Verfügbar für Kunden in Moshi und Arusha.",
+
+    footerLocation:
+      "Frisches Broiler-Hähnchen • Moshi • Arusha",
+
+    copyright:
+      "© 2026 Mac Chicken. Alle Rechte vorbehalten."
+
+  },
+
+  zh: {
+
+    heroTitle:
+      "新鲜肉鸡",
+
+    heroSubtitle:
+      "订购新鲜鸡肉",
+
+    heroText:
+      "为个人、家庭、企业和活动提供新鲜、健康、高品质的肉鸡。",
+
+    perChicken:
+      " / 只",
+
+    orderNow:
+      "立即订购",
+
+    trackOrder:
+      "查询订单",
+
+    trackTitle:
+      "查询您的订单",
+
+    trackDescription:
+      "输入您的 Mac Chicken 订单编号以查看订单状态。",
+
+    trackPlaceholder:
+      "例如：MC-20260915-5740",
+
+    trackButton:
+      "查询订单",
+
+    packagesTitle:
+      "鸡肉套餐",
+
+    packagesDescription:
+      "选择您需要的数量。",
+
+    package5:
+      "5只套餐",
+
+    package10:
+      "10只套餐",
+
+    package20:
+      "20只套餐",
+
+    fiveChickens:
+      "5只新鲜肉鸡",
+
+    tenChickens:
+      "10只新鲜肉鸡",
+
+    twentyChickens:
+      "20只新鲜肉鸡",
+
+    order5:
+      "订购5只",
+
+    order10:
+      "订购10只",
+
+    order20:
+      "订购20只",
+
+    quickOrder:
+      "快速订购",
+
+    quickOrderDescription:
+      "填写您的信息并提交订单。",
+
+    numberOfChickens:
+      "鸡的数量",
+
+    fullName:
+      "姓名",
+
+    fullNamePlaceholder:
+      "请输入您的姓名",
+
+    phoneNumber:
+      "电话号码",
+
+    phonePlaceholder:
+      "例如：0744xxxxxx",
+
+    location:
+      "地区",
+
+    addressArea:
+      "地址 / 区域",
+
+    addressPlaceholder:
+      "例如：Moshi市区、Arusha市区……",
+
+    deliveryMethod:
+      "配送方式",
+
+    delivery:
+      "配送",
+
+    pickup:
+      "自取",
+
+    deliveryLocation:
+      "配送地点",
+
+    deliveryLocationPlaceholder:
+      "请填写配送地点",
+
+    paymentMethod:
+      "付款方式",
+
+    payBefore:
+      "配送前付款",
+
+    payAtDelivery:
+      "送达时付款",
+
+    requiredDateTime:
+      "需要的日期和时间",
+
+    quantity:
+      "数量",
+
+    pricePerChicken:
+      "每只鸡价格",
+
+    total:
+      "总计",
+
+    deliveryFeeNote:
+      "配送费用将根据地点确认。",
+
+    placeOrder:
+      "提交订单",
+
+    businessEvents:
+      "企业与活动",
+
+    businessEventsDescription:
+      "您的企业、餐厅或活动需要鸡肉吗？",
+
+    businessSupply:
+      "企业供应",
+
+    businessSupplyText:
+      "我们为企业、餐厅和其他客户供应新鲜肉鸡。",
+
+    eventsFunctions:
+      "活动与庆典",
+
+    eventsFunctionsText:
+      "正在筹办婚礼、聚会、仪式或大型活动？联系我们获取鸡肉供应。",
+
+    contactUs:
+      "联系我们",
+
+    deliveryTitle:
+      "配送",
+
+    deliveryDescription:
+      "我们根据您的地点提供配送服务。",
+
+    freshChickenDelivered:
+      "新鲜鸡肉配送",
+
+    deliveryFeeText:
+      "配送费用不是固定的，将根据您的配送地点确认。",
+
+    availableMoshiArusha:
+      "Moshi 和 Arusha 的客户均可使用。",
+
+    footerLocation:
+      "新鲜肉鸡 • Moshi • Arusha",
+
+    copyright:
+      "© 2026 Mac Chicken. 版权所有。"
+
+  }
+
+};
+
 function money(amount){
-  return new Intl.NumberFormat("en-TZ").format(amount);
+
+  return new Intl.NumberFormat("en-TZ")
+    .format(amount);
+
 }
 
 function changeQty(change){
@@ -882,6 +2266,7 @@ function changeQty(change){
     quantity;
 
   updateOrder();
+
 }
 
 function selectPackage(qty){
@@ -896,17 +2281,20 @@ function selectPackage(qty){
   document.getElementById("order").scrollIntoView({
     behavior:"smooth"
   });
+
 }
 
 function updateOrder(){
 
-  const total = quantity * PRICE;
+  const total =
+    quantity * PRICE;
 
   document.getElementById("summaryQty").textContent =
     quantity;
 
   document.getElementById("summaryTotal").textContent =
     "TSh " + money(total);
+
 }
 
 function toggleSchedule(){
@@ -924,6 +2312,7 @@ function toggleSchedule(){
   }else{
     box.style.display = "none";
   }
+
 }
 
 function getRadio(name){
@@ -934,6 +2323,7 @@ function getRadio(name){
     );
 
   return selected ? selected.value : "";
+
 }
 
 function generateOrderId(){
@@ -953,6 +2343,7 @@ function generateOrderId(){
     Math.floor(1000 + Math.random()*9000);
 
   return `MC-${year}${month}${day}-${random}`;
+
 }
 
 function escapeHtml(value){
@@ -967,6 +2358,78 @@ function escapeHtml(value){
     .replace(/>/g,"&gt;")
     .replace(/"/g,"&quot;")
     .replace(/'/g,"&#039;");
+
+}
+
+function getCurrentLanguage(){
+
+  return localStorage.getItem("macChickenLanguage") || "sw";
+
+}
+
+function changeLanguage(language){
+
+  if(!translations[language]){
+    language = "sw";
+  }
+
+  localStorage.setItem(
+    "macChickenLanguage",
+    language
+  );
+
+  applyLanguage(language);
+
+}
+
+function applyLanguage(language){
+
+  const dictionary =
+    translations[language] || translations.sw;
+
+  document.documentElement.lang =
+    language === "zh"
+      ? "zh"
+      : language;
+
+  document.querySelectorAll("[data-i18n]")
+    .forEach(function(element){
+
+      const key =
+        element.getAttribute("data-i18n");
+
+      if(dictionary[key] !== undefined){
+
+        element.textContent =
+          dictionary[key];
+
+      }
+
+    });
+
+  document.querySelectorAll("[data-i18n-placeholder]")
+    .forEach(function(element){
+
+      const key =
+        element.getAttribute(
+          "data-i18n-placeholder"
+        );
+
+      if(dictionary[key] !== undefined){
+
+        element.placeholder =
+          dictionary[key];
+
+      }
+
+    });
+
+  document.getElementById(
+    "languageSelect"
+  ).value = language;
+
+  updateOrder();
+
 }
 
 async function sendOrder(){
@@ -1000,13 +2463,29 @@ async function sendOrder(){
     document.getElementById("requiredDatetime")
       .value;
 
+  const language =
+    getCurrentLanguage();
+
+  const dictionary =
+    translations[language];
+
   if(!customerName ||
      !phone ||
      !location ||
      !address){
 
     alert(
-      "Tafadhali jaza taarifa zote muhimu."
+      language === "sw"
+        ? "Tafadhali jaza taarifa zote muhimu."
+        : language === "en"
+          ? "Please fill in all required information."
+          : language === "hi"
+            ? "कृपया सभी आवश्यक जानकारी भरें।"
+            : language === "fr"
+              ? "Veuillez remplir toutes les informations obligatoires."
+              : language === "de"
+                ? "Bitte füllen Sie alle erforderlichen Informationen aus."
+                : "请填写所有必填信息。"
     );
 
     return;
@@ -1018,7 +2497,17 @@ async function sendOrder(){
   ){
 
     alert(
-      "Tafadhali weka eneo la delivery."
+      language === "sw"
+        ? "Tafadhali weka eneo la delivery."
+        : language === "en"
+          ? "Please enter the delivery location."
+          : language === "hi"
+            ? "कृपया डिलीवरी स्थान दर्ज करें।"
+            : language === "fr"
+              ? "Veuillez indiquer le lieu de livraison."
+              : language === "de"
+                ? "Bitte geben Sie den Lieferort ein."
+                : "请输入配送地点。"
     );
 
     return;
@@ -1032,7 +2521,8 @@ async function sendOrder(){
 
   const orderData = {
 
-    order_id: orderId,
+    order_id:
+      orderId,
 
     customer_name:
       customerName,
@@ -1094,8 +2584,17 @@ async function sendOrder(){
     console.error(error);
 
     alert(
-      "Samahani, order haikufanikiwa.\n\n" +
-      error.message
+      language === "sw"
+        ? "Samahani, order haikufanikiwa.\n\n" + error.message
+        : language === "en"
+          ? "Sorry, the order was not successful.\n\n" + error.message
+          : language === "hi"
+            ? "क्षमा करें, ऑर्डर सफल नहीं हुआ।\n\n" + error.message
+            : language === "fr"
+              ? "Désolé, la commande a échoué.\n\n" + error.message
+              : language === "de"
+                ? "Entschuldigung, die Bestellung war nicht erfolgreich.\n\n" + error.message
+                : "抱歉，订单提交失败。\n\n" + error.message
     );
 
     return;
@@ -1104,18 +2603,71 @@ async function sendOrder(){
   document.getElementById("trackOrderId").value =
     orderId;
 
-  alert(
-    "Order yako imepokelewa vizuri!\n\n" +
-    "Order ID:\n" +
-    orderId +
-    "\n\n" +
-    "Mac Chicken itawasiliana nawe kuthibitisha order yako."
-  );
+  let successMessage = "";
+
+  if(language === "sw"){
+
+    successMessage =
+      "Order yako imepokelewa vizuri!\n\n" +
+      "Order ID:\n" +
+      orderId +
+      "\n\n" +
+      "Mac Chicken itawasiliana nawe kuthibitisha order yako.";
+
+  }else if(language === "en"){
+
+    successMessage =
+      "Your order has been received successfully!\n\n" +
+      "Order ID:\n" +
+      orderId +
+      "\n\n" +
+      "Mac Chicken will contact you to confirm your order.";
+
+  }else if(language === "hi"){
+
+    successMessage =
+      "आपका ऑर्डर सफलतापूर्वक प्राप्त हो गया है!\n\n" +
+      "ऑर्डर ID:\n" +
+      orderId +
+      "\n\n" +
+      "Mac Chicken आपके ऑर्डर की पुष्टि करने के लिए आपसे संपर्क करेगा।";
+
+  }else if(language === "fr"){
+
+    successMessage =
+      "Votre commande a été reçue avec succès !\n\n" +
+      "ID de commande :\n" +
+      orderId +
+      "\n\n" +
+      "Mac Chicken vous contactera pour confirmer votre commande.";
+
+  }else if(language === "de"){
+
+    successMessage =
+      "Ihre Bestellung wurde erfolgreich empfangen!\n\n" +
+      "Bestell-ID:\n" +
+      orderId +
+      "\n\n" +
+      "Mac Chicken wird Sie zur Bestätigung Ihrer Bestellung kontaktieren.";
+
+  }else{
+
+    successMessage =
+      "您的订单已成功收到！\n\n" +
+      "订单编号：\n" +
+      orderId +
+      "\n\n" +
+      "Mac Chicken 将联系您确认订单。";
+
+  }
+
+  alert(successMessage);
 
   document.getElementById("track-order")
     .scrollIntoView({
       behavior:"smooth"
     });
+
 }
 
 async function trackOrder(){
@@ -1129,12 +2681,17 @@ async function trackOrder(){
   const orderId =
     input.value.trim().toUpperCase();
 
+  const language =
+    getCurrentLanguage();
+
   if(!orderId){
 
     result.style.display = "block";
 
     result.innerHTML =
-      "<p style='color:#c62828;font-weight:bold;'>Tafadhali weka Order ID.</p>";
+      "<p style='color:#c62828;font-weight:bold;'>" +
+      getTrackMessage("empty",language) +
+      "</p>";
 
     return;
   }
@@ -1142,7 +2699,9 @@ async function trackOrder(){
   result.style.display = "block";
 
   result.innerHTML =
-    "<p>Inatafuta order yako...</p>";
+    "<p>" +
+    getTrackMessage("searching",language) +
+    "</p>";
 
   const {
     data,
@@ -1161,7 +2720,9 @@ async function trackOrder(){
     console.error(error);
 
     result.innerHTML =
-      "<p style='color:#c62828;font-weight:bold;'>Imeshindikana kufuatilia order. Tafadhali jaribu tena.</p>";
+      "<p style='color:#c62828;font-weight:bold;'>" +
+      getTrackMessage("error",language) +
+      "</p>";
 
     return;
   }
@@ -1169,8 +2730,13 @@ async function trackOrder(){
   if(!data || data.length === 0){
 
     result.innerHTML =
-      "<p style='color:#c62828;font-weight:bold;'>Order ID haijapatikana.</p>" +
-      "<p class='small'>Hakikisha umeingiza Order ID sahihi.</p>";
+      "<p style='color:#c62828;font-weight:bold;'>" +
+      getTrackMessage("notFound",language) +
+      "</p>" +
+
+      "<p class='small'>" +
+      getTrackMessage("checkId",language) +
+      "</p>";
 
     return;
   }
@@ -1187,7 +2753,7 @@ async function trackOrder(){
 
     timeline =
       "<div class='cancelled'>" +
-      "❌ ORDER CANCELLED" +
+      getTrackMessage("cancelled",language) +
       "</div>";
 
   }else{
@@ -1233,30 +2799,175 @@ async function trackOrder(){
           "</div>" +
 
           "<div class='status-label'>" +
-          item +
+          getStatusLabel(item,language) +
           "</div>" +
 
           "</div>";
+
       }
     );
 
     timeline +=
       "</div>";
+
   }
 
   result.innerHTML =
 
     "<div class='track-id'>" +
-    "Order ID: " +
+    getTrackMessage("orderId",language) +
     escapeHtml(order.order_id) +
     "</div>" +
 
     "<p style='text-align:left;color:#222;margin-bottom:5px;'>" +
-    "<strong>Current Status:</strong> " +
-    escapeHtml(status) +
+    "<strong>" +
+    getTrackMessage("currentStatus",language) +
+    "</strong> " +
+    getStatusLabel(status,language) +
     "</p>" +
 
     timeline;
+
+}
+
+function getTrackMessage(type,language){
+
+  const messages = {
+
+    empty: {
+      sw: "Tafadhali weka Order ID.",
+      en: "Please enter your Order ID.",
+      hi: "कृपया अपना ऑर्डर ID दर्ज करें।",
+      fr: "Veuillez saisir votre identifiant de commande.",
+      de: "Bitte geben Sie Ihre Bestell-ID ein.",
+      zh: "请输入您的订单编号。"
+    },
+
+    searching: {
+      sw: "Inatafuta order yako...",
+      en: "Searching for your order...",
+      hi: "आपका ऑर्डर खोजा जा रहा है...",
+      fr: "Recherche de votre commande...",
+      de: "Ihre Bestellung wird gesucht...",
+      zh: "正在查找您的订单……"
+    },
+
+    error: {
+      sw: "Imeshindikana kufuatilia order. Tafadhali jaribu tena.",
+      en: "Unable to track the order. Please try again.",
+      hi: "ऑर्डर ट्रैक नहीं किया जा सका। कृपया फिर कोशिश करें।",
+      fr: "Impossible de suivre la commande. Veuillez réessayer.",
+      de: "Die Bestellung konnte nicht verfolgt werden. Bitte versuchen Sie es erneut.",
+      zh: "无法查询订单，请重试。"
+    },
+
+    notFound: {
+      sw: "Order ID haijapatikana.",
+      en: "Order ID not found.",
+      hi: "订单 ID 未找到。",
+      fr: "Identifiant de commande introuvable.",
+      de: "Bestell-ID wurde nicht gefunden.",
+      zh: "未找到订单编号。"
+    },
+
+    checkId: {
+      sw: "Hakikisha umeingiza Order ID sahihi.",
+      en: "Please make sure you entered the correct Order ID.",
+      hi: "कृपया सुनिश्चित करें कि आपने सही ऑर्डर ID दर्ज की है।",
+      fr: "Vérifiez que vous avez saisi le bon identifiant.",
+      de: "Bitte überprüfen Sie, ob Sie die richtige Bestell-ID eingegeben haben.",
+      zh: "请确认您输入的订单编号正确。"
+    },
+
+    cancelled: {
+      sw: "❌ ORDER IMECANCEL",
+      en: "❌ ORDER CANCELLED",
+      hi: "❌ ऑर्डर रद्द कर दिया गया",
+      fr: "❌ COMMANDE ANNULÉE",
+      de: "❌ BESTELLUNG STORNIERT",
+      zh: "❌ 订单已取消"
+    },
+
+    orderId: {
+      sw: "Order ID: ",
+      en: "Order ID: ",
+      hi: "ऑर्डर ID: ",
+      fr: "ID de commande : ",
+      de: "Bestell-ID: ",
+      zh: "订单编号："
+    },
+
+    currentStatus: {
+      sw: "Hali ya sasa:",
+      en: "Current Status:",
+      hi: "वर्तमान स्थिति:",
+      fr: "Statut actuel :",
+      de: "Aktueller Status:",
+      zh: "当前状态："
+    }
+
+  };
+
+  return messages[type][language] ||
+         messages[type].en;
+
+}
+
+function getStatusLabel(status,language){
+
+  const labels = {
+
+    Pending: {
+      sw: "Inasubiri",
+      en: "Pending",
+      hi: "लंबित",
+      fr: "En attente",
+      de: "Ausstehend",
+      zh: "待处理"
+    },
+
+    Confirmed: {
+      sw: "Imethibitishwa",
+      en: "Confirmed",
+      hi: "पुष्टि की गई",
+      fr: "Confirmée",
+      de: "Bestätigt",
+      zh: "已确认"
+    },
+
+    Ready: {
+      sw: "Tayari",
+      en: "Ready",
+      hi: "तैयार",
+      fr: "Prête",
+      de: "Bereit",
+      zh: "已准备好"
+    },
+
+    Delivered: {
+      sw: "Imefikishwa",
+      en: "Delivered",
+      hi: "डिलीवर किया गया",
+      fr: "Livrée",
+      de: "Geliefert",
+      zh: "已送达"
+    },
+
+    Cancelled: {
+      sw: "Imeghairiwa",
+      en: "Cancelled",
+      hi: "रद्द",
+      fr: "Annulée",
+      de: "Storniert",
+      zh: "已取消"
+    }
+
+  };
+
+  return labels[status]
+    ? labels[status][language] || labels[status].en
+    : status;
+
 }
 
 const today =
@@ -1283,6 +2994,10 @@ document.getElementById(
 updateOrder();
 
 toggleSchedule();
+
+applyLanguage(
+  getCurrentLanguage()
+);
 
 </script>
 
